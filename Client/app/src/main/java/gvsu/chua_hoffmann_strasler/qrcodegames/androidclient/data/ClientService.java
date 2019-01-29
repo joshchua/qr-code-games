@@ -13,6 +13,10 @@ import android.os.Process;
 
 import com.esotericsoftware.kryonet.Client;
 
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.CreateGame;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.JoinGame;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.JoinTeam;
+
 
 import java.io.IOException;
 
@@ -25,7 +29,9 @@ public class ClientService extends Service {
 
     private Client client;
 
+    private boolean mIsClientConnected = false;
 
+    private boolean mHasJoinedGame = false;
 
     private final class ServiceHandler extends Handler {
         public ServiceHandler(Looper looper) {
@@ -35,23 +41,34 @@ public class ClientService extends Service {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case 0:
+                case 0: // Connect to Server
                     client = new Client();
                     Network.register(client);
                     client.start();
+                    ConnectionInfo info = (ConnectionInfo)msg.obj;
                     try {
-                        client.connect(5000, "ip address here", Network.PORT);
+                        client.connect(5000, info.ip, Network.PORT);
+                        if (client.isConnected())
+                            mIsClientConnected = true;
                     } catch (IOException ex) {
 
                     }
                     break;
-                case 1:
-                    Network.RegisterUserName name = new Network.RegisterUserName();
-                    name.userName = "Josh";
-                    client.sendTCP(name);
+                case 1: // Create a game and register user name
+                    CreateGame createGame = (CreateGame)msg.obj;
+                    client.sendTCP(createGame);
+                    break;
+                case 2: // Join a game and register user name
+                    JoinGame joinGame = (JoinGame)msg.obj;
+                    client.sendTCP(joinGame);
+                    break;
+                case 3: // Pick a team
+                    JoinTeam joinTeam = (JoinTeam)msg.obj;
+                    client.sendTCP(joinTeam);
+                    break;
+                case 4: // Start the game
                     break;
             }
-
         }
     }
 
@@ -63,19 +80,6 @@ public class ClientService extends Service {
 
         mServiceLooper = thread.getLooper();
         mServiceHandler = new ServiceHandler(mServiceLooper);
-
-        Message connectMessage = mServiceHandler.obtainMessage(0);
-        mServiceHandler.sendMessage(connectMessage);
-
-//        client = new Client();
-//        Network.register(client);
-//        client.start();
-//
-//        try {
-//            client.connect(5000, "127.0.0.1", Network.PORT);
-//        } catch (IOException ex) {
-//
-//        }
     }
 
     @Override
@@ -101,6 +105,46 @@ public class ClientService extends Service {
         Message msg = mServiceHandler.obtainMessage(1);
         mServiceHandler.sendMessage(msg);
     }
+
+    public void connectAndCreateGame(String userName, int game, String ip, int port) {
+        connect(ip, port);
+        if (mIsClientConnected) {
+            CreateGame createGame = new CreateGame();
+            createGame.game = game;
+            createGame.userName = userName;
+            Message msg = mServiceHandler.obtainMessage(1);
+            msg.obj = createGame;
+            mServiceHandler.sendMessage(msg);
+        }
+    }
+
+    public void connectAndJoinGame(String userName, String gameCode, String ip, int port) {
+        connect(ip, port);
+        if (mIsClientConnected) {
+            JoinGame joinGame = new JoinGame();
+            joinGame.gameCode = gameCode;
+            joinGame.userName = userName;
+            Message msg = mServiceHandler.obtainMessage(2);
+            msg.obj = joinGame;
+            mServiceHandler.sendMessage(msg);
+        }
+    }
+
+    public void joinTeam(int team) {
+        JoinTeam joinTeam = new JoinTeam();
+        joinTeam.team = team;
+        Message msg = mServiceHandler.obtainMessage(3);
+        msg.obj = joinTeam;
+        mServiceHandler.sendMessage(msg);
+    }
+
+    private void connect(String ip, int port) {
+        Message msg = mServiceHandler.obtainMessage(0);
+        msg.obj = new ConnectionInfo(ip, port);
+        mServiceHandler.sendMessage(msg);
+    }
+
+
 
 
 }
