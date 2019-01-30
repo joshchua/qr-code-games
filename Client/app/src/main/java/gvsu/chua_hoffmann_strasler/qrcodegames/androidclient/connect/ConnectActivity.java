@@ -8,6 +8,8 @@ import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.util.ActivityUtils;
 
 public class ConnectActivity extends AppCompatActivity {
 
+    private ConnectContract.Presenter mPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,5 +22,7 @@ public class ConnectActivity extends AppCompatActivity {
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
                     connectFragment, R.id.contentFrame);
         }
+
+        mPresenter = new ConnectPresenter(connectFragment);
     }
 }

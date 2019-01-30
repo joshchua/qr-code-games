@@ -10,12 +10,16 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
+import android.widget.Toast;
 
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.CreateGame;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.JoinGame;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.JoinTeam;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.Lobby;
 
 
 import java.io.IOException;
@@ -44,6 +48,16 @@ public class ClientService extends Service {
                 case 0: // Connect to Server
                     client = new Client();
                     Network.register(client);
+
+                    client.addListener(new Listener() {
+                        public void received(Connection conn, Object obj) {
+                            if (obj instanceof Lobby) {
+                                int i = 0;
+                                //test
+                            }
+                        }
+                    });
+
                     client.start();
                     ConnectionInfo info = (ConnectionInfo)msg.obj;
                     try {
@@ -54,19 +68,8 @@ public class ClientService extends Service {
 
                     }
                     break;
-                case 1: // Create a game and register user name
-                    CreateGame createGame = (CreateGame)msg.obj;
-                    client.sendTCP(createGame);
-                    break;
-                case 2: // Join a game and register user name
-                    JoinGame joinGame = (JoinGame)msg.obj;
-                    client.sendTCP(joinGame);
-                    break;
-                case 3: // Pick a team
-                    JoinTeam joinTeam = (JoinTeam)msg.obj;
-                    client.sendTCP(joinTeam);
-                    break;
-                case 4: // Start the game
+                case 1:
+                    client.sendTCP(msg.obj);
                     break;
             }
         }
@@ -101,11 +104,6 @@ public class ClientService extends Service {
     @Override
     public void onDestroy() {}
 
-    public void test() {
-        Message msg = mServiceHandler.obtainMessage(1);
-        mServiceHandler.sendMessage(msg);
-    }
-
     public void connectAndCreateGame(String userName, int game, String ip, int port) {
         connect(ip, port);
         if (mIsClientConnected) {
@@ -124,7 +122,7 @@ public class ClientService extends Service {
             JoinGame joinGame = new JoinGame();
             joinGame.gameCode = gameCode;
             joinGame.userName = userName;
-            Message msg = mServiceHandler.obtainMessage(2);
+            Message msg = mServiceHandler.obtainMessage(1);
             msg.obj = joinGame;
             mServiceHandler.sendMessage(msg);
         }
@@ -133,7 +131,7 @@ public class ClientService extends Service {
     public void joinTeam(int team) {
         JoinTeam joinTeam = new JoinTeam();
         joinTeam.team = team;
-        Message msg = mServiceHandler.obtainMessage(3);
+        Message msg = mServiceHandler.obtainMessage(1);
         msg.obj = joinTeam;
         mServiceHandler.sendMessage(msg);
     }

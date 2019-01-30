@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
@@ -49,8 +50,7 @@ public class ConnectFragment extends Fragment implements ConnectContract.View {
     @Override
     public void onStart() {
         super.onStart();
-        Intent intent = new Intent(getActivity(), ClientService.class);
-        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        startClientService();
     }
 
     @Override
@@ -72,21 +72,64 @@ public class ConnectFragment extends Fragment implements ConnectContract.View {
         }
     };
 
+    private void startClientService() {
+        if (!mBound) {
+            Intent intent = new Intent(getActivity(), ClientService.class);
+            //getActivity().startService(intent);
+            getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        }
+    }
+
+    @Override
+    public void sendCreateGameRequest(String ip, int port, String userName, int game) {
+
+        mService.connectAndCreateGame(userName, game, ip, port);
+    }
+
+    @Override
+    public void sendJoinGameRequest(String ip, int port, String userName, String gameCode) {
+        startClientService();
+        mService.connectAndJoinGame(userName, gameCode, ip, port);
+    }
+
+    @Override
+    public void showError(String name) {
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_connect, container, false);
+        final View root = inflater.inflate(R.layout.fragment_connect, container, false);
 
-        Button btnConnect = root.findViewById(R.id.btn_connect);
+        Button btnCreateGame = root.findViewById(R.id.btn_createGame);
 
-        btnConnect.setOnClickListener(new View.OnClickListener() {
+        btnCreateGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mService.test();
+                EditText txtIp = root.findViewById(R.id.editText_ipAddress);
+                String ip = txtIp.getText().toString();
+
+                EditText txtPort = root.findViewById(R.id.editText_port);
+                String port = txtPort.getText().toString();
+
+                EditText txtUserName = root.findViewById(R.id.editText_userName);
+                String userName = txtUserName.getText().toString();
+
+                String game = "0";
+
+                mPresenter.createGame(ip, port, userName, game);
             }
         });
 
         return root;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        getActivity().unbindService(mConnection);
     }
 }

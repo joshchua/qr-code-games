@@ -1,7 +1,8 @@
 import com.esotericsoftware.kryonet.*;
 
 import data.*;
-import data.Network.RegisterUserName;
+import data.Network.CreateGame;
+import data.Network.Lobby;
 
 import java.io.IOException;
 
@@ -21,15 +22,12 @@ public class QRCodeGameServer {
             public void received(Connection con, Object obj) {
                 GameConnection gc = (GameConnection)con;
 
-                if (obj instanceof RegisterUserName) {
-                    if (gc.userName != null) return;
-
-                    String name = ((RegisterUserName)obj).userName;
-
-                    if (name == null) return;
-
-                    gc.userName = name;
-                    System.out.println(name + " has been registered");
+                if (obj instanceof CreateGame) {
+                    CreateGame createGame = (CreateGame)obj;
+                    System.out.println(createGame.userName + " has created a new game");
+                    Lobby lobby = new Lobby();
+                    lobby.noTeam = new String[] {createGame.userName};
+                    server.sendToAllTCP(lobby);
                 }
             }
 
