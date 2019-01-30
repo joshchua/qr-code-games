@@ -28,6 +28,7 @@ public class ClientService extends Service {
 
     private final IBinder mBinder = new ClientServiceBinder();
 
+    private HandlerThread mHandlerThread;
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
 
@@ -46,19 +47,6 @@ public class ClientService extends Service {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0: // Connect to Server
-                    client = new Client();
-                    Network.register(client);
-
-                    client.addListener(new Listener() {
-                        public void received(Connection conn, Object obj) {
-                            if (obj instanceof Lobby) {
-                                int i = 0;
-                                //test
-                            }
-                        }
-                    });
-
-                    client.start();
                     ConnectionInfo info = (ConnectionInfo)msg.obj;
                     try {
                         client.connect(5000, info.ip, Network.PORT);
@@ -68,7 +56,7 @@ public class ClientService extends Service {
 
                     }
                     break;
-                case 1:
+                case 1: // Send an object to the server
                     client.sendTCP(msg.obj);
                     break;
             }
@@ -77,12 +65,29 @@ public class ClientService extends Service {
 
     @Override
     public void onCreate() {
-        HandlerThread thread = new HandlerThread("QRGamesClientService",
+        mHandlerThread = new HandlerThread("QRGamesClientService",
                 Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
+        mHandlerThread.start();
 
-        mServiceLooper = thread.getLooper();
+        mServiceLooper = mHandlerThread.getLooper();
         mServiceHandler = new ServiceHandler(mServiceLooper);
+
+        client = new Client();
+        Network.register(client);
+        client.start();
+
+        client.addListener(new Listener() {
+            public void received(Connection conn, Object obj) {
+                if (obj instanceof Lobby) {
+
+                }
+            }
+
+
+            public void disconnected(Connection connection) {
+                mIsClientConnected = false
+            }
+        });
     }
 
     @Override
@@ -102,7 +107,9 @@ public class ClientService extends Service {
     }
 
     @Override
-    public void onDestroy() {}
+    public void onDestroy() {
+        mHandlerThread.quit();
+    }
 
     public void connectAndCreateGame(String userName, int game, String ip, int port) {
         connect(ip, port);

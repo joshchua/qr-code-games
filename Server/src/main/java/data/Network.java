@@ -11,6 +11,7 @@ public class Network {
         kryo.register(CreateGame.class);
         kryo.register(JoinGame.class);
         kryo.register(Lobby.class);
+        kryo.register(String[].class);
     }
 
     public static class CreateGame {
