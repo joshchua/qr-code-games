@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
+import android.os.Messenger;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -30,13 +34,18 @@ public class ConnectFragment extends Fragment implements ConnectContract.View {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment ConnectFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+    private class ResponseHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case ClientService.NEW_GAME_CREATED:
+                    break;
+                case ClientService.GAME_JOINED:
+                    break;
+            }
+        }
+    }
+
     public static ConnectFragment newInstance() {
         return new ConnectFragment();
     }
@@ -50,7 +59,9 @@ public class ConnectFragment extends Fragment implements ConnectContract.View {
     @Override
     public void onStart() {
         super.onStart();
-        startClientService();
+        Intent intent = new Intent(getActivity(), ClientService.class);
+        //getActivity().startService(intent);
+        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -63,6 +74,7 @@ public class ConnectFragment extends Fragment implements ConnectContract.View {
         public void onServiceConnected(ComponentName className, IBinder service) {
             ClientServiceBinder binder = (ClientServiceBinder) service;
             mService = binder.getService();
+            mService.setReceiver(new Messenger(new ResponseHandler()));
             mBound = true;
         }
 
@@ -72,23 +84,13 @@ public class ConnectFragment extends Fragment implements ConnectContract.View {
         }
     };
 
-    private void startClientService() {
-        if (!mBound) {
-            Intent intent = new Intent(getActivity(), ClientService.class);
-            //getActivity().startService(intent);
-            getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-        }
-    }
-
     @Override
     public void sendCreateGameRequest(String ip, int port, String userName, int game) {
-
         mService.connectAndCreateGame(userName, game, ip, port);
     }
 
     @Override
     public void sendJoinGameRequest(String ip, int port, String userName, String gameCode) {
-        startClientService();
         mService.connectAndJoinGame(userName, gameCode, ip, port);
     }
 

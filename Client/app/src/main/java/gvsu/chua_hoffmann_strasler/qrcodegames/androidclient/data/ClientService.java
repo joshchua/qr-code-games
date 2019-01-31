@@ -9,8 +9,9 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Messenger;
 import android.os.Process;
-import android.widget.Toast;
+import android.os.RemoteException;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -29,7 +30,9 @@ public class ClientService extends Service {
     private final IBinder mBinder = new ClientServiceBinder();
 
     private HandlerThread mHandlerThread;
+
     private Looper mServiceLooper;
+
     private ServiceHandler mServiceHandler;
 
     private Client client;
@@ -37,6 +40,11 @@ public class ClientService extends Service {
     private boolean mIsClientConnected = false;
 
     private boolean mHasJoinedGame = false;
+
+    private Messenger mMsgReceiver;
+
+    public static final int NEW_GAME_CREATED = 1;
+    public static final int GAME_JOINED = 2;
 
     private final class ServiceHandler extends Handler {
         public ServiceHandler(Looper looper) {
@@ -79,13 +87,15 @@ public class ClientService extends Service {
         client.addListener(new Listener() {
             public void received(Connection conn, Object obj) {
                 if (obj instanceof Lobby) {
-
+                    Message msg = Message.obtain();
+                    msg.what = NEW_GAME_CREATED;
+                    sendToReceiver(msg);
                 }
             }
 
 
             public void disconnected(Connection connection) {
-                mIsClientConnected = false
+                mIsClientConnected = false;
             }
         });
     }
@@ -109,6 +119,18 @@ public class ClientService extends Service {
     @Override
     public void onDestroy() {
         mHandlerThread.quit();
+    }
+
+    public void setReceiver(Messenger messenger) {
+        mMsgReceiver = messenger;
+    }
+
+    private void sendToReceiver(Message msg) {
+        try {
+            mMsgReceiver.send(msg);
+        } catch (RemoteException ex) {
+
+        }
     }
 
     public void connectAndCreateGame(String userName, int game, String ip, int port) {
