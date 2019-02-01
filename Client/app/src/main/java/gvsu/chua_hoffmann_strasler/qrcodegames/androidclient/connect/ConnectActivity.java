@@ -30,6 +30,9 @@ public class ConnectActivity extends GameActivity implements ConnectContract.Vie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
 
+        Intent intent = new Intent(this, ClientService.class);
+        startService(intent);
+
         mPresenter = new ConnectPresenter(this);
 
         btnCreateGame = findViewById(R.id.btn_createGame);
@@ -53,14 +56,6 @@ public class ConnectActivity extends GameActivity implements ConnectContract.Vie
         });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        Intent intent = new Intent(this, ClientService.class);
-        //getActivity().startService(intent);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-    }
 
     @Override
     protected void handleGameEvent(Bundle bundle) {

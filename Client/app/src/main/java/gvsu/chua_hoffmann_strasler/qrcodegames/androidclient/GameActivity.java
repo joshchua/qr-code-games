@@ -25,6 +25,14 @@ public abstract class GameActivity extends AppCompatActivity {
         lbm.registerReceiver(mGameEventReceiver, new IntentFilter("game_event_received"));
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Intent intent = new Intent(this, ClientService.class);
+        bindService(intent, mConnection, BIND_NOT_FOREGROUND);
+    }
+
     protected ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
