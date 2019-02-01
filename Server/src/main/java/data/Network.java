@@ -25,17 +25,19 @@ public class Network {
     }
 
     public static class Lobby {
+        public String gameName;
+        public String gameCode;
         public String[] team1;
         public String[] team2;
         public String[] noTeam;
     }
 
-    public static class JoinTeam {
+    public static class ChooseTeam {
+        public String gameCode;
         public int team;
     }
 
     public static class Tag {
         public String tagged;
-        public String tagger;
     }
 }

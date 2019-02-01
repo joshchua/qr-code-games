@@ -4,14 +4,14 @@ package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import android.os.Messenger;
 import android.os.Process;
-import android.os.RemoteException;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -19,7 +19,6 @@ import com.esotericsoftware.kryonet.Listener;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.CreateGame;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.JoinGame;
-import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.JoinTeam;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.Lobby;
 
 
@@ -28,26 +27,16 @@ import java.io.IOException;
 public class ClientService extends Service {
 
     private final IBinder mBinder = new ClientServiceBinder();
-
     private HandlerThread mHandlerThread;
-
-    private Looper mServiceLooper;
-
-    private ServiceHandler mServiceHandler;
-
+    private Looper mOutgoingNetworkLooper;
+    private OutgoingNetworkHandler mOutNetHandler;
     private Client client;
-
     private boolean mIsClientConnected = false;
+    private boolean mIsInGame = false;
 
-    private boolean mHasJoinedGame = false;
-
-    private Messenger mMsgReceiver;
-
-    public static final int NEW_GAME_CREATED = 1;
-    public static final int GAME_JOINED = 2;
-
-    private final class ServiceHandler extends Handler {
-        public ServiceHandler(Looper looper) {
+    // For outgoing network requests, as network calls cannot be on the main thread
+    private final class OutgoingNetworkHandler extends Handler {
+        public OutgoingNetworkHandler(Looper looper) {
             super(looper);
         }
 
@@ -77,8 +66,8 @@ public class ClientService extends Service {
                 Process.THREAD_PRIORITY_BACKGROUND);
         mHandlerThread.start();
 
-        mServiceLooper = mHandlerThread.getLooper();
-        mServiceHandler = new ServiceHandler(mServiceLooper);
+        mOutgoingNetworkLooper = mHandlerThread.getLooper();
+        mOutNetHandler = new OutgoingNetworkHandler(mOutgoingNetworkLooper);
 
         client = new Client();
         Network.register(client);
@@ -87,12 +76,18 @@ public class ClientService extends Service {
         client.addListener(new Listener() {
             public void received(Connection conn, Object obj) {
                 if (obj instanceof Lobby) {
-                    Message msg = Message.obtain();
-                    msg.what = NEW_GAME_CREATED;
-                    sendToReceiver(msg);
+                    mIsInGame = true;
+                    Lobby lobby = (Lobby)obj;
+                    String eventName = "lobby_received";
+                    Bundle bundle = new Bundle();
+                    bundle.putString("gameCode", lobby.gameCode);
+                    bundle.putString("gameName", lobby.gameName);
+                    bundle.putStringArray("team1", lobby.team1);
+                    bundle.putStringArray("team2", lobby.team2);
+                    bundle.putStringArray("noTeam", lobby.noTeam);
+                    sendToActivity(eventName, bundle);
                 }
             }
-
 
             public void disconnected(Connection connection) {
                 mIsClientConnected = false;
@@ -121,57 +116,53 @@ public class ClientService extends Service {
         mHandlerThread.quit();
     }
 
-    public void setReceiver(Messenger messenger) {
-        mMsgReceiver = messenger;
+    private void sendToActivity(String messageName, Bundle extras) {
+        Intent intent = new Intent("game_event_received");
+        intent.putExtra("key", messageName);
+        intent.putExtras(extras);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
-    private void sendToReceiver(Message msg) {
-        try {
-            mMsgReceiver.send(msg);
-        } catch (RemoteException ex) {
+    public void connectAndCreateGame(String ip, int port, final String userName, final int game) {
+        connectToServer(ip, port);
+        // Wait a second to ensure that client is connected to server
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mIsClientConnected && !mIsInGame) {
+                    CreateGame createGame = new CreateGame();
+                    createGame.game = game;
+                    createGame.userName = userName;
+                    Message msg = mOutNetHandler.obtainMessage(1);
+                    msg.obj = createGame;
+                    mOutNetHandler.sendMessage(msg);
+                }
+            }
+        }, 1000);
 
-        }
     }
 
-    public void connectAndCreateGame(String userName, int game, String ip, int port) {
-        connect(ip, port);
-        if (mIsClientConnected) {
-            CreateGame createGame = new CreateGame();
-            createGame.game = game;
-            createGame.userName = userName;
-            Message msg = mServiceHandler.obtainMessage(1);
-            msg.obj = createGame;
-            mServiceHandler.sendMessage(msg);
-        }
+    public void connectAndJoinGame(String ip, int port, final String userName, final String gameCode) {
+        connectToServer(ip, port);
+        // Wait a second to ensure that client is connected to the server
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mIsClientConnected && !mIsInGame) {
+                    JoinGame joinGame = new JoinGame();
+                    joinGame.gameCode = gameCode;
+                    joinGame.userName = userName;
+                    Message msg = mOutNetHandler.obtainMessage(1);
+                    msg.obj = joinGame;
+                    mOutNetHandler.sendMessage(msg);
+                }
+            }
+        }, 1000);
     }
 
-    public void connectAndJoinGame(String userName, String gameCode, String ip, int port) {
-        connect(ip, port);
-        if (mIsClientConnected) {
-            JoinGame joinGame = new JoinGame();
-            joinGame.gameCode = gameCode;
-            joinGame.userName = userName;
-            Message msg = mServiceHandler.obtainMessage(1);
-            msg.obj = joinGame;
-            mServiceHandler.sendMessage(msg);
-        }
-    }
-
-    public void joinTeam(int team) {
-        JoinTeam joinTeam = new JoinTeam();
-        joinTeam.team = team;
-        Message msg = mServiceHandler.obtainMessage(1);
-        msg.obj = joinTeam;
-        mServiceHandler.sendMessage(msg);
-    }
-
-    private void connect(String ip, int port) {
-        Message msg = mServiceHandler.obtainMessage(0);
+    private void connectToServer(String ip, int port) {
+        Message msg = mOutNetHandler.obtainMessage(0);
         msg.obj = new ConnectionInfo(ip, port);
-        mServiceHandler.sendMessage(msg);
+        mOutNetHandler.sendMessage(msg);
     }
-
-
-
-
 }
