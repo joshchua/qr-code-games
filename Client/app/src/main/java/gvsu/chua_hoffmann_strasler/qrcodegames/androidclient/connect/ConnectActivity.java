@@ -23,7 +23,13 @@ public class ConnectActivity extends GameActivity implements ConnectContract.Vie
 
     private ConnectContract.Presenter mPresenter;
 
+    private EditText txtIp;
+    private EditText txtPort;
+    private EditText txtUserName;
+    private EditText txtGameCode;
+
     private Button btnCreateGame;
+    private Button btnJoinGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,22 +42,32 @@ public class ConnectActivity extends GameActivity implements ConnectContract.Vie
         mPresenter = new ConnectPresenter(this);
 
         btnCreateGame = findViewById(R.id.btn_createGame);
+        btnJoinGame = findViewById(R.id.btn_joinGame);
+
+        txtIp = findViewById(R.id.editText_ipAddress);
+        txtPort = findViewById(R.id.editText_port);
+        txtUserName = findViewById(R.id.editText_userName);
+        txtGameCode = findViewById(R.id.editText_gameCode);
 
         btnCreateGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText txtIp = findViewById(R.id.editText_ipAddress);
-                String ip = txtIp.getText().toString();
-
-                EditText txtPort = findViewById(R.id.editText_port);
-                String port = txtPort.getText().toString();
-
-                EditText txtUserName = findViewById(R.id.editText_userName);
-                String userName = txtUserName.getText().toString();
-
                 String game = "0";
-
+                String ip = txtIp.getText().toString();
+                String port = txtPort.getText().toString();
+                String userName = txtUserName.getText().toString();
                 mPresenter.createGame(ip, port, userName, game);
+            }
+        });
+
+        btnJoinGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String ip = txtIp.getText().toString();
+                String port = txtPort.getText().toString();
+                String userName = txtUserName.getText().toString();
+                String gameCode = txtGameCode.getText().toString();
+                mPresenter.joinGame(ip, port, userName, gameCode);
             }
         });
     }
@@ -75,18 +91,32 @@ public class ConnectActivity extends GameActivity implements ConnectContract.Vie
 
     @Override
     public void sendCreateGameRequest(String ip, int port, String userName, int game) {
+        // Disable buttons for 5 seconds to wait for connection attempt
         btnCreateGame.setEnabled(false);
+        btnJoinGame.setEnabled(false);
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
                 btnCreateGame.setEnabled(true);
+                btnJoinGame.setEnabled(true);
             }
         }, 5000);
+
         gameService.connectAndCreateGame(ip, port, userName, game);
     }
 
     @Override
     public void sendJoinGameRequest(String ip, int port, String userName, String gameCode) {
+        // Disable buttons for 5 seconds to wait for connection attempt
+        btnCreateGame.setEnabled(false);
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                btnCreateGame.setEnabled(true);
+                btnJoinGame.setEnabled(true);
+            }
+        }, 5000);
+
         gameService.connectAndJoinGame(ip, port, userName, gameCode);
     }
 

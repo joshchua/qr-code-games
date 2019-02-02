@@ -12,6 +12,7 @@ public class Network {
         kryo.register(JoinGame.class);
         kryo.register(Lobby.class);
         kryo.register(String[].class);
+        kryo.register(JoinGameErrorResult.class);
     }
 
     public static class CreateGame {
@@ -39,5 +40,9 @@ public class Network {
 
     public static class Tag {
         public String tagged;
+    }
+
+    public static class JoinGameErrorResult {
+        public String message;
     }
 }

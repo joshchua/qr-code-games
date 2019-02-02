@@ -33,15 +33,26 @@ public class QRCodeGameServer {
                 if (obj instanceof CreateGame) {
                     CreateGame cg = (CreateGame)obj;
                     gc.userName = cg.userName;
-                    gc.gameIndex = games.size();
                     createGame(cg.game, cg.userName);
+                    gc.gameCode = games.get(games.size() - 1).getGameCode();
                 }
 
                 if (obj instanceof JoinGame) {
                     JoinGame jg = (JoinGame)obj;
+                    Game game = findGame(jg.gameCode);
+                    if (game == null) {
+                        // error
+                        return;
+                    }
+
+                    if (game.getPlayers().contains(jg.userName)) {
+                        // error
+                        return;
+                    }
+
+                    gc.gameCode = jg.gameCode;
                     gc.userName = jg.userName;
                     joinGame(jg.gameCode, jg.userName);
-                    //gc.gameIndex = findGame(jg.gameCode);
                 }
 
                 if (obj instanceof ChooseTeam) {
@@ -71,6 +82,10 @@ public class QRCodeGameServer {
         return null;
     }
 
+    private void sendJoinGameError(int connectionID, String msg) {
+        
+    }
+
     private void createGame(int gameNum, String userName) {
         Game game;
         if (gameNum == 0) {
@@ -86,16 +101,6 @@ public class QRCodeGameServer {
 
     private void joinGame(String gameCode, String userName) {
         Game game = findGame(gameCode);
-        // If no game exists with this game code
-        if (game == null) {
-            return;
-        }
-
-        // If someone with this userName is already in this game
-        if (game.getPlayers().contains(userName)) {
-            return;
-        }
-
         game.joinLobby(userName);
         System.out.println(userName + " joined " + game.getGameName() + ". (" + game.getGameCode() + ")");
         sendAllUpdatedLobby(game);
