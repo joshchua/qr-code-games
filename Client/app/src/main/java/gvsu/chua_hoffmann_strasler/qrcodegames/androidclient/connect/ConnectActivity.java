@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.GameActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
@@ -76,11 +77,14 @@ public class ConnectActivity extends GameActivity implements ConnectContract.Vie
     @Override
     protected void handleGameEvent(Bundle bundle) {
         String key = (String)bundle.get("key");
-        if(key.equals("lobby_received")) {
+        if (key.equals("lobby_received")) {
             Intent intent = new Intent(this, LobbyActivity.class);
             intent.removeExtra("key");
             intent.putExtras(bundle);
             startActivity(intent);
+        } else if (key.equals("join_game_error")) {
+            Toast.makeText(this, bundle.getString("message"),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 

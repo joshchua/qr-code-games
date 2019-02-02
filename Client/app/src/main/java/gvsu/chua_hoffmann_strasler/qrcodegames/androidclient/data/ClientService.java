@@ -20,6 +20,7 @@ import com.esotericsoftware.kryonet.Listener;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.CreateGame;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.JoinGame;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.Lobby;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.JoinGameErrorResult;
 
 
 import java.io.IOException;
@@ -85,6 +86,14 @@ public class ClientService extends Service {
                     bundle.putStringArray("team1", lobby.team1);
                     bundle.putStringArray("team2", lobby.team2);
                     bundle.putStringArray("noTeam", lobby.noTeam);
+                    sendToActivity(eventName, bundle);
+                }
+
+                if (obj instanceof JoinGameErrorResult) {
+                    JoinGameErrorResult error = (JoinGameErrorResult)obj;
+                    String eventName = "join_game_error";
+                    Bundle bundle = new Bundle();
+                    bundle.putString("message", error.message);
                     sendToActivity(eventName, bundle);
                 }
             }

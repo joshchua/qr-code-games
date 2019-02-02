@@ -5,6 +5,7 @@ import data.Network.CreateGame;
 import data.Network.JoinGame;
 import data.Network.Lobby;
 import data.Network.ChooseTeam;
+import data.Network.JoinGameErrorResult;
 import games.CaptureTheFlag;
 import games.Game;
 
@@ -41,12 +42,14 @@ public class QRCodeGameServer {
                     JoinGame jg = (JoinGame)obj;
                     Game game = findGame(jg.gameCode);
                     if (game == null) {
-                        // error
+                        String msg = "There is no game with the provided game code.";
+                        sendJoinGameError(gc.getID(), msg);
                         return;
                     }
 
                     if (game.getPlayers().contains(jg.userName)) {
-                        // error
+                        String msg = "Someone with that user name is already in this game.";
+                        sendJoinGameError(gc.getID(), msg);
                         return;
                     }
 
@@ -83,7 +86,9 @@ public class QRCodeGameServer {
     }
 
     private void sendJoinGameError(int connectionID, String msg) {
-        
+        JoinGameErrorResult error = new JoinGameErrorResult();
+        error.message = msg;
+        server.sendToTCP(connectionID, msg);
     }
 
     private void createGame(int gameNum, String userName) {
