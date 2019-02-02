@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".connect.ConnectActivity">
+    <EditText
+        android:id="@+id/editText_ipAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Enter IP Address"/>
+    <EditText
+        android:id="@+id/editText_port"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Enter port number"/>
+    <EditText
+        android:id="@+id/editText_userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Enter user name"/>
+    <Button
+        android:id="@+id/btn_createGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Connect and Create Game" />
+    <EditText
+        android:id="@+id/editText_gameCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Enter game code"/>
+    <Button
+        android:id="@+id/btn_joinGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Connect and Join Game" />
+</LinearLayout>
