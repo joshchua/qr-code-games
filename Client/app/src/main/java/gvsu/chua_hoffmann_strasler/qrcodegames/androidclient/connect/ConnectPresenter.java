@@ -32,7 +32,7 @@ public class ConnectPresenter implements ConnectContract.Presenter {
 
     @Override
     public void joinGame(String ip, String port, String userName, String gameCode) {
-        //mConnectView.sendJoinGameRequest(ip, port, userName, gameCode);
+        mConnectView.sendJoinGameRequest(ip, Integer.parseInt(port), userName, gameCode);
     }
 
     @Override
