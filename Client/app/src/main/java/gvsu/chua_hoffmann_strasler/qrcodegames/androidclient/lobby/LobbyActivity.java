@@ -3,10 +3,10 @@ package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.lobby;
 import android.content.Intent;
 import android.os.Bundle;
 
-import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.GameActivity;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
 
-public class LobbyActivity extends GameActivity implements LobbyContract.View{
+public class LobbyActivity extends BaseActivity implements LobbyContract.View{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

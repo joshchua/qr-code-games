@@ -1,26 +1,20 @@
 package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.connect;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Looper;
-import android.os.Messenger;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.GameActivity;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.ClientService;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.lobby.LobbyActivity;
 
-public class ConnectActivity extends GameActivity implements ConnectContract.View {
+public class ConnectActivity extends BaseActivity implements ConnectContract.View {
 
     private ConnectContract.Presenter mPresenter;
 

@@ -13,7 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.ClientService;
 
-public abstract class GameActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     protected ClientService gameService;
     protected boolean isServiceBound = false;
 
