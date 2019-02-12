@@ -57,6 +57,8 @@ public class ConnectPresenter implements ConnectContract.Presenter {
         mConnectView.sendCreateGameRequest(ip, Integer.parseInt(port), userName, Integer.parseInt(game));
     }
 
+
+
     @Override
     public void start() {
 

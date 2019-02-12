@@ -19,6 +19,7 @@ import com.esotericsoftware.kryonet.Listener;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.CreateGame;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.JoinGame;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.SwitchTeam;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.Lobby;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.JoinGameErrorResult;
 
@@ -85,7 +86,6 @@ public class ClientService extends Service {
                     bundle.putString("gameName", lobby.gameName);
                     bundle.putStringArray("team1", lobby.team1);
                     bundle.putStringArray("team2", lobby.team2);
-                    bundle.putStringArray("noTeam", lobby.noTeam);
                     sendToActivity(eventName, bundle);
                 }
 
@@ -168,6 +168,17 @@ public class ClientService extends Service {
             }
         }, 1000);
     }
+
+    public void switchTeam(final String userName, final String gameCode) {
+                    SwitchTeam switchTeam = new SwitchTeam();
+                    switchTeam.gameCode = gameCode;
+                    switchTeam.userName = userName;
+                    Message msg = mOutNetHandler.obtainMessage(1);
+                    msg.obj = switchTeam;
+                    mOutNetHandler.sendMessage(msg);
+    }
+
+
 
     private void connectToServer(String ip, int port) {
         Message msg = mOutNetHandler.obtainMessage(0);
