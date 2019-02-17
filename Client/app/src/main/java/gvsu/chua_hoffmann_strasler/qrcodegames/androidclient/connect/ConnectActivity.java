@@ -68,6 +68,15 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
     }
 
 
+    public String getUserName(){
+        return txtUserName.getText().toString();
+    }
+
+    @Override
+    public String getIpAddress() {
+        return txtIp.getText().toString();
+    }
+
     @Override
     protected void handleGameEvent(Bundle bundle) {
         String key = (String)bundle.get("key");
@@ -75,12 +84,16 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
             Intent intent = new Intent(this, LobbyActivity.class);
             intent.removeExtra("key");
             intent.putExtras(bundle);
+            intent.putExtra("userName", getUserName());
+            intent.putExtra("ip",getIpAddress());
             startActivity(intent);
+            ConnectActivity.this.finish();
         } else if (key.equals("join_game_error")) {
             Toast.makeText(this, bundle.getString("message"),
                     Toast.LENGTH_SHORT).show();
         }
     }
+
 
     @Override
     public void setPresenter(ConnectContract.Presenter presenter) {
@@ -107,6 +120,7 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
     public void sendJoinGameRequest(String ip, int port, String userName, String gameCode) {
         // Disable buttons for 5 seconds to wait for connection attempt
         btnCreateGame.setEnabled(false);
+        btnJoinGame.setEnabled(false);
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -120,6 +134,7 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
 
     @Override
     public void showError(String name) {
+        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
 
     }
 }

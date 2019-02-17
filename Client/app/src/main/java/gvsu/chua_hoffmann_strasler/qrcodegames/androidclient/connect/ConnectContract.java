@@ -5,6 +5,8 @@ import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseView;
 
 public interface ConnectContract {
     interface View extends BaseView<Presenter> {
+        String getUserName();
+        String getIpAddress();
         void sendCreateGameRequest(String ip, int port, String userName, int game);
         void sendJoinGameRequest(String ip, int port, String userName, String gameCode);
         void showError(String name);
