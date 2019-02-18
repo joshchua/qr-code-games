@@ -23,6 +23,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".lobby.LobbyActivity"></activity>
+        <activity android:name=".game.GameActivity"></activity>
+        <activity android:name=".registerusername.RegisterActivity"></activity>
     </application>
 
 </manifest>

@@ -1,30 +1,32 @@
-package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.game;
+package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.registerusername;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.BarcodeScanningProcessor;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.CameraSource;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.CameraSourcePreview;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.GraphicOverlay;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.connect.ConnectActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameActivity extends BaseActivity implements GameContract.View {
+public class RegisterActivity extends AppCompatActivity implements RegisterContract.View {
 
-    private static final String TAG = "GameActivity";
+    private static final String TAG = "RegisterActivity";
     private static final int PERMISSION_REQUESTS = 1;
 
-    private GameContract.Presenter presenter;
+    private RegisterContract.Presenter presenter;
 
     private CameraSource cameraSource = null;
     private CameraSourcePreview preview;
@@ -35,9 +37,9 @@ public class GameActivity extends BaseActivity implements GameContract.View {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
 
-        setContentView(R.layout.activity_game);
+        setContentView(R.layout.activity_register);
 
-        presenter = new GamePresenter(this);
+        presenter = new RegisterPresenter(this);
 
         preview = (CameraSourcePreview) findViewById(R.id.firePreview);
         if (preview == null) {
@@ -56,7 +58,7 @@ public class GameActivity extends BaseActivity implements GameContract.View {
     }
 
     @Override
-    public void setPresenter(GameContract.Presenter presenter) {
+    public void setPresenter(RegisterContract.Presenter presenter) {
         this.presenter = presenter;
     }
 
@@ -71,7 +73,7 @@ public class GameActivity extends BaseActivity implements GameContract.View {
             cameraSource.setMachineLearningFrameProcessor(new BarcodeScanningProcessor() {
                 @Override
                 public void scanCallback(String rawValue) {
-
+                    presenter.handleScan(rawValue);
                 }
             });
         } catch (Exception e) {
@@ -114,11 +116,6 @@ public class GameActivity extends BaseActivity implements GameContract.View {
     protected void onPause() {
         super.onPause();
         preview.stop();
-    }
-
-    @Override
-    protected void handleGameEvent(Bundle bundle) {
-
     }
 
     @Override
@@ -189,7 +186,10 @@ public class GameActivity extends BaseActivity implements GameContract.View {
     }
 
     @Override
-    public void sendScanRequest(String barcodeValue) {
-
+    public void sendUserName(String userName) {
+        Intent intent = new Intent(this, ConnectActivity.class);
+        intent.putExtra("key", "scanned_username");
+        intent.putExtra("username", userName);
+        startActivity(intent);
     }
 }

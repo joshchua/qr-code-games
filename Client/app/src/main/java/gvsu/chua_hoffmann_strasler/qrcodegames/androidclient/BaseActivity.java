@@ -17,20 +17,25 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected ClientService gameService;
     protected boolean isServiceBound = false;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private LocalBroadcastManager lbm;
 
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        lbm = LocalBroadcastManager.getInstance(this);
         lbm.registerReceiver(mGameEventReceiver, new IntentFilter("game_event_received"));
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
 
         Intent intent = new Intent(this, ClientService.class);
         bindService(intent, mConnection, BIND_NOT_FOREGROUND);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        unbindService(mConnection);
+        lbm.unregisterReceiver(mGameEventReceiver);
     }
 
     protected ServiceConnection mConnection = new ServiceConnection() {

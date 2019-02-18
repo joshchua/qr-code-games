@@ -4,6 +4,8 @@ public class ConnectPresenter implements ConnectContract.Presenter {
 
     private ConnectContract.View mConnectView;
 
+    private String mUserName;
+
     public ConnectPresenter(ConnectContract.View connectView) {
         mConnectView = connectView;
         mConnectView.setPresenter(this);
@@ -31,12 +33,17 @@ public class ConnectPresenter implements ConnectContract.Presenter {
     }
 
     @Override
-    public void joinGame(String ip, String port, String userName, String gameCode) {
-        mConnectView.sendJoinGameRequest(ip, Integer.parseInt(port), userName, gameCode);
+    public void joinGame(String ip, String port,  String gameCode) {
+        mConnectView.sendJoinGameRequest(ip, Integer.parseInt(port), mUserName, gameCode);
     }
 
     @Override
-    public void createGame(String ip, String port, String userName, String game) {
+    public void createGame(String ip, String port, String game) {
+        if (!hasUserNameSet()) {
+            mConnectView.showError("Please register your username first");
+            return;
+        }
+
         if (!isValidIPAddress(ip)) {
             mConnectView.showError("The provided IP address is not valid");
             return;
@@ -54,9 +61,29 @@ public class ConnectPresenter implements ConnectContract.Presenter {
             return;
         }
 
-        mConnectView.sendCreateGameRequest(ip, Integer.parseInt(port), userName, Integer.parseInt(game));
+        mConnectView.sendCreateGameRequest(ip, Integer.parseInt(port), mUserName, Integer.parseInt(game));
     }
 
+    @Override
+    public void scanUserName() {
+        mConnectView.showScanner();
+    }
+
+    @Override
+    public void setUserName(String userName) {
+        mUserName = userName;
+        mConnectView.showUserName(userName);
+    }
+
+    @Override
+    public String getUserName() {
+        return mUserName;
+    }
+
+    @Override
+    public boolean hasUserNameSet() {
+        return mUserName != null;
+    }
 
 
     @Override

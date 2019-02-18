@@ -3,21 +3,15 @@ package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.lobby;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
-import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.connect.ConnectPresenter;
-import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.ClientService;
 
 public class LobbyActivity extends BaseActivity implements LobbyContract.View{
 
@@ -69,7 +63,7 @@ public class LobbyActivity extends BaseActivity implements LobbyContract.View{
             public void onClick(View v) {
                 String userName = intent.getStringExtra("userName");
                 String gameCode = intent.getStringExtra("gameCode");
-                 mPresenter.switchTeams(userName,gameCode);
+                mPresenter.switchTeams(userName,gameCode);
             }
         });
 

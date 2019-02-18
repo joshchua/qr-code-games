@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * Barcode Detector Demo.
  */
-public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseVisionBarcode>> {
+public abstract class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseVisionBarcode>> {
 
     private static final String TAG = "BarcodeScanProc";
 
@@ -45,6 +45,8 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
         //     .build();
         detector = FirebaseVision.getInstance().getVisionBarcodeDetector();
     }
+
+    public abstract void scanCallback(String rawValue);
 
     @Override
     public void stop() {
@@ -75,6 +77,8 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
             FirebaseVisionBarcode barcode = barcodes.get(i);
             BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode);
             graphicOverlay.add(barcodeGraphic);
+            String rawValue = barcode.getRawValue();
+            scanCallback(rawValue);
         }
         graphicOverlay.postInvalidate();
     }

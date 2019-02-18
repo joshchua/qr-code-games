@@ -59,8 +59,8 @@ public class QRCodeGameServer {
                 }
 
                 if (obj instanceof SwitchTeam) {
-                    System.out.println("switch object");
                     SwitchTeam ct = (SwitchTeam)obj;
+                    System.out.printf("%s is switching teams in game %s.%n", ct.userName, ct.gameCode);
                     switchTeam(ct.gameCode, ct.userName);
                 }
             }

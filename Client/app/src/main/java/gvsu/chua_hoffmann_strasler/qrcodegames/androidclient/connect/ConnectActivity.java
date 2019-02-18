@@ -13,6 +13,7 @@ import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.ClientService;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.lobby.LobbyActivity;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.registerusername.RegisterActivity;
 
 public class ConnectActivity extends BaseActivity implements ConnectContract.View {
 
@@ -20,11 +21,11 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
 
     private EditText txtIp;
     private EditText txtPort;
-    private EditText txtUserName;
     private EditText txtGameCode;
 
     private Button btnCreateGame;
     private Button btnJoinGame;
+    private Button btnRegisterUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +39,18 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
 
         btnCreateGame = findViewById(R.id.btn_createGame);
         btnJoinGame = findViewById(R.id.btn_joinGame);
+        btnRegisterUserName = findViewById(R.id.btn_registerUserName);
 
         txtIp = findViewById(R.id.editText_ipAddress);
         txtPort = findViewById(R.id.editText_port);
-        txtUserName = findViewById(R.id.editText_userName);
         txtGameCode = findViewById(R.id.editText_gameCode);
+
+        btnRegisterUserName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.scanUserName();
+            }
+        });
 
         btnCreateGame.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,8 +58,7 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
                 String game = "0";
                 String ip = txtIp.getText().toString();
                 String port = txtPort.getText().toString();
-                String userName = txtUserName.getText().toString();
-                mPresenter.createGame(ip, port, userName, game);
+                mPresenter.createGame(ip, port, game);
             }
         });
 
@@ -60,21 +67,35 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
             public void onClick(View v) {
                 String ip = txtIp.getText().toString();
                 String port = txtPort.getText().toString();
-                String userName = txtUserName.getText().toString();
                 String gameCode = txtGameCode.getText().toString();
-                mPresenter.joinGame(ip, port, userName, gameCode);
+                mPresenter.joinGame(ip, port, gameCode);
             }
         });
     }
 
-
-    public String getUserName(){
-        return txtUserName.getText().toString();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        final Intent intent = getIntent();
+        if (intent != null) {
+            String key = intent.getStringExtra("key");
+            if (key == null) return;
+            if (key.equals("scanned_username")) {
+                String userName = intent.getStringExtra("username");
+                mPresenter.setUserName(userName);
+            }
+        }
     }
 
     @Override
     public String getIpAddress() {
         return txtIp.getText().toString();
+    }
+
+    @Override
+    public void showUserName(String userName) {
+        Toast.makeText(this, "You set your username to " + userName,
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -84,8 +105,8 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
             Intent intent = new Intent(this, LobbyActivity.class);
             intent.removeExtra("key");
             intent.putExtras(bundle);
-            intent.putExtra("userName", getUserName());
-            intent.putExtra("ip",getIpAddress());
+            intent.putExtra("userName", mPresenter.getUserName());
+            intent.putExtra("ip", getIpAddress());
             startActivity(intent);
             ConnectActivity.this.finish();
         } else if (key.equals("join_game_error")) {
@@ -136,5 +157,12 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
     public void showError(String name) {
         Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
 
+    }
+
+    @Override
+    public void showScanner() {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        intent.putExtra("key", "register_username");
+        startActivity(intent);
     }
 }

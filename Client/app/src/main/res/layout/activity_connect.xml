@@ -5,30 +5,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".connect.ConnectActivity">
-
     <EditText
         android:id="@+id/editText_ipAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Enter IP Address"
-        android:text="192.168.1.239" />
+        android:hint="Enter IP Address" />
 
     <EditText
         android:id="@+id/editText_port"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Enter port number"
-        android:text="54555" />
+        android:hint="Enter port number (54555)" />
 
-    <EditText
-        android:id="@+id/editText_userName"
+    <Button
+        android:id="@+id/btn_registerUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Enter user name"
-        android:text="Phone" />
+        android:text="Register Username" />
     <Button
         android:id="@+id/btn_createGame"
         android:layout_width="wrap_content"
