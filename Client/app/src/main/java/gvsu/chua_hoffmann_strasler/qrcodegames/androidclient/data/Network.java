@@ -15,6 +15,7 @@ public class Network {
         kryo.register(String[].class);
         kryo.register(JoinGameErrorResult.class);
         kryo.register(SwitchTeam.class);
+        kryo.register(Tag.class);
     }
 
     public static class CreateGame {
@@ -34,16 +35,16 @@ public class Network {
         public String[] team2;
     }
 
+    public static class JoinGameErrorResult {
+        public String message;
+    }
+
     public static class SwitchTeam {
         public String gameCode;
         public String userName;
     }
 
     public static class Tag {
-        public String tagged;
-    }
-
-    public static class JoinGameErrorResult {
-        public String message;
+        public String value;
     }
 }

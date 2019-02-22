@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseActivity;
@@ -27,6 +28,8 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
     private Button btnJoinGame;
     private Button btnRegisterUserName;
 
+    private TextView tvUserName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +47,8 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
         txtIp = findViewById(R.id.editText_ipAddress);
         txtPort = findViewById(R.id.editText_port);
         txtGameCode = findViewById(R.id.editText_gameCode);
+
+        tvUserName = findViewById(R.id.tv_userName);
 
         btnRegisterUserName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,8 +99,13 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
 
     @Override
     public void showUserName(String userName) {
-        Toast.makeText(this, "You set your username to " + userName,
-                Toast.LENGTH_SHORT).show();
+        tvUserName.setText("You set your username to \""+ userName +"\".");
+    }
+
+    @Override
+    public void setConnectBtnEnabled(boolean isEnabled) {
+        btnCreateGame.setEnabled(isEnabled);
+        btnJoinGame.setEnabled(isEnabled);
     }
 
     @Override
@@ -124,13 +134,11 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
     @Override
     public void sendCreateGameRequest(String ip, int port, String userName, int game) {
         // Disable buttons for 5 seconds to wait for connection attempt
-        btnCreateGame.setEnabled(false);
-        btnJoinGame.setEnabled(false);
+        setConnectBtnEnabled(false);
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                btnCreateGame.setEnabled(true);
-                btnJoinGame.setEnabled(true);
+                setConnectBtnEnabled(true);
             }
         }, 5000);
 
@@ -140,13 +148,11 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
     @Override
     public void sendJoinGameRequest(String ip, int port, String userName, String gameCode) {
         // Disable buttons for 5 seconds to wait for connection attempt
-        btnCreateGame.setEnabled(false);
-        btnJoinGame.setEnabled(false);
+        setConnectBtnEnabled(false);
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                btnCreateGame.setEnabled(true);
-                btnJoinGame.setEnabled(true);
+                setConnectBtnEnabled(true);
             }
         }, 5000);
 

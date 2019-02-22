@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
 
-public class LobbyActivity extends BaseActivity implements LobbyContract.View{
+public class LobbyActivity extends BaseActivity implements LobbyContract.View {
 
     private LobbyContract.Presenter mPresenter;
 

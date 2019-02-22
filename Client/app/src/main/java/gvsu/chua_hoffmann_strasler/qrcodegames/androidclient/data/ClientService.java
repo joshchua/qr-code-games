@@ -22,6 +22,7 @@ import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.JoinGa
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.SwitchTeam;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.Lobby;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.JoinGameErrorResult;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.Tag;
 
 
 import java.io.IOException;
@@ -170,15 +171,21 @@ public class ClientService extends Service {
     }
 
     public void switchTeam(final String userName, final String gameCode) {
-                    SwitchTeam switchTeam = new SwitchTeam();
-                    switchTeam.gameCode = gameCode;
-                    switchTeam.userName = userName;
-                    Message msg = mOutNetHandler.obtainMessage(1);
-                    msg.obj = switchTeam;
-                    mOutNetHandler.sendMessage(msg);
+        SwitchTeam switchTeam = new SwitchTeam();
+        switchTeam.gameCode = gameCode;
+        switchTeam.userName = userName;
+        Message msg = mOutNetHandler.obtainMessage(1);
+        msg.obj = switchTeam;
+        mOutNetHandler.sendMessage(msg);
     }
 
-
+    public void Tag(final String scanValue) {
+        Tag tag = new Tag();
+        tag.value = scanValue;
+        Message msg = mOutNetHandler.obtainMessage(1);
+        msg.obj = tag;
+        mOutNetHandler.sendMessage(msg);
+    }
 
     private void connectToServer(String ip, int port) {
         Message msg = mOutNetHandler.obtainMessage(0);

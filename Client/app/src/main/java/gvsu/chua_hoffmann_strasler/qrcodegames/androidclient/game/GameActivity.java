@@ -31,6 +31,11 @@ public class GameActivity extends BaseActivity implements GameContract.View {
     private GraphicOverlay graphicOverlay;
 
     @Override
+    public void showGameEvent(String gameEvent) {
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
@@ -190,6 +195,6 @@ public class GameActivity extends BaseActivity implements GameContract.View {
 
     @Override
     public void sendScanRequest(String barcodeValue) {
-
+        gameService.Tag(barcodeValue);
     }
 }

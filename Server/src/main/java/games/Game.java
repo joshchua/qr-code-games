@@ -70,6 +70,10 @@ public abstract class Game {
         mIsStarted = true;
     }
 
+    public void gameOver() {
+        mIsStarted = false;
+    }
+
     public boolean isPlaying() {
         return mIsStarted;
     }

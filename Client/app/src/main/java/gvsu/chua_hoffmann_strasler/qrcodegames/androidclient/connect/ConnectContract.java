@@ -11,6 +11,7 @@ public interface ConnectContract {
         void showScanner();
         String getIpAddress();
         void showUserName(String userName);
+        void setConnectBtnEnabled(boolean isEnabled);
     }
 
     interface Presenter extends BasePresenter {

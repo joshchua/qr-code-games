@@ -25,4 +25,9 @@
             android:layout_alignParentBottom="true"/>
     </gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.CameraSourcePreview>
 
+    <ListView
+        android:id="@+id/list_gameEvents"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </RelativeLayout>
