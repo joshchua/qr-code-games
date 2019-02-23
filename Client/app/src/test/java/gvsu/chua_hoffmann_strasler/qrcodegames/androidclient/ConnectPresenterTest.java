@@ -10,29 +10,31 @@ import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.connect.ConnectPres
 public class ConnectPresenterTest {
     public static class MockConnectActivity implements ConnectContract.View {
 
+        private boolean mWasCalled = false;
+
         public MockConnectActivity() {
 
         }
 
         @Override
         public void sendCreateGameRequest(String ip, int port, String userName, int game) {
-            mockWasCalled();
+            mWasCalled = true;
         }
 
         @Override
         public void sendJoinGameRequest(String ip, int port, String userName, String gameCode) {
-            mockWasCalled();
+            mWasCalled = true;
         }
 
         @Override
         public void showError(String name) {
-            mockWasCalled();
+            mWasCalled = true;
 
         }
 
         @Override
         public void showScanner() {
-            mockWasCalled();
+            mWasCalled = true;
         }
 
         @Override
@@ -42,21 +44,21 @@ public class ConnectPresenterTest {
 
         @Override
         public void showUserName(String userName) {
-            mockWasCalled();
+            mWasCalled = true;
         }
 
         @Override
         public void setConnectBtnEnabled(boolean isEnabled) {
-            mockWasCalled();
+            mWasCalled = true;
         }
 
         @Override
         public void setPresenter(ConnectContract.Presenter presenter) {
-            mockWasCalled();
+            mWasCalled = true;
         }
 
         public boolean mockWasCalled() {
-            return true;
+            return mWasCalled;
         }
     }
 
