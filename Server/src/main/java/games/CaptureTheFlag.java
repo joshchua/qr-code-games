@@ -46,12 +46,12 @@ public class CaptureTheFlag extends Game {
         }
 
         // Handle a player tagging their own base
-        if (findTeam(userName) == 1 && base.equals(BASE1) && flag2.getFlagBearer().equals(userName)) {
+        if (findTeam(userName) == 1 && base.equals(BASE1) && userName.equals(flag2.getFlagBearer())) {
             gameOver();
             return new ScanResult(userName + " has returned Team 2's flag to their base. Game Over!");
         }
 
-        if (findTeam(userName) == 2 && base.equals(BASE2) && flag2.getFlagBearer().equals(userName)) {
+        if (findTeam(userName) == 2 && base.equals(BASE2) && userName.equals(flag2.getFlagBearer())) {
             gameOver();
             return new ScanResult(userName + " has returned Team 1's flag to their base. Game Over!");
         }

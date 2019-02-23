@@ -44,6 +44,7 @@ public class GamePresenterTest {
     }
 
     public MockGameActivity mock;
+
     public GamePresenter presenter;
 
     @Test
