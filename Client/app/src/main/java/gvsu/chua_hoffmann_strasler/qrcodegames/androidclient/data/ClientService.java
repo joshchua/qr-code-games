@@ -22,7 +22,9 @@ import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.JoinGa
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.SwitchTeam;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.Lobby;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.JoinGameErrorResult;
-import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.Tag;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.StartGame;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.GameEvent;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.Scan;
 
 
 import java.io.IOException;
@@ -97,6 +99,14 @@ public class ClientService extends Service {
                     bundle.putString("message", error.message);
                     sendToActivity(eventName, bundle);
                 }
+
+                if (obj instanceof GameEvent) {
+                    GameEvent ge = (GameEvent)obj;
+                    String eventName = "game_event";
+                    Bundle bundle = new Bundle();
+                    bundle.putString("message", ge.message);
+                    sendToActivity(eventName, bundle);
+                }
             }
 
             public void disconnected(Connection connection) {
@@ -131,6 +141,12 @@ public class ClientService extends Service {
         intent.putExtra("key", messageName);
         intent.putExtras(extras);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    private void connectToServer(String ip, int port) {
+        Message msg = mOutNetHandler.obtainMessage(0);
+        msg.obj = new ConnectionInfo(ip, port);
+        mOutNetHandler.sendMessage(msg);
     }
 
     public void connectAndCreateGame(String ip, int port, final String userName, final int game) {
@@ -179,17 +195,19 @@ public class ClientService extends Service {
         mOutNetHandler.sendMessage(msg);
     }
 
-    public void Tag(final String scanValue) {
-        Tag tag = new Tag();
-        tag.value = scanValue;
+    public void startGame(String gameCode) {
         Message msg = mOutNetHandler.obtainMessage(1);
-        msg.obj = tag;
+        StartGame startGame = new StartGame();
+        startGame.gameCode = gameCode;
+        msg.obj = startGame;
         mOutNetHandler.sendMessage(msg);
     }
 
-    private void connectToServer(String ip, int port) {
-        Message msg = mOutNetHandler.obtainMessage(0);
-        msg.obj = new ConnectionInfo(ip, port);
+    public void sendScan(String scanned) {
+        Message msg = mOutNetHandler.obtainMessage(1);
+        Scan scan = new Scan();
+        scan.scanned = scanned;
+        msg.obj = scan;
         mOutNetHandler.sendMessage(msg);
     }
 }

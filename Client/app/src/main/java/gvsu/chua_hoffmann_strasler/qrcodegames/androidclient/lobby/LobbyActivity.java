@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.game.GameActivity;
 
 public class LobbyActivity extends BaseActivity implements LobbyContract.View {
 
@@ -20,6 +21,12 @@ public class LobbyActivity extends BaseActivity implements LobbyContract.View {
     private TextView gameID;
 
     private ListView listTeam1;
+
+    @Override
+    public void startGame(String gameCode) {
+        gameService.startGame(gameCode);
+    }
+
     private ListView listTeam2;
 
     private Button btnSwitchTeams;
@@ -40,8 +47,10 @@ public class LobbyActivity extends BaseActivity implements LobbyContract.View {
 
         mPresenter = new LobbyPresenter(this);
 
+        mPresenter.setGameCode(intent.getStringExtra("gameCode"));
+
         gameID = findViewById(R.id.gameID);
-        gameID.setText(intent.getStringExtra("gameCode"));
+        gameID.setText(mPresenter.getGameCode());
 
         //update team list
         listTeam1 = findViewById(R.id.list_Team1);
@@ -72,7 +81,7 @@ public class LobbyActivity extends BaseActivity implements LobbyContract.View {
         btnStartGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Start game");
+                mPresenter.startGame();
             }
         });
 
@@ -87,9 +96,15 @@ public class LobbyActivity extends BaseActivity implements LobbyContract.View {
         String key = (String)bundle.get("key");
         if (key.equals("lobby_received")) {
             mPresenter.updateTeams(bundle.getStringArray("team1"),
-                    bundle.getStringArray("team2"),teamArray1,teamArray2);
+                    bundle.getStringArray("team2"), teamArray1, teamArray2);
         }
 
+        if (key.equals("game_event")) {
+            Intent intent = new Intent(this, GameActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override

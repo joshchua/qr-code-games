@@ -17,6 +17,11 @@ public class GamePresenter implements GameContract.Presenter{
     }
 
     @Override
+    public void handleGameEvent(String gameEvent) {
+
+    }
+
+    @Override
     public void start() {
 
     }

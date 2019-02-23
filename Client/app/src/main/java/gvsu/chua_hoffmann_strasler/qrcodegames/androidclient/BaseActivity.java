@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.ClientService;
 
@@ -18,6 +19,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected boolean isServiceBound = false;
 
     private LocalBroadcastManager lbm;
+
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, "You can't use the back button here.",
+                Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     protected void onResume() {

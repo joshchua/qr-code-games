@@ -6,6 +6,8 @@ public class LobbyPresenter implements LobbyContract.Presenter {
 
     private LobbyContract.View mLobbyView;
 
+    private String gameCode;
+
     public LobbyPresenter(LobbyContract.View connectView) {
         mLobbyView = connectView;
         mLobbyView.setPresenter(this);
@@ -26,7 +28,23 @@ public class LobbyPresenter implements LobbyContract.Presenter {
     }
 
     @Override
+    public void startGame() {
+        mLobbyView.startGame(gameCode);
+    }
+
+    @Override
+    public void setGameCode(String gameCode) {
+        this.gameCode = gameCode;
+    }
+
+    @Override
+    public String getGameCode() {
+        return gameCode;
+    }
+
+    @Override
     public void start() {
 
     }
+
 }

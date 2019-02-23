@@ -11,13 +11,15 @@ public interface LobbyContract {
     interface View extends BaseView<Presenter> {
         void sendSwitchTeamRequest(final String userName, final String gameCode);
         void updateTeams();
-
+        void startGame(String gameCode);
     }
 
     interface Presenter extends BasePresenter {
         void switchTeams(String userName, String gameCode);
         void updateTeams(String[] team1, String[] team2, ArrayList<String> teamArray1,  ArrayList<String> teamArray2);
-
+        void startGame();
+        void setGameCode(String gameCode);
+        String getGameCode();
     }
 
 

@@ -118,7 +118,7 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
             intent.putExtra("userName", mPresenter.getUserName());
             intent.putExtra("ip", getIpAddress());
             startActivity(intent);
-            ConnectActivity.this.finish();
+            finish();
         } else if (key.equals("join_game_error")) {
             Toast.makeText(this, bundle.getString("message"),
                     Toast.LENGTH_SHORT).show();

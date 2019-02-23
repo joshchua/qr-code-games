@@ -178,11 +178,14 @@ public class QRCodeGameServer {
         Game game = findGame(gameCode);
 
         if (game != null) {
-            String msg = String.format("%s (%s) has started!", game.getGameName(), game.getGameCode());
-            System.out.println(msg);
-            GameEvent ge = new GameEvent();
-            ge.message = msg;
-            sendToPlayers(game, ge);
+            if (!game.isPlaying()) {
+                String msg = String.format("%s (%s) has started!",
+                        game.getGameName(), game.getGameCode());
+                System.out.println(msg);
+                GameEvent ge = new GameEvent();
+                ge.message = msg;
+                sendToPlayers(game, ge);
+            }
         }
     }
 

@@ -195,6 +195,6 @@ public class GameActivity extends BaseActivity implements GameContract.View {
 
     @Override
     public void sendScanRequest(String barcodeValue) {
-        gameService.Tag(barcodeValue);
+        gameService.sendScan(barcodeValue);
     }
 }
