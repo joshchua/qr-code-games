@@ -16,20 +16,56 @@ import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.ClientService;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.lobby.LobbyActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.registerusername.RegisterActivity;
 
+/**
+ * The starting activity where users can register and connect to a server to join or create a new
+ * game.
+ */
 public class ConnectActivity extends BaseActivity implements ConnectContract.View {
 
+    /**
+     * The ConnectActivity's Presenter
+     */
     private ConnectContract.Presenter mPresenter;
 
+    /**
+     * The EditText view to hold IP address input
+     */
     private EditText txtIp;
+
+    /**
+     * The EditText view to hold port number input
+     */
     private EditText txtPort;
+    /**
+     * The EditText view to hold gameCode input
+     */
     private EditText txtGameCode;
 
+    /**
+     * The Button view used to create a new game
+     */
     private Button btnCreateGame;
+
+    /**
+     * The Button view used to join an existing game
+     */
     private Button btnJoinGame;
+
+    /**
+     * The Button view to launch the username scanner
+     */
     private Button btnRegisterUserName;
 
+    /**
+     * The TextView that displays the user's username
+     */
     private TextView tvUserName;
 
+    /**
+     * Called when this activity is created
+     *
+     * @param savedInstanceState The bundle saved from previous instances of this activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +114,9 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
         });
     }
 
+    /**
+     * Called when this activity is resumed
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -92,22 +131,42 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
         }
     }
 
+    /**
+     * Get's the the text from the IP address text box
+     *
+     * @return IP address string
+     */
     @Override
     public String getIpAddress() {
         return txtIp.getText().toString();
     }
 
+    /**
+     * Displays the given username by changing the TextView
+     *
+     * @param userName The user's username
+     */
     @Override
     public void showUserName(String userName) {
         tvUserName.setText("You set your username to \""+ userName +"\".");
     }
 
+    /**
+     * Enables/Disables the connect/join buttons
+     *
+     * @param isEnabled If true, the buttons will be enabled. If false, the buttons will be
+     *                  disabled.
+     */
     @Override
     public void setConnectBtnEnabled(boolean isEnabled) {
         btnCreateGame.setEnabled(isEnabled);
         btnJoinGame.setEnabled(isEnabled);
     }
 
+    /**
+     * Called when this activity receives a Local Broadcast from the ClientService
+     * @param bundle The bundle holding relevant extras
+     */
     @Override
     protected void handleGameEvent(Bundle bundle) {
         String key = bundle.getString("key");
@@ -126,11 +185,24 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
     }
 
 
+    /**
+     * Sets this activity's presenter
+     *
+     * @param presenter The presenter for this activity
+     */
     @Override
     public void setPresenter(ConnectContract.Presenter presenter) {
         mPresenter = presenter;
     }
 
+    /**
+     * Attempts to connect to the game server, and if successful, will create a new game
+     *
+     * @param ip The IP address of the server
+     * @param port The server's port reserved for this game
+     * @param userName The user's username
+     * @param game The game the user wishes to play
+     */
     @Override
     public void sendCreateGameRequest(String ip, int port, String userName, int game) {
         // Disable buttons for 5 seconds to wait for connection attempt
@@ -145,6 +217,14 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
         gameService.connectAndCreateGame(ip, port, userName, game);
     }
 
+    /**
+     * Attempts to connect to the game server, and if successful, will join an existing game
+     *
+     * @param ip The IP address of the server
+     * @param port The server's port reserved for this game
+     * @param userName The user's username
+     * @param gameCode The game code of the existing session on the server
+     */
     @Override
     public void sendJoinGameRequest(String ip, int port, String userName, String gameCode) {
         // Disable buttons for 5 seconds to wait for connection attempt
@@ -159,12 +239,20 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
         gameService.connectAndJoinGame(ip, port, userName, gameCode);
     }
 
+    /**
+     * Displays a Toast with given error message
+     *
+     * @param error The error message
+     */
     @Override
-    public void showError(String name) {
-        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+    public void showError(String error) {
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
 
     }
 
+    /**
+     * Starts the RegisterActivity, so a user can scan their username
+     */
     @Override
     public void showScanner() {
         Intent intent = new Intent(this, RegisterActivity.class);
