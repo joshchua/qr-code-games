@@ -1,12 +1,15 @@
 package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.game;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
@@ -30,9 +33,13 @@ public class GameActivity extends BaseActivity implements GameContract.View {
     private CameraSourcePreview preview;
     private GraphicOverlay graphicOverlay;
 
-    @Override
-    public void showGameEvent(String gameEvent) {
+    private ListView gameEventView;
+    private ArrayList<String> gameEventList;
+    private ArrayAdapter<String> gameEventAdapter;
 
+    @Override
+    public void showGameEvent() {
+        gameEventAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -43,6 +50,18 @@ public class GameActivity extends BaseActivity implements GameContract.View {
         setContentView(R.layout.activity_game);
 
         presenter = new GamePresenter(this);
+
+        gameEventView = findViewById(R.id.list_gameEvents);
+        gameEventList = presenter.getGameEventList();
+        gameEventAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, gameEventList);
+        gameEventView.setAdapter(gameEventAdapter);
+
+        final Intent startingIntent = getIntent();
+
+        if (startingIntent != null) {
+            String startingMessage = startingIntent.getStringExtra("message");
+            presenter.handleGameEvent(startingMessage);
+        }
 
         preview = (CameraSourcePreview) findViewById(R.id.firePreview);
         if (preview == null) {
@@ -58,6 +77,7 @@ public class GameActivity extends BaseActivity implements GameContract.View {
         } else {
             getRuntimePermissions();
         }
+
     }
 
     @Override
@@ -76,7 +96,7 @@ public class GameActivity extends BaseActivity implements GameContract.View {
             cameraSource.setMachineLearningFrameProcessor(new BarcodeScanningProcessor() {
                 @Override
                 public void scanCallback(String rawValue) {
-
+                    presenter.handleScan(rawValue);
                 }
             });
         } catch (Exception e) {
@@ -123,7 +143,11 @@ public class GameActivity extends BaseActivity implements GameContract.View {
 
     @Override
     protected void handleGameEvent(Bundle bundle) {
-
+        String key = bundle.getString("key");
+        if (key.equals("game_event")) {
+            String gameEvent = bundle.getString("message");
+            presenter.handleGameEvent(gameEvent);
+        }
     }
 
     @Override

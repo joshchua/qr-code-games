@@ -179,6 +179,8 @@ public class QRCodeGameServer {
 
         if (game != null) {
             if (!game.isPlaying()) {
+                game.start();
+
                 String msg = String.format("%s (%s) has started!",
                         game.getGameName(), game.getGameCode());
                 System.out.println(msg);
@@ -198,6 +200,7 @@ public class QRCodeGameServer {
                 GameEvent ge = new GameEvent();
                 ge.message = scanResult.getMessage();
                 sendToPlayers(game, ge);
+                System.out.println(ge.message);
             }
         }
     }

@@ -110,7 +110,7 @@ public class ConnectActivity extends BaseActivity implements ConnectContract.Vie
 
     @Override
     protected void handleGameEvent(Bundle bundle) {
-        String key = (String)bundle.get("key");
+        String key = bundle.getString("key");
         if (key.equals("lobby_received")) {
             Intent intent = new Intent(this, LobbyActivity.class);
             intent.removeExtra("key");
