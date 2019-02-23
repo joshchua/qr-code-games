@@ -33,7 +33,11 @@ public class ConnectPresenter implements ConnectContract.Presenter {
      */
     @Override
     public boolean isValidIPAddress(String ip) {
-        return true; // TODO
+        String strPattern = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+        "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+                "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+                "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+        return ip.matches(strPattern);
     }
 
     /**
@@ -44,7 +48,7 @@ public class ConnectPresenter implements ConnectContract.Presenter {
      */
     @Override
     public boolean isValidPort(String port) {
-        return true; // TODO
+        return port.matches("\\d+");
     }
 
     /**
