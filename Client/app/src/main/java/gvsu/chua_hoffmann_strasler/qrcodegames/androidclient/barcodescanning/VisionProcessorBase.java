@@ -1,19 +1,5 @@
 package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning;
 
-// Copyright 2018 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.support.annotation.GuardedBy;
@@ -39,24 +25,45 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
 
-    // To keep the latest images and its metadata.
+
+    /**
+     * To keep the latest images and its metadata.
+     */
     @GuardedBy("this")
     private ByteBuffer latestImage;
 
+    /**
+     * The metadata for the latest image
+     */
     @GuardedBy("this")
     private FrameMetadata latestImageMetaData;
 
-    // To keep the images and metadata in process.
+    /**
+     * To keep the images and metadata in process.
+     */
     @GuardedBy("this")
     private ByteBuffer processingImage;
 
+    /**
+     * The metadata for the processing image
+     */
     @GuardedBy("this")
 
     private FrameMetadata processingMetaData;
 
+    /**
+     * Creates a new VisionProcessorBase
+     */
     public VisionProcessorBase() {
     }
 
+    /**
+     * Processes an image
+     *
+     * @param data The image data
+     * @param frameMetadata Metadata about the frame
+     * @param graphicOverlay The overlay used to draw
+     */
     @Override
     public synchronized void process(
             ByteBuffer data, final FrameMetadata frameMetadata, final GraphicOverlay
@@ -68,7 +75,11 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
         }
     }
 
-    // Bitmap version
+    /**
+     * Processes a static bitmap
+     * @param bitmap The static bitmap to be scanned
+     * @param graphicOverlay The graphic overlay used to draw
+     */
     @Override
     public void process(Bitmap bitmap, final GraphicOverlay
             graphicOverlay) {
@@ -76,6 +87,11 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
                 graphicOverlay);
     }
 
+    /**
+     * Processes the latest image
+     *
+     * @param graphicOverlay The graphic overlay used to draw
+     */
     private synchronized void processLatestImage(final GraphicOverlay graphicOverlay) {
         processingImage = latestImage;
         processingMetaData = latestImageMetaData;
@@ -86,6 +102,13 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
         }
     }
 
+    /**
+     * Processes an image from a byte stream
+     *
+     * @param data The image data
+     * @param frameMetadata The frame metadata
+     * @param graphicOverlay The graphic overlay used to draw the graphic
+     */
     private void processImage(
             ByteBuffer data, final FrameMetadata frameMetadata,
             final GraphicOverlay graphicOverlay) {
@@ -103,6 +126,14 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
                 graphicOverlay);
     }
 
+    /**
+     * Detects a barcode in the image
+     *
+     * @param originalCameraImage
+     * @param image
+     * @param metadata
+     * @param graphicOverlay
+     */
     private void detectInVisionImage(
             final Bitmap originalCameraImage,
             FirebaseVisionImage image,
@@ -128,10 +159,19 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
                         });
     }
 
+    /**
+     * Called when the processor is stopped
+     */
     @Override
     public void stop() {
     }
 
+    /**
+     * To be implemented by child classes to detect objects in the image
+     *
+     * @param image
+     * @return
+     */
     protected abstract Task<T> detectInImage(FirebaseVisionImage image);
 
     /**
@@ -146,5 +186,10 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
             @NonNull FrameMetadata frameMetadata,
             @NonNull GraphicOverlay graphicOverlay);
 
+    /**
+     * To be implemented by child classes to handle failures
+     *
+     * @param e The exception caught
+     */
     protected abstract void onFailure(@NonNull Exception e);
 }

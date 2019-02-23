@@ -1,19 +1,5 @@
 package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning;
 
-// Copyright 2018 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,14 +15,23 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Barcode Detector Demo.
+ * Processes barcodes using MLKit
  */
 public abstract class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseVisionBarcode>> {
 
+    /**
+     * This class' tag
+     */
     private static final String TAG = "BarcodeScanProc";
 
+    /**
+     * The MLKit barcode dectector
+     */
     private final FirebaseVisionBarcodeDetector detector;
 
+    /**
+     * Creates a new BarcodeScanningProcessor
+     */
     public BarcodeScanningProcessor() {
         // Note that if you know which format of barcode your app is dealing with, detection will be
         // faster to specify the supported barcode formats one by one, e.g.
@@ -46,8 +41,17 @@ public abstract class BarcodeScanningProcessor extends VisionProcessorBase<List<
         detector = FirebaseVision.getInstance().getVisionBarcodeDetector();
     }
 
+    /**
+     * A callback to be called in classes extending BarcodeScanningProcessor holding the raw value
+     * of the barcode
+     *
+     * @param rawValue The raw text of the barcode
+     */
     public abstract void scanCallback(String rawValue);
 
+    /**
+     * Called when the processor is closed
+     */
     @Override
     public void stop() {
         try {
@@ -57,11 +61,25 @@ public abstract class BarcodeScanningProcessor extends VisionProcessorBase<List<
         }
     }
 
+    /**
+     * Asynchronously detects barcodes in a given image
+     *
+     * @param image The image to be scanned
+     * @return A task for the detector to look for a barcode in an image
+     */
     @Override
     protected Task<List<FirebaseVisionBarcode>> detectInImage(FirebaseVisionImage image) {
         return detector.detectInImage(image);
     }
 
+    /**
+     * Called when there is a successful scan
+     *
+     * @param originalCameraImage hold the original image from camera, used to draw the background
+     * @param barcodes The list of MLKit barcodes
+     * @param frameMetadata Metadata about the current frame
+     * @param graphicOverlay The overlay used to draw on top of the original image
+     */
     @Override
     protected void onSuccess(
             @Nullable Bitmap originalCameraImage,
@@ -83,6 +101,11 @@ public abstract class BarcodeScanningProcessor extends VisionProcessorBase<List<
         graphicOverlay.postInvalidate();
     }
 
+    /**
+     * Logs the error in debug when there is a failure with barcode detection
+     *
+     * @param e The exception to be logged
+     */
     @Override
     protected void onFailure(@NonNull Exception e) {
         Log.e(TAG, "Barcode detection failed " + e);

@@ -1,19 +1,5 @@
 package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning;
 
-// Copyright 2018 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -22,17 +8,48 @@ import android.graphics.RectF;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.GraphicOverlay.Graphic;
 
-/** Graphic instance for rendering Barcode position and content information in an overlay view. */
+
+/**
+ * Graphic instance for rendering Barcode position and content information in an overlay view.
+ */
 public class BarcodeGraphic extends Graphic {
 
+    /**
+     * The default text color
+     */
     private static final int TEXT_COLOR = Color.WHITE;
+
+    /**
+     * The default text size
+     */
     private static final float TEXT_SIZE = 54.0f;
+
+    /**
+     * The default stroke width
+     */
     private static final float STROKE_WIDTH = 4.0f;
 
+    /**
+     * The rectangle drawn on the screen
+     */
     private final Paint rectPaint;
+
+    /**
+     * The text containing the value of the barcode drawn on the screen
+     */
     private final Paint barcodePaint;
+
+    /**
+     * The MLKit object holding information about the barcode
+     */
     private final FirebaseVisionBarcode barcode;
 
+    /**
+     * Creates a new Barcode Graphic to be drawn in GraphicOverlay
+     *
+     * @param overlay The GraphicOverlay used
+     * @param barcode The MLKit barcode object to extract information
+     */
     BarcodeGraphic(GraphicOverlay overlay, FirebaseVisionBarcode barcode) {
         super(overlay);
 
@@ -48,8 +65,11 @@ public class BarcodeGraphic extends Graphic {
         barcodePaint.setTextSize(TEXT_SIZE);
     }
 
+
     /**
      * Draws the barcode block annotations for position, size, and raw value on the supplied canvas.
+     *
+     * @param canvas drawing canvas
      */
     @Override
     public void draw(Canvas canvas) {

@@ -16,15 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service android:name=".data.ClientService" />
-        <activity android:name=".connect.ConnectActivity">
+        <activity android:name=".connect.ConnectActivity"  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".lobby.LobbyActivity"></activity>
-        <activity android:name=".game.GameActivity"></activity>
-        <activity android:name=".registerusername.RegisterActivity"></activity>
+        <activity android:name=".lobby.LobbyActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".game.GameActivity"  android:screenOrientation="portrait"></activity>
+        <activity android:name=".registerusername.RegisterActivity"  android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

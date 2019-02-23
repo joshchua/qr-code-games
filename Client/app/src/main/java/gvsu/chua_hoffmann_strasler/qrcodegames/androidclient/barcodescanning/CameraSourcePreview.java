@@ -1,19 +1,5 @@
 package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning;
 
-// Copyright 2018 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -29,16 +15,48 @@ import java.io.IOException;
 
 /** Preview the camera image in the screen. */
 public class CameraSourcePreview extends ViewGroup {
-    private static final String TAG = "MIDemoApp:Preview";
 
+    /**
+     * The tag for this object used for debug logs
+     */
+    private static final String TAG = "QRCodeGames:Preview";
+
+    /**
+     * The application context
+     */
     private Context context;
+
+    /**
+     * Surface view
+     */
     private SurfaceView surfaceView;
+
+    /**
+     * If a start has been requested
+     */
     private boolean startRequested;
+
+    /**
+     * If there is a surface to draw to that is available
+     */
     private boolean surfaceAvailable;
+
+    /**
+     * The imaging data from the camera
+     */
     private CameraSource cameraSource;
 
+    /**
+     * The overlay used to draw graphics on top of the overlay
+     */
     private GraphicOverlay overlay;
 
+    /**
+     * Creates a preview for the camera with MLKit detection
+     *
+     * @param context The application context
+     * @param attrs A collection of attributes for this custom view
+     */
     public CameraSourcePreview(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
@@ -50,6 +68,12 @@ public class CameraSourcePreview extends ViewGroup {
         addView(surfaceView);
     }
 
+    /**
+     * Starts the camera stream of image data
+     *
+     * @param cameraSource The source of image data
+     * @throws IOException
+     */
     public void start(CameraSource cameraSource) throws IOException {
         if (cameraSource == null) {
             stop();
@@ -63,17 +87,30 @@ public class CameraSourcePreview extends ViewGroup {
         }
     }
 
+    /**
+     * Starts the camera stream of image data
+     *
+     * @param cameraSource The source of image data
+     * @param overlay The graphic overlay used for drawing
+     * @throws IOException
+     */
     public void start(CameraSource cameraSource, GraphicOverlay overlay) throws IOException {
         this.overlay = overlay;
         start(cameraSource);
     }
 
+    /**
+     * Stops the camera
+     */
     public void stop() {
         if (cameraSource != null) {
             cameraSource.stop();
         }
     }
 
+    /**
+     * Release the camera
+     */
     public void release() {
         if (cameraSource != null) {
             cameraSource.release();
@@ -81,6 +118,11 @@ public class CameraSourcePreview extends ViewGroup {
         }
     }
 
+    /**
+     * Starts the camera if the camera is ready
+     *
+     * @throws IOException
+     */
     @SuppressLint("MissingPermission")
     private void startIfReady() throws IOException {
         if (startRequested && surfaceAvailable) {
@@ -102,7 +144,15 @@ public class CameraSourcePreview extends ViewGroup {
         }
     }
 
+    /**
+     * The callback for the SurfaceHolder
+     */
     private class SurfaceCallback implements SurfaceHolder.Callback {
+        /**
+         * Called when the surface is created
+         *
+         * @param surface The surface holder used
+         */
         @Override
         public void surfaceCreated(SurfaceHolder surface) {
             surfaceAvailable = true;
@@ -113,15 +163,37 @@ public class CameraSourcePreview extends ViewGroup {
             }
         }
 
+        /**
+         * Called when the surface is destroyed
+         *
+         * @param surface The surface holder used
+         */
         @Override
         public void surfaceDestroyed(SurfaceHolder surface) {
             surfaceAvailable = false;
         }
 
+        /**
+         * Called when the surface is changed
+         *
+         * @param holder The holder for the surface
+         * @param format The format for the surface
+         * @param width The width of the surface
+         * @param height The height of the surface
+         */
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
     }
 
+    /**
+     * Called when this view group is on the layout
+     *
+     * @param changed If the view has been changed
+     * @param left The left position
+     * @param top The top position
+     * @param right The right position
+     * @param bottom The bottom position
+     */
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int width = 320;
@@ -166,6 +238,11 @@ public class CameraSourcePreview extends ViewGroup {
         }
     }
 
+    /**
+     * Checks if the device is in portrait mode
+     *
+     * @return If the device is in portrait
+     */
     private boolean isPortraitMode() {
         int orientation = context.getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {

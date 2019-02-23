@@ -13,10 +13,20 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
-/** Utils functions for bitmap conversions. */
+
+/**
+ * Utils functions for bitmap conversions.
+ */
 public class BitmapUtils {
 
-    // Convert NV21 format byte buffer to bitmap.
+
+    /**
+     * Gets a bitmap from a ByteBuffer of a live stream of image data
+     *
+     * @param data The image data
+     * @param metadata The frame metadata
+     * @return
+     */
     @Nullable
     public static Bitmap getBitmap(ByteBuffer data, FrameMetadata metadata) {
         data.rewind();
@@ -41,7 +51,15 @@ public class BitmapUtils {
         return null;
     }
 
-    // Rotates a bitmap if it is converted from a bytebuffer.
+
+    /**
+     * Rotates the bitmap
+     *
+     * @param bitmap The bitmap to be rotated
+     * @param rotation The angle of the rotation in degrees
+     * @param facing The front/back facing camera
+     * @return The rotated bitmap
+     */
     private static Bitmap rotateBitmap(Bitmap bitmap, int rotation, int facing) {
         Matrix matrix = new Matrix();
         int rotationDegree = 0;
