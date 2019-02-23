@@ -41,15 +41,15 @@ public abstract class Game {
         return mGameCode;
     }
 
-    public void chooseTeam(String userName, int team) {
+    public void switchTeam(String userName) {
         int index = mPlayers.indexOf(userName);
-        if (team == 1 || team == 2)
-            mPlayerTeam.set(index, team);
+        int team = mPlayerTeam.get(index);
+        mPlayerTeam.set(index,(team == 1 ) ? 2 : 1);
     }
 
     public void joinLobby(String userName) {
         mPlayers.add(userName);
-        mPlayerTeam.add(0);
+        mPlayerTeam.add(1);
         mPlayerState.add(PlayerState.NORMAL);
     }
 
@@ -68,6 +68,10 @@ public abstract class Game {
     // This should be overridden by children, but also use super.start()
     public void start() {
         mIsStarted = true;
+    }
+
+    public void gameOver() {
+        mIsStarted = false;
     }
 
     public boolean isPlaying() {

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="gvsu.chua_hoffmann_strasler.qrcodegames.androidclient">
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:allowBackup="true"
@@ -11,13 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service android:name=".data.ClientService" />
-        <activity android:name=".connect.ConnectActivity">
+        <activity android:name=".connect.ConnectActivity"  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".lobby.LobbyActivity"></activity>
+        <activity android:name=".lobby.LobbyActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".game.GameActivity"  android:screenOrientation="portrait"></activity>
+        <activity android:name=".registerusername.RegisterActivity"  android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

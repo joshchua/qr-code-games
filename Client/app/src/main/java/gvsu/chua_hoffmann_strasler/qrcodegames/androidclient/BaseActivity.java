@@ -10,27 +10,39 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.ClientService;
 
-public abstract class GameActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     protected ClientService gameService;
     protected boolean isServiceBound = false;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private LocalBroadcastManager lbm;
 
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        lbm.registerReceiver(mGameEventReceiver, new IntentFilter("game_event_received"));
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, "You can't use the back button here.",
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
+
+        lbm = LocalBroadcastManager.getInstance(this);
+        lbm.registerReceiver(mGameEventReceiver, new IntentFilter("game_event_received"));
 
         Intent intent = new Intent(this, ClientService.class);
         bindService(intent, mConnection, BIND_NOT_FOREGROUND);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        unbindService(mConnection);
+        lbm.unregisterReceiver(mGameEventReceiver);
     }
 
     protected ServiceConnection mConnection = new ServiceConnection() {

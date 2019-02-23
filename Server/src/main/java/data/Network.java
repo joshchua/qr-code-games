@@ -13,6 +13,10 @@ public class Network {
         kryo.register(Lobby.class);
         kryo.register(String[].class);
         kryo.register(JoinGameErrorResult.class);
+        kryo.register(SwitchTeam.class);
+        kryo.register(StartGame.class);
+        kryo.register(GameEvent.class);
+        kryo.register(Scan.class);
     }
 
     public static class CreateGame {
@@ -30,19 +34,27 @@ public class Network {
         public String gameCode;
         public String[] team1;
         public String[] team2;
-        public String[] noTeam;
     }
 
-    public static class ChooseTeam {
+    public static class SwitchTeam {
         public String gameCode;
-        public int team;
-    }
-
-    public static class Tag {
-        public String tagged;
+        public String userName;
     }
 
     public static class JoinGameErrorResult {
         public String message;
+    }
+
+    public static class StartGame {
+        public String gameCode;
+    }
+
+    public static class GameEvent {
+        public String message;
+        public boolean isPlaying;
+    }
+
+    public static class Scan {
+        public String scanned;
     }
 }

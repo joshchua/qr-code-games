@@ -4,10 +4,14 @@ import data.*;
 import data.Network.CreateGame;
 import data.Network.JoinGame;
 import data.Network.Lobby;
-import data.Network.ChooseTeam;
+import data.Network.SwitchTeam;
 import data.Network.JoinGameErrorResult;
+import data.Network.StartGame;
+import data.Network.GameEvent;
+import data.Network.Scan;
 import games.CaptureTheFlag;
 import games.Game;
+import models.ScanResult;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,9 +20,21 @@ public class QRCodeGameServer {
 
     private ArrayList<Game> games;
 
+    private int port;
+
     Server server;
 
     public QRCodeGameServer() {
+        port = Network.PORT;
+        startServer();
+    }
+
+    public QRCodeGameServer(int port) {
+        this.port = port;
+        startServer();
+    }
+
+    private void startServer() {
         games = new ArrayList<Game>();
         server = new Server() {
             protected Connection newConnection() {
@@ -58,9 +74,20 @@ public class QRCodeGameServer {
                     joinGame(jg.gameCode, jg.userName);
                 }
 
-                if (obj instanceof ChooseTeam) {
-                    ChooseTeam ct = (ChooseTeam)obj;
-                    chooseTeam(ct.gameCode, gc.userName, ct.team);
+                if (obj instanceof SwitchTeam) {
+                    SwitchTeam ct = (SwitchTeam)obj;
+                    System.out.printf("%s is switching teams in game %s.%n", ct.userName, ct.gameCode);
+                    switchTeam(ct.gameCode, ct.userName);
+                }
+
+                if (obj instanceof StartGame) {
+                    StartGame sg = (StartGame)obj;
+                    startGame(sg.gameCode);
+                }
+
+                if (obj instanceof Scan) {
+                    Scan scan = (Scan)obj;
+                    handleScan(gc.gameCode, gc.userName, scan.scanned);
                 }
             }
 
@@ -70,10 +97,24 @@ public class QRCodeGameServer {
         });
 
         try {
-            server.bind(Network.PORT);
+            server.bind(port);
             server.start();
         } catch (IOException ex) {
 
+        }
+    }
+
+    private void sendToPlayers(Game game, Object obj) {
+        ArrayList<String> temp = new ArrayList<String>(game.getPlayers());
+        for (Connection connection : server.getConnections()) {
+            GameConnection gc = (GameConnection)connection;
+            for (String userName : temp) {
+                if (userName.equals(gc.userName)) {
+                    server.sendToTCP(gc.getID(), obj);
+                    temp.remove(userName);
+                    break;
+                }
+            }
         }
     }
 
@@ -111,26 +152,25 @@ public class QRCodeGameServer {
         sendAllUpdatedLobby(game);
     }
 
-    private void chooseTeam(String gameCode, String userName, int team) {
+    private void switchTeam(String gameCode, String userName) {
         Game game = findGame(gameCode);
-        game.chooseTeam(userName, team);
+        game.switchTeam(userName);
         sendAllUpdatedLobby(game);
     }
 
     private void sendAllUpdatedLobby(Game game) {
         Lobby lobby = new Lobby();
+        lobby.gameCode = game.getGameCode();
         lobby.gameName = game.getGameName();
 
         ArrayList<String> team1 = new ArrayList<String>();
         ArrayList<String> team2 = new ArrayList<String>();
-        ArrayList<String> noTeam = new ArrayList<String>();
+
         for (String userName : game.getPlayers()) {
             if (game.findTeam(userName) == 1) {
                 team1.add(userName);
             } else if (game.findTeam(userName) == 2) {
                 team2.add(userName);
-            } else {
-                noTeam.add(userName);
             }
         }
         if (team1.size() > 0) {
@@ -143,25 +183,59 @@ public class QRCodeGameServer {
             lobby.team2 = team2.toArray(lobby.team2);
         }
 
-        if (noTeam.size() > 0) {
-            lobby.noTeam = new String[noTeam.size()];
-            lobby.noTeam = noTeam.toArray(lobby.noTeam);
-        }
+        sendToPlayers(game, lobby);
+    }
 
-        ArrayList<String> temp = new ArrayList<String>(game.getPlayers());
-        for (Connection connection : server.getConnections()) {
-            GameConnection gc = (GameConnection)connection;
-            for (String userName : temp) {
-                if (userName.equals(gc.userName)) {
-                    server.sendToTCP(gc.getID(), lobby);
-                    temp.remove(userName);
-                    break;
-                }
+    private void startGame(String gameCode) {
+        Game game = findGame(gameCode);
+
+        if (game != null) {
+            if (!game.isPlaying()) {
+                game.start();
+
+                String msg = String.format("%s (%s) has started!",
+                        game.getGameName(), game.getGameCode());
+                System.out.println(msg);
+                GameEvent ge = new GameEvent();
+                ge.message = msg;
+                ge.isPlaying = game.isPlaying();
+                sendToPlayers(game, ge);
+            }
+        }
+    }
+
+    private void handleScan(String gameCode, String userName, String scanned) {
+        Game game = findGame(gameCode);
+        if (game != null) {
+            ScanResult scanResult = game.handleScan(userName, scanned);
+
+            if (scanResult != null) {
+                GameEvent ge = new GameEvent();
+                ge.message = scanResult.getMessage();
+                ge.isPlaying = game.isPlaying();
+                sendToPlayers(game, ge);
+                System.out.println(ge.message);
             }
         }
     }
 
     public static void main(String[] args) {
-        new QRCodeGameServer();
+        int port = -1;
+        if (args.length > 0) {
+            for (int i = 0; i < args.length; i++) {
+                try {
+                    if (args[i].equals("-port") || args[i].equals("-p")) {
+                        port = Integer.parseInt(args[i + 1]);
+                    }
+                } catch (Exception ex) {
+                    System.out.println("There is an error with the given arguments.");
+                }
+            }
+        }
+
+        if (port == -1)
+            new QRCodeGameServer();
+        else
+            new QRCodeGameServer(port);
     }
 }

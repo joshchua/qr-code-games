@@ -19,28 +19,74 @@ import com.esotericsoftware.kryonet.Listener;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.CreateGame;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.JoinGame;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.SwitchTeam;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.Lobby;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.JoinGameErrorResult;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.StartGame;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.GameEvent;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.Scan;
 
 
 import java.io.IOException;
 
+/**
+ * The service used to facilitate communication between this client app and the game server
+ */
 public class ClientService extends Service {
 
+    /**
+     * The binder to that binds Activities to this service for activity to service communication
+     */
     private final IBinder mBinder = new ClientServiceBinder();
+
+    /**
+     * The second thread used for outgoing network calls
+     */
     private HandlerThread mHandlerThread;
+
+    /**
+     * The looper keeping the second thread alive
+     */
     private Looper mOutgoingNetworkLooper;
+
+    /**
+     * The handler for the HandlerThread used for outgoing network calls
+     */
     private OutgoingNetworkHandler mOutNetHandler;
+
+    /**
+     * The Kryonet client that communicates with the game server
+     */
     private Client client;
+
+    /**
+     * If the client is connected to the game server
+     */
     private boolean mIsClientConnected = false;
+
+    /**
+     * If the user is in a lobby/game
+     */
     private boolean mIsInGame = false;
 
-    // For outgoing network requests, as network calls cannot be on the main thread
+    /**
+     * A custom handler for a HandlerThread used for outgoing network calls
+     */
     private final class OutgoingNetworkHandler extends Handler {
+        /**
+         * Creates an OutgoingNetworkHandler
+         *
+         * @param looper The looper to keep the message loop alive
+         */
         public OutgoingNetworkHandler(Looper looper) {
             super(looper);
         }
 
+        /**
+         * Handles messages sent to this worker thread
+         *
+         * @param msg The message delegating work for this thread
+         */
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -61,6 +107,9 @@ public class ClientService extends Service {
         }
     }
 
+    /**
+     * Called when this service is created
+     */
     @Override
     public void onCreate() {
         mHandlerThread = new HandlerThread("QRGamesClientService",
@@ -85,7 +134,6 @@ public class ClientService extends Service {
                     bundle.putString("gameName", lobby.gameName);
                     bundle.putStringArray("team1", lobby.team1);
                     bundle.putStringArray("team2", lobby.team2);
-                    bundle.putStringArray("noTeam", lobby.noTeam);
                     sendToActivity(eventName, bundle);
                 }
 
@@ -96,6 +144,15 @@ public class ClientService extends Service {
                     bundle.putString("message", error.message);
                     sendToActivity(eventName, bundle);
                 }
+
+                if (obj instanceof GameEvent) {
+                    GameEvent ge = (GameEvent)obj;
+                    String eventName = "game_event";
+                    Bundle bundle = new Bundle();
+                    bundle.putString("message", ge.message);
+                    bundle.putBoolean("is_playing", ge.isPlaying);
+                    sendToActivity(eventName, bundle);
+                }
             }
 
             public void disconnected(Connection connection) {
@@ -104,27 +161,53 @@ public class ClientService extends Service {
         });
     }
 
+    /**
+     * Called when this service is called to be a started service
+     *
+     * @param intent
+     * @param flags
+     * @param startId
+     * @return Specifies the process for this service
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_STICKY;
     }
 
+    /**
+     * A custom binder used to bind this service on an activity
+     */
     public class ClientServiceBinder extends Binder {
         public ClientService getService() {
             return ClientService.this;
         }
     }
 
+    /**
+     * Called when the activity is bound to this service
+     *
+     * @param intent
+     * @return
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
     }
 
+    /**
+     * Called when this service is destroyed
+     */
     @Override
     public void onDestroy() {
         mHandlerThread.quit();
     }
 
+    /**
+     * Sends a Local Broadcast to listening activities
+     *
+     * @param messageName The key message
+     * @param extras The bundle holding relevant extras
+     */
     private void sendToActivity(String messageName, Bundle extras) {
         Intent intent = new Intent("game_event_received");
         intent.putExtra("key", messageName);
@@ -132,6 +215,26 @@ public class ClientService extends Service {
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
+    /**
+     * Connects to the game server
+     *
+     * @param ip IP Address
+     * @param port Port
+     */
+    private void connectToServer(String ip, int port) {
+        Message msg = mOutNetHandler.obtainMessage(0);
+        msg.obj = new ConnectionInfo(ip, port);
+        mOutNetHandler.sendMessage(msg);
+    }
+
+    /**
+     * Attempts to connect to the server, and if successful, will create a new game
+     *
+     * @param ip IP address
+     * @param port Port
+     * @param userName Username
+     * @param game Type of game to be created
+     */
     public void connectAndCreateGame(String ip, int port, final String userName, final int game) {
         connectToServer(ip, port);
         // Wait a second to ensure that client is connected to server
@@ -151,6 +254,14 @@ public class ClientService extends Service {
 
     }
 
+    /**
+     * Attempts to connect to the server, and if successful, will join an existing session
+     *
+     * @param ip IP address
+     * @param port Port
+     * @param userName The user's username
+     * @param gameCode The game code of the existing session
+     */
     public void connectAndJoinGame(String ip, int port, final String userName, final String gameCode) {
         connectToServer(ip, port);
         // Wait a second to ensure that client is connected to the server
@@ -169,9 +280,44 @@ public class ClientService extends Service {
         }, 1000);
     }
 
-    private void connectToServer(String ip, int port) {
-        Message msg = mOutNetHandler.obtainMessage(0);
-        msg.obj = new ConnectionInfo(ip, port);
+    /**
+     * Switches the user's team
+     *
+     * @param userName The user's username
+     * @param gameCode The session that the user is in
+     */
+    public void switchTeam(final String userName, final String gameCode) {
+        SwitchTeam switchTeam = new SwitchTeam();
+        switchTeam.gameCode = gameCode;
+        switchTeam.userName = userName;
+        Message msg = mOutNetHandler.obtainMessage(1);
+        msg.obj = switchTeam;
+        mOutNetHandler.sendMessage(msg);
+    }
+
+    /**
+     * Starts the game
+     *
+     * @param gameCode The game code of the session
+     */
+    public void startGame(String gameCode) {
+        Message msg = mOutNetHandler.obtainMessage(1);
+        StartGame startGame = new StartGame();
+        startGame.gameCode = gameCode;
+        msg.obj = startGame;
+        mOutNetHandler.sendMessage(msg);
+    }
+
+    /**
+     * Tells the server that this user has scanned something
+     *
+     * @param scanned The value of the QR code the user scanned
+     */
+    public void sendScan(String scanned) {
+        Message msg = mOutNetHandler.obtainMessage(1);
+        Scan scan = new Scan();
+        scan.scanned = scanned;
+        msg.obj = scan;
         mOutNetHandler.sendMessage(msg);
     }
 }
