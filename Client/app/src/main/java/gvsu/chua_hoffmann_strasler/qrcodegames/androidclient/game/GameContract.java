@@ -13,7 +13,8 @@ public interface GameContract {
 
     interface Presenter extends BasePresenter {
         void handleScan(String barcodeValue);
-        void handleGameEvent(String gameEvent);
+        void handleGameEvent(String gameEvent, boolean isPlaying);
+        void gameOver();
         ArrayList<String> getGameEventList();
     }
 }

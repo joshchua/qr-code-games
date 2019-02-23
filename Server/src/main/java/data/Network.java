@@ -51,6 +51,7 @@ public class Network {
 
     public static class GameEvent {
         public String message;
+        public boolean isPlaying;
     }
 
     public static class Scan {

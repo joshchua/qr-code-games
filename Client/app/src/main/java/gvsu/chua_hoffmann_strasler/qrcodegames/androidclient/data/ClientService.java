@@ -105,6 +105,7 @@ public class ClientService extends Service {
                     String eventName = "game_event";
                     Bundle bundle = new Bundle();
                     bundle.putString("message", ge.message);
+                    bundle.putBoolean("is_playing", ge.isPlaying);
                     sendToActivity(eventName, bundle);
                 }
             }

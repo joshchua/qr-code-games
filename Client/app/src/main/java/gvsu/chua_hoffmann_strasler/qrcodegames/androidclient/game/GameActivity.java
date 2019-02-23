@@ -60,7 +60,8 @@ public class GameActivity extends BaseActivity implements GameContract.View {
 
         if (startingIntent != null) {
             String startingMessage = startingIntent.getStringExtra("message");
-            presenter.handleGameEvent(startingMessage);
+            boolean isPlaying = startingIntent.getBooleanExtra("is_playing", false);
+            presenter.handleGameEvent(startingMessage, isPlaying);
         }
 
         preview = (CameraSourcePreview) findViewById(R.id.firePreview);
@@ -146,7 +147,8 @@ public class GameActivity extends BaseActivity implements GameContract.View {
         String key = bundle.getString("key");
         if (key.equals("game_event")) {
             String gameEvent = bundle.getString("message");
-            presenter.handleGameEvent(gameEvent);
+            boolean isPlaying = bundle.getBoolean("is_playing");
+            presenter.handleGameEvent(gameEvent, isPlaying);
         }
     }
 

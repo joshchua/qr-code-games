@@ -20,9 +20,21 @@ public class QRCodeGameServer {
 
     private ArrayList<Game> games;
 
+    private int port;
+
     Server server;
 
     public QRCodeGameServer() {
+        port = Network.PORT;
+        startServer();
+    }
+
+    public QRCodeGameServer(int port) {
+        this.port = port;
+        startServer();
+    }
+
+    private void startServer() {
         games = new ArrayList<Game>();
         server = new Server() {
             protected Connection newConnection() {
@@ -85,7 +97,7 @@ public class QRCodeGameServer {
         });
 
         try {
-            server.bind(Network.PORT);
+            server.bind(port);
             server.start();
         } catch (IOException ex) {
 
@@ -186,6 +198,7 @@ public class QRCodeGameServer {
                 System.out.println(msg);
                 GameEvent ge = new GameEvent();
                 ge.message = msg;
+                ge.isPlaying = game.isPlaying();
                 sendToPlayers(game, ge);
             }
         }
@@ -199,6 +212,7 @@ public class QRCodeGameServer {
             if (scanResult != null) {
                 GameEvent ge = new GameEvent();
                 ge.message = scanResult.getMessage();
+                ge.isPlaying = game.isPlaying();
                 sendToPlayers(game, ge);
                 System.out.println(ge.message);
             }
@@ -206,6 +220,22 @@ public class QRCodeGameServer {
     }
 
     public static void main(String[] args) {
-        new QRCodeGameServer();
+        int port = -1;
+        if (args.length > 0) {
+            for (int i = 0; i < args.length; i++) {
+                try {
+                    if (args[i].equals("-port") || args[i].equals("-p")) {
+                        port = Integer.parseInt(args[i + 1]);
+                    }
+                } catch (Exception ex) {
+                    System.out.println("There is an error with the given arguments.");
+                }
+            }
+        }
+
+        if (port == -1)
+            new QRCodeGameServer();
+        else
+            new QRCodeGameServer(port);
     }
 }
