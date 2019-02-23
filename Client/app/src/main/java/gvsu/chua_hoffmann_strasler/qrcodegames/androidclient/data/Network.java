@@ -3,7 +3,6 @@ package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
-
 public class Network {
     public static final int PORT = 54555;
 
@@ -15,7 +14,9 @@ public class Network {
         kryo.register(String[].class);
         kryo.register(JoinGameErrorResult.class);
         kryo.register(SwitchTeam.class);
-        kryo.register(Tag.class);
+        kryo.register(StartGame.class);
+        kryo.register(GameEvent.class);
+        kryo.register(Scan.class);
     }
 
     public static class CreateGame {
@@ -35,16 +36,24 @@ public class Network {
         public String[] team2;
     }
 
-    public static class JoinGameErrorResult {
-        public String message;
-    }
-
     public static class SwitchTeam {
         public String gameCode;
         public String userName;
     }
 
-    public static class Tag {
-        public String value;
+    public static class JoinGameErrorResult {
+        public String message;
+    }
+
+    public static class StartGame {
+        public String gameCode;
+    }
+
+    public static class GameEvent {
+        public String message;
+    }
+
+    public static class Scan {
+        public String scanned;
     }
 }

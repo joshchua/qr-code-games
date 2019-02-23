@@ -17,7 +17,6 @@ public class CaptureTheFlag extends Game {
         this.mGameName = "Capture the Flag";
         flag1 = new Flag(1);
         flag2 = new Flag(2);
-
     }
 
     private ScanResult scannedPlayer(String userName, String otherPlayer) {
@@ -71,3 +70,4 @@ public class CaptureTheFlag extends Game {
 
         return null;
     }
+}

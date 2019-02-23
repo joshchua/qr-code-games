@@ -6,8 +6,12 @@ import data.Network.JoinGame;
 import data.Network.Lobby;
 import data.Network.SwitchTeam;
 import data.Network.JoinGameErrorResult;
+import data.Network.StartGame;
+import data.Network.GameEvent;
+import data.Network.Scan;
 import games.CaptureTheFlag;
 import games.Game;
+import models.ScanResult;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,6 +67,16 @@ public class QRCodeGameServer {
                     System.out.printf("%s is switching teams in game %s.%n", ct.userName, ct.gameCode);
                     switchTeam(ct.gameCode, ct.userName);
                 }
+
+                if (obj instanceof StartGame) {
+                    StartGame sg = (StartGame)obj;
+                    startGame(sg.gameCode);
+                }
+
+                if (obj instanceof Scan) {
+                    Scan scan = (Scan)obj;
+                    handleScan(gc.gameCode, gc.userName, scan.scanned);
+                }
             }
 
             public void disconnected(Connection con) {
@@ -75,6 +89,20 @@ public class QRCodeGameServer {
             server.start();
         } catch (IOException ex) {
 
+        }
+    }
+
+    private void sendToPlayers(Game game, Object obj) {
+        ArrayList<String> temp = new ArrayList<String>(game.getPlayers());
+        for (Connection connection : server.getConnections()) {
+            GameConnection gc = (GameConnection)connection;
+            for (String userName : temp) {
+                if (userName.equals(gc.userName)) {
+                    server.sendToTCP(gc.getID(), obj);
+                    temp.remove(userName);
+                    break;
+                }
+            }
         }
     }
 
@@ -143,15 +171,30 @@ public class QRCodeGameServer {
             lobby.team2 = team2.toArray(lobby.team2);
         }
 
-        ArrayList<String> temp = new ArrayList<String>(game.getPlayers());
-        for (Connection connection : server.getConnections()) {
-            GameConnection gc = (GameConnection)connection;
-            for (String userName : temp) {
-                if (userName.equals(gc.userName)) {
-                    server.sendToTCP(gc.getID(), lobby);
-                    temp.remove(userName);
-                    break;
-                }
+        sendToPlayers(game, lobby);
+    }
+
+    private void startGame(String gameCode) {
+        Game game = findGame(gameCode);
+
+        if (game != null) {
+            String msg = String.format("%s (%s) has started!", game.getGameName(), game.getGameCode());
+            System.out.println(msg);
+            GameEvent ge = new GameEvent();
+            ge.message = msg;
+            sendToPlayers(game, ge);
+        }
+    }
+
+    private void handleScan(String gameCode, String userName, String scanned) {
+        Game game = findGame(gameCode);
+        if (game != null) {
+            ScanResult scanResult = game.handleScan(userName, scanned);
+
+            if (scanResult != null) {
+                GameEvent ge = new GameEvent();
+                ge.message = scanResult.getMessage();
+                sendToPlayers(game, ge);
             }
         }
     }
