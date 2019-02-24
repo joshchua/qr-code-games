@@ -7,7 +7,7 @@ Utilizing socket connections and Google's Firebase MLKit, QR Code Games are mult
 The first game being developed in the QR Code Games collection is Capture the Flag. Players can tag the opponent's base to take the flag, in hopes to return it to their own base to win. Players can tag each other to reset the flag.
 
 ## Usage
-Install the apk on an Android phone running Android 6.0 or higher, and start the server on the default port of 54555 with the following command.
+Install the apk on an Android phone running Android 6.0 or higher, and start the server on the default port of 54555 with the following command. Connect to the game server by inputing the host's IP address and specified port.
 ```
 java -jar ./QRCodeGamesServer.jar
 ```
