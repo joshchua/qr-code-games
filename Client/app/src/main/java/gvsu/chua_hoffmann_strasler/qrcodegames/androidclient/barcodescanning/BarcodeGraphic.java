@@ -10,47 +10,49 @@ import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.Gra
 
 
 /**
- * Graphic instance for rendering Barcode position and content information in an overlay view.
+ * Graphic instance for rendering Barcode position and content information in an
+ * overlay view.
  */
 public class BarcodeGraphic extends Graphic {
 
     /**
-     * The default text color
+     * The default text color.
      */
     private static final int TEXT_COLOR = Color.WHITE;
 
     /**
-     * The default text size
+     * The default text size.
      */
     private static final float TEXT_SIZE = 54.0f;
 
     /**
-     * The default stroke width
+     * The default stroke width.
      */
     private static final float STROKE_WIDTH = 4.0f;
 
     /**
-     * The rectangle drawn on the screen
+     * The rectangle drawn on the screen.
      */
     private final Paint rectPaint;
 
     /**
-     * The text containing the value of the barcode drawn on the screen
+     * The text containing the value of the barcode drawn on the screen.
      */
     private final Paint barcodePaint;
 
     /**
-     * The MLKit object holding information about the barcode
+     * The MLKit object holding information about the barcode.
      */
     private final FirebaseVisionBarcode barcode;
 
     /**
-     * Creates a new Barcode Graphic to be drawn in GraphicOverlay
+     * Creates a new Barcode Graphic to be drawn in GraphicOverlay.
      *
      * @param overlay The GraphicOverlay used
      * @param barcode The MLKit barcode object to extract information
      */
-    BarcodeGraphic(GraphicOverlay overlay, FirebaseVisionBarcode barcode) {
+    BarcodeGraphic(final GraphicOverlay overlay,
+                   final FirebaseVisionBarcode barcode) {
         super(overlay);
 
         this.barcode = barcode;
@@ -67,14 +69,16 @@ public class BarcodeGraphic extends Graphic {
 
 
     /**
-     * Draws the barcode block annotations for position, size, and raw value on the supplied canvas.
+     * Draws the barcode block annotations for position, size, and raw value on
+     * the supplied canvas.
      *
      * @param canvas drawing canvas
      */
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(final Canvas canvas) {
         if (barcode == null) {
-            throw new IllegalStateException("Attempting to draw a null barcode.");
+            throw new IllegalStateException(
+                    "Attempting to draw a null barcode.");
         }
 
         // Draws the bounding box around the BarcodeBlock.
@@ -86,6 +90,7 @@ public class BarcodeGraphic extends Graphic {
         canvas.drawRect(rect, rectPaint);
 
         // Renders the barcode at the bottom of the box.
-        canvas.drawText(barcode.getRawValue(), rect.left, rect.bottom, barcodePaint);
+        canvas.drawText(barcode.getRawValue(), rect.left, rect.bottom,
+                barcodePaint);
     }
 }

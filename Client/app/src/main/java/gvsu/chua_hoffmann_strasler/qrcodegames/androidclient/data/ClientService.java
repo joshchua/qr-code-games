@@ -30,72 +30,75 @@ import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.Network.Scan;
 import java.io.IOException;
 
 /**
- * The service used to facilitate communication between this client app and the game server
+ * The service used to facilitate communication between this client app and
+ * the game server.
  */
 public class ClientService extends Service {
 
     /**
-     * The binder to that binds Activities to this service for activity to service communication
+     * The binder to that binds Activities to this service for activity to
+     * service communication.
      */
     private final IBinder mBinder = new ClientServiceBinder();
 
     /**
-     * The second thread used for outgoing network calls
+     * The second thread used for outgoing network calls.
      */
     private HandlerThread mHandlerThread;
 
     /**
-     * The looper keeping the second thread alive
+     * The looper keeping the second thread alive.
      */
     private Looper mOutgoingNetworkLooper;
 
     /**
-     * The handler for the HandlerThread used for outgoing network calls
+     * The handler for the HandlerThread used for outgoing network calls.
      */
     private OutgoingNetworkHandler mOutNetHandler;
 
     /**
-     * The Kryonet client that communicates with the game server
+     * The Kryonet client that communicates with the game server.
      */
     private Client client;
 
     /**
-     * If the client is connected to the game server
+     * If the client is connected to the game server.
      */
     private boolean mIsClientConnected = false;
 
     /**
-     * If the user is in a lobby/game
+     * If the user is in a lobby/game.
      */
     private boolean mIsInGame = false;
 
     /**
-     * A custom handler for a HandlerThread used for outgoing network calls
+     * A custom handler for a HandlerThread used for outgoing network calls.
      */
     private final class OutgoingNetworkHandler extends Handler {
         /**
-         * Creates an OutgoingNetworkHandler
+         * Creates an OutgoingNetworkHandler.
          *
          * @param looper The looper to keep the message loop alive
          */
-        public OutgoingNetworkHandler(Looper looper) {
+        OutgoingNetworkHandler(final Looper looper) {
             super(looper);
         }
 
         /**
-         * Handles messages sent to this worker thread
+         * Handles messages sent to this worker thread.
          *
          * @param msg The message delegating work for this thread
          */
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(final Message msg) {
             switch (msg.what) {
                 case 0: // Connect to Server
-                    ConnectionInfo info = (ConnectionInfo)msg.obj;
+                    ConnectionInfo info = (ConnectionInfo) msg.obj;
                     try {
                         client.connect(5000, info.ip, Network.PORT);
-                        if (client.isConnected())
+                        if (client.isConnected()) {
                             mIsClientConnected = true;
+                        }
                     } catch (IOException ex) {
 
                     }
@@ -103,12 +106,14 @@ public class ClientService extends Service {
                 case 1: // Send an object to the server
                     client.sendTCP(msg.obj);
                     break;
+                default:
+                    break;
             }
         }
     }
 
     /**
-     * Called when this service is created
+     * Called when this service is created.
      */
     @Override
     public void onCreate() {
@@ -124,10 +129,10 @@ public class ClientService extends Service {
         client.start();
 
         client.addListener(new Listener() {
-            public void received(Connection conn, Object obj) {
+            public void received(final Connection conn, final Object obj) {
                 if (obj instanceof Lobby) {
                     mIsInGame = true;
-                    Lobby lobby = (Lobby)obj;
+                    Lobby lobby = (Lobby) obj;
                     String eventName = "lobby_received";
                     Bundle bundle = new Bundle();
                     bundle.putString("gameCode", lobby.gameCode);
@@ -138,7 +143,7 @@ public class ClientService extends Service {
                 }
 
                 if (obj instanceof JoinGameErrorResult) {
-                    JoinGameErrorResult error = (JoinGameErrorResult)obj;
+                    JoinGameErrorResult error = (JoinGameErrorResult) obj;
                     String eventName = "join_game_error";
                     Bundle bundle = new Bundle();
                     bundle.putString("message", error.message);
@@ -146,7 +151,7 @@ public class ClientService extends Service {
                 }
 
                 if (obj instanceof GameEvent) {
-                    GameEvent ge = (GameEvent)obj;
+                    GameEvent ge = (GameEvent) obj;
                     String eventName = "game_event";
                     Bundle bundle = new Bundle();
                     bundle.putString("message", ge.message);
@@ -155,47 +160,53 @@ public class ClientService extends Service {
                 }
             }
 
-            public void disconnected(Connection connection) {
+            public void disconnected(final Connection connection) {
                 mIsClientConnected = false;
             }
         });
     }
 
     /**
-     * Called when this service is called to be a started service
+     * Called when this service is called to be a started service.
      *
-     * @param intent
-     * @param flags
-     * @param startId
+     * @param intent The intent calling this service
+     * @param flags Service flags
+     * @param startId The start id
      * @return Specifies the process for this service
      */
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(final Intent intent, final int flags,
+                              final int startId) {
         return START_STICKY;
     }
 
     /**
-     * A custom binder used to bind this service on an activity
+     * A custom binder used to bind this service on an activity.
      */
     public class ClientServiceBinder extends Binder {
+        /**
+         * Gets the service.
+         *
+         * @return This ClientService
+         */
         public ClientService getService() {
             return ClientService.this;
         }
     }
 
     /**
-     * Called when the activity is bound to this service
+     * Called when the activity is bound to this service.
      *
      * @param intent
      * @return
      */
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(final Intent intent) {
         return mBinder;
     }
 
     /**
-     * Called when this service is destroyed
+     * Called when this service is destroyed.
      */
     @Override
     public void onDestroy() {
@@ -203,12 +214,12 @@ public class ClientService extends Service {
     }
 
     /**
-     * Sends a Local Broadcast to listening activities
+     * Sends a Local Broadcast to listening activities.
      *
      * @param messageName The key message
      * @param extras The bundle holding relevant extras
      */
-    private void sendToActivity(String messageName, Bundle extras) {
+    private void sendToActivity(final String messageName, final Bundle extras) {
         Intent intent = new Intent("game_event_received");
         intent.putExtra("key", messageName);
         intent.putExtras(extras);
@@ -216,26 +227,28 @@ public class ClientService extends Service {
     }
 
     /**
-     * Connects to the game server
+     * Connects to the game server.
      *
      * @param ip IP Address
      * @param port Port
      */
-    private void connectToServer(String ip, int port) {
+    private void connectToServer(final String ip, final int port) {
         Message msg = mOutNetHandler.obtainMessage(0);
         msg.obj = new ConnectionInfo(ip, port);
         mOutNetHandler.sendMessage(msg);
     }
 
     /**
-     * Attempts to connect to the server, and if successful, will create a new game
+     * Attempts to connect to the server, and if successful, will create a new
+     * game.
      *
      * @param ip IP address
      * @param port Port
      * @param userName Username
      * @param game Type of game to be created
      */
-    public void connectAndCreateGame(String ip, int port, final String userName, final int game) {
+    public void connectAndCreateGame(final String ip, final int port,
+                                     final String userName, final int game) {
         connectToServer(ip, port);
         // Wait a second to ensure that client is connected to server
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -255,14 +268,17 @@ public class ClientService extends Service {
     }
 
     /**
-     * Attempts to connect to the server, and if successful, will join an existing session
+     * Attempts to connect to the server, and if successful, will join an
+     * existing session.
      *
      * @param ip IP address
      * @param port Port
      * @param userName The user's username
      * @param gameCode The game code of the existing session
      */
-    public void connectAndJoinGame(String ip, int port, final String userName, final String gameCode) {
+    public void connectAndJoinGame(final String ip, final int port,
+                                   final String userName,
+                                   final String gameCode) {
         connectToServer(ip, port);
         // Wait a second to ensure that client is connected to the server
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -281,7 +297,7 @@ public class ClientService extends Service {
     }
 
     /**
-     * Switches the user's team
+     * Switches the user's team.
      *
      * @param userName The user's username
      * @param gameCode The session that the user is in
@@ -296,11 +312,11 @@ public class ClientService extends Service {
     }
 
     /**
-     * Starts the game
+     * Starts the game.
      *
      * @param gameCode The game code of the session
      */
-    public void startGame(String gameCode) {
+    public void startGame(final String gameCode) {
         Message msg = mOutNetHandler.obtainMessage(1);
         StartGame startGame = new StartGame();
         startGame.gameCode = gameCode;
@@ -309,11 +325,11 @@ public class ClientService extends Service {
     }
 
     /**
-     * Tells the server that this user has scanned something
+     * Tells the server that this user has scanned something.
      *
      * @param scanned The value of the QR code the user scanned
      */
-    public void sendScan(String scanned) {
+    public void sendScan(final String scanned) {
         Message msg = mOutNetHandler.obtainMessage(1);
         Scan scan = new Scan();
         scan.scanned = scanned;

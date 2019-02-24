@@ -4,32 +4,32 @@ import models.CaptureTheFlag.Flag;
 import models.ScanResult;
 
 /**
- * Class for the game of Capture the flag
+ * Class for the game of Capture the flag.
  */
 public class CaptureTheFlag extends Game {
 
     /**
-     *Flag for team 1
+     *Flag for team 1.
      */
     private Flag flag1;
 
     /**
-     *Flag for team 2
+     *Flag for team 2.
      */
     private Flag flag2;
 
     /**
-     *Name of the base 1
+     *Name of the base 1.
      */
     private static final String BASE1 = "base1";
 
     /**
-     *Name of the base 2
+     *Name of the base 2.
      */
     private static final String BASE2 = "base2";
 
     /**
-     *Creates a game of capture the flag
+     *Creates a game of capture the flag.
      */
     public CaptureTheFlag() {
         super();
@@ -39,7 +39,7 @@ public class CaptureTheFlag extends Game {
     }
 
     /**
-     *Checks if a player scanned another player
+     *Checks if a player scanned another player.
      * @param userName name of the player
      * @param otherPlayer name of the player that has been tagged
      * @return returns a message of the players

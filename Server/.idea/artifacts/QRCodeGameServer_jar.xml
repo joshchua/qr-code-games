@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="QRCodeGameServer:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/QRCodeGameServer_jar</output-path>
+    <root id="archive" name="QRCodeGameServer.jar">
+      <element id="module-output" name="QRCodeGameServer" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/esotericsoftware/minlog/minlog/1.2/minlog-1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/esotericsoftware/reflectasm/reflectasm/1.07/reflectasm-1.07-shaded.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/esotericsoftware/minlog/1.3.1/minlog-1.3.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/objenesis/objenesis/2.1/objenesis-2.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/kryonet/kryonet/2.21/kryonet-2.21.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/esotericsoftware/kryo/5.0.0-RC2/kryo-5.0.0-RC2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/esotericsoftware/reflectasm/1.11.8/reflectasm-1.11.8.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

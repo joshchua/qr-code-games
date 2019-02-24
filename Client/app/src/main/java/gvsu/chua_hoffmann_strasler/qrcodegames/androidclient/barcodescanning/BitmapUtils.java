@@ -21,29 +21,36 @@ public class BitmapUtils {
 
 
     /**
-     * Gets a bitmap from a ByteBuffer of a live stream of image data
+     * Gets a bitmap from a ByteBuffer of a live stream of image data.
      *
      * @param data The image data
      * @param metadata The frame metadata
-     * @return
+     * @return The bitmap returned.
      */
     @Nullable
-    public static Bitmap getBitmap(ByteBuffer data, FrameMetadata metadata) {
+    public static Bitmap getBitmap(final ByteBuffer data,
+                                   final FrameMetadata metadata) {
         data.rewind();
         byte[] imageInBuffer = new byte[data.limit()];
         data.get(imageInBuffer, 0, imageInBuffer.length);
         try {
             YuvImage image =
                     new YuvImage(
-                            imageInBuffer, ImageFormat.NV21, metadata.getWidth(), metadata.getHeight(), null);
+                            imageInBuffer, ImageFormat.NV21,
+                            metadata.getWidth(), metadata.getHeight(),
+                            null);
             if (image != null) {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                image.compressToJpeg(new Rect(0, 0, metadata.getWidth(), metadata.getHeight()), 80, stream);
+                image.compressToJpeg(new Rect(0, 0,
+                        metadata.getWidth(), metadata.getHeight()),
+                        80, stream);
 
-                Bitmap bmp = BitmapFactory.decodeByteArray(stream.toByteArray(), 0, stream.size());
+                Bitmap bmp = BitmapFactory.decodeByteArray(stream.toByteArray(),
+                        0, stream.size());
 
                 stream.close();
-                return rotateBitmap(bmp, metadata.getRotation(), metadata.getCameraFacing());
+                return rotateBitmap(bmp, metadata.getRotation(),
+                        metadata.getCameraFacing());
             }
         } catch (Exception e) {
             Log.e("VisionProcessorBase", "Error: " + e.getMessage());
@@ -53,14 +60,15 @@ public class BitmapUtils {
 
 
     /**
-     * Rotates the bitmap
+     * Rotates the bitmap.
      *
      * @param bitmap The bitmap to be rotated
      * @param rotation The angle of the rotation in degrees
      * @param facing The front/back facing camera
      * @return The rotated bitmap
      */
-    private static Bitmap rotateBitmap(Bitmap bitmap, int rotation, int facing) {
+    private static Bitmap rotateBitmap(final Bitmap bitmap, final int rotation,
+                                       final int facing) {
         Matrix matrix = new Matrix();
         int rotationDegree = 0;
         switch (rotation) {
@@ -80,11 +88,13 @@ public class BitmapUtils {
         // Rotate the image back to straight.}
         matrix.postRotate(rotationDegree);
         if (facing == CameraInfo.CAMERA_FACING_BACK) {
-            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+                    bitmap.getHeight(), matrix, true);
         } else {
             // Mirror the image along X axis for front-facing camera image.
             matrix.postScale(-1.0f, 1.0f);
-            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+                    bitmap.getHeight(), matrix, true);
         }
     }
 }
