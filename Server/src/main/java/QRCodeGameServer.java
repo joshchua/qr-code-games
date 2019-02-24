@@ -65,6 +65,8 @@ public class QRCodeGameServer {
         };
         Network.register(server);
 
+        System.out.println("QR Code Games Server was created on port " + port);
+
         server.addListener(new Listener() {
             public void received(Connection con, Object obj) {
                 GameConnection gc = (GameConnection)con;
