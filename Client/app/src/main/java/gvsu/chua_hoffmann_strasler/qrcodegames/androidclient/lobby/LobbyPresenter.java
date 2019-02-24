@@ -20,10 +20,10 @@ public class LobbyPresenter implements LobbyContract.Presenter {
     /**
      * Initializes the connection between the Lobby View and this presenter
      *
-     * @param connectView The Connect View to be bound to this presenter
+     * @param LobbyView The Connect View to be bound to this presenter
      */
-    public LobbyPresenter(LobbyContract.View connectView) {
-        mLobbyView = connectView;
+    public LobbyPresenter(LobbyContract.View LobbyView) {
+        mLobbyView = LobbyView;
         mLobbyView.setPresenter(this);
     }
 

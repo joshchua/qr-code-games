@@ -161,14 +161,14 @@ public class QRCodeGameServer {
     }
 
     /**
-     *
-     * @param connectionID
-     * @param msg
+     * Send message to client if an error occurs when joining the game
+     * @param connectionID client connection
+     * @param msg Error message
      */
     private void sendJoinGameError(int connectionID, String msg) {
         JoinGameErrorResult error = new JoinGameErrorResult();
         error.message = msg;
-        server.sendToTCP(connectionID, msg);
+        server.sendToTCP(connectionID, error);
     }
 
     /**
