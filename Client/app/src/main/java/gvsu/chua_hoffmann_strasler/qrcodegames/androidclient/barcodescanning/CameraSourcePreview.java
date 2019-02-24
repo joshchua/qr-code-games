@@ -58,7 +58,7 @@ public class CameraSourcePreview extends ViewGroup {
      * Creates a preview for the camera with MLKit detection.
      *
      * @param context The application context
-     * @param attrs A collection of attributes for this custom view
+     * @param attrs   A collection of attributes for this custom view
      */
     public CameraSourcePreview(final Context context,
                                final AttributeSet attrs) {
@@ -95,7 +95,7 @@ public class CameraSourcePreview extends ViewGroup {
      * Starts the camera stream of image data.
      *
      * @param cameraSource The source of image data
-     * @param overlay The graphic overlay used for drawing
+     * @param overlay      The graphic overlay used for drawing
      * @throws IOException Thrown when starting camera
      */
     public void start(final CameraSource cameraSource,
@@ -129,7 +129,7 @@ public class CameraSourcePreview extends ViewGroup {
      * @throws IOException
      */
     @SuppressLint("MissingPermission")
-    private void startIfReady() throws IOException {
+    protected void startIfReady() throws IOException {
         if (startRequested && surfaceAvailable) {
             cameraSource.start();
             if (overlay != null) {
@@ -186,26 +186,27 @@ public class CameraSourcePreview extends ViewGroup {
          *
          * @param holder The holder for the surface
          * @param format The format for the surface
-         * @param width The width of the surface
+         * @param width  The width of the surface
          * @param height The height of the surface
          */
         @Override
         public void surfaceChanged(final SurfaceHolder holder,
                                    final int format, final int width,
-                                   final int height) {}
-
+                                   final int height) {
+        }
+    }
     /**
-     * Called when this view group is on the layout
-     *
-     * @param changed If the view has been changed
-     * @param left The left position
-     * @param top The top position
-     * @param right The right position
-     * @param bottom The bottom position
-     */
+      * Called when this view group is on the layout.
+      *
+      * @param changed If the view has been changed
+      * @param left    The left position
+      * @param top     The top position
+      * @param right   The right position
+      * @param bottom  The bottom position
+      */
     @Override
     protected void onLayout(boolean changed, int left, int top, int right,
-                            int bottom) {
+                                int bottom) {
         int width = 320;
         int height = 240;
         if (cameraSource != null) {
@@ -229,14 +230,13 @@ public class CameraSourcePreview extends ViewGroup {
 
         // Computes height and width for potentially doing fit width.
         int childWidth = layoutWidth;
-        int childHeight = (int) (((float) layoutWidth /
-                (float) width) * height);
+        int childHeight = (int) (((float) layoutWidth / (float) width) * height);
 
         // If height is too tall using fit width, does fit height instead.
         if (childHeight > layoutHeight) {
             childHeight = layoutHeight;
-            childWidth = (int) (((float) layoutHeight /
-                    (float) height) * width);
+            childWidth = (int) (((float) layoutHeight / (float) height) * width);
+
         }
 
         for (int i = 0; i < getChildCount(); ++i) {
@@ -252,7 +252,7 @@ public class CameraSourcePreview extends ViewGroup {
     }
 
     /**
-     * Checks if the device is in portrait mode
+     * Checks if the device is in portrait mode.
      *
      * @return If the device is in portrait
      */
@@ -264,8 +264,30 @@ public class CameraSourcePreview extends ViewGroup {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             return true;
         }
-
         Log.d(TAG, "isPortraitMode returning false by default");
         return false;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

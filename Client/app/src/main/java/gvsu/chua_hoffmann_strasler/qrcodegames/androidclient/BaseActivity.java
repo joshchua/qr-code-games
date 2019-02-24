@@ -21,7 +21,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * The service bound to this activity.
      */
-    private ClientService gameService;
+    protected ClientService gameService;
 
     /**
      * If the service is bound to this activity.
