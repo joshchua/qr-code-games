@@ -14,30 +14,71 @@ import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.game.GameActivity;
 
+/**
+ * Lobby activity that activates when a game is created. It shows all the players in each teams
+ */
 public class LobbyActivity extends BaseActivity implements LobbyContract.View {
 
+    /**
+     * Presenter for Lobby Activity.
+     */
     private LobbyContract.Presenter mPresenter;
 
+    /**
+     * TextView that holds the unique ID of the game.
+     */
     private TextView gameID;
 
+    /**
+     * ListView the shows players on team 1.
+     */
     private ListView listTeam1;
 
+    /**
+     * Tries to connect to the server and start the game.
+     * @param gameCode Unique game ID
+     */
     @Override
     public void startGame(String gameCode) {
         gameService.startGame(gameCode);
     }
 
+    /**
+     *ListView the shows players on team 2.
+     */
     private ListView listTeam2;
 
+    /**
+     * Button that switches teams of the player.
+     */
     private Button btnSwitchTeams;
+    /**
+     * Button to start the game.
+     */
     private Button btnStartGame;
 
+    /**
+     * Array that holds the names of the players on team 1.
+     */
     private ArrayList<String> teamArray1;
+    /**
+     *Array that holds the names of the players on team 2.
+     */
     private ArrayList<String> teamArray2;
 
+    /**
+     * Adapter for ListView to update members of team 1.
+     */
     private ArrayAdapter<String> adapter1;
+    /**
+     *Adapter for ListView to update members of the team 2.
+     */
     private ArrayAdapter<String> adapter2;
 
+    /**
+     * Call this when the activity is created.
+     * @param savedInstanceState The bundle saved from previous instances of this activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,10 +128,18 @@ public class LobbyActivity extends BaseActivity implements LobbyContract.View {
 
     }
 
-
+    /**
+     * Sets this activity's presenter
+     *
+     * @param presenter The presenter for this activity
+     */
     @Override
     public void setPresenter(LobbyContract.Presenter presenter) { mPresenter = presenter; }
 
+    /**
+     * Called when this activity receives a Local Broadcast from the ClientService
+     * @param bundle The bundle holding relevant extras
+     */
     @Override
     public void handleGameEvent(Bundle bundle) {
         String key = (String)bundle.get("key");
@@ -107,11 +156,19 @@ public class LobbyActivity extends BaseActivity implements LobbyContract.View {
         }
     }
 
+    /**
+     * Sends request to the server to switch teams for a player.
+     * @param userName name of the player switching teams
+     * @param gameCode  ID of the game the player is in
+     */
     @Override
     public void sendSwitchTeamRequest(String userName, String gameCode) {
         gameService.switchTeam(userName,gameCode);
     }
 
+    /**
+     * Updates lists with the players on the screen
+     */
     @Override
     public void updateTeams() {
         adapter1.notifyDataSetChanged();

@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Register activity that is created when users start scanning their name from the connect activity
+ */
 public class RegisterActivity extends AppCompatActivity implements RegisterContract.View {
 
     private static final String TAG = "RegisterActivity";
@@ -32,6 +35,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
     private CameraSourcePreview preview;
     private GraphicOverlay graphicOverlay;
 
+    /**
+     * Call this when the activity is created
+     * @param savedInstanceState The bundle saved from previous instances of this activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +64,11 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         }
     }
 
+    /**
+     * Sets this activity's presenter
+     *
+     * @param presenter The presenter for this activity
+     */
     @Override
     public void setPresenter(RegisterContract.Presenter presenter) {
         this.presenter = presenter;
@@ -104,6 +116,9 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         }
     }
 
+    /**
+     * Resumes the camera
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -118,6 +133,9 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         preview.stop();
     }
 
+    /**
+     * Releases the camera source
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -126,6 +144,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         }
     }
 
+    /**
+     * Asks the user for permissions
+     * @return a permission
+     */
     private String[] getRequiredPermissions() {
         try {
             PackageInfo info =
@@ -142,6 +164,11 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         }
     }
 
+
+    /**
+     * Finds if all permissions needed are granted
+     * @return True if all permissions granted, false if at least one is missing
+     */
     private boolean allPermissionsGranted() {
         for (String permission : getRequiredPermissions()) {
             if (!isPermissionGranted(this, permission)) {
@@ -151,6 +178,9 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         return true;
     }
 
+    /**
+     * Asks the user for each permission specifically
+     */
     private void getRuntimePermissions() {
         List<String> allNeededPermissions = new ArrayList<>();
         for (String permission : getRequiredPermissions()) {
@@ -165,6 +195,12 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         }
     }
 
+    /**
+     * Gets the response to the permission request from the user
+     * @param requestCode The request code passed in
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     */
     @Override
     public void onRequestPermissionsResult(
             int requestCode, String[] permissions, int[] grantResults) {
@@ -175,6 +211,12 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    /**
+     * Checks if permission is granted
+     * @param context Context why permission is asked
+     * @param permission One of the permissions
+     * @return True if permission granted, False if not
+     */
     private static boolean isPermissionGranted(Context context, String permission) {
         if (ContextCompat.checkSelfPermission(context, permission)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -185,6 +227,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         return false;
     }
 
+    /**
+     * Adds the user name to an intents and returns back to the connect activity
+     * @param userName name of the user
+     */
     @Override
     public void sendUserName(String userName) {
         Intent intent = new Intent(this, ConnectActivity.class);
