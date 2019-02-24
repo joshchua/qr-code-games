@@ -22,26 +22,64 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Game activity.
+ */
 public class GameActivity extends BaseActivity implements GameContract.View {
 
+    /**
+     *Used for logging the camera in the acitivity
+     */
     private static final String TAG = "GameActivity";
+    /**
+     * Defines number of the permissions requested
+     */
     private static final int PERMISSION_REQUESTS = 1;
 
+    /**
+     * Presenter for Game Activity.
+     */
     private GameContract.Presenter presenter;
 
+    /**
+     * Source of the camera
+     */
     private CameraSource cameraSource = null;
+    /**
+     * Preview of th camera source
+     */
     private CameraSourcePreview preview;
+    /**
+     *Graphic overlay for the camera
+     */
     private GraphicOverlay graphicOverlay;
 
+    /**
+     * ListView for game events
+     */
     private ListView gameEventView;
+    /**
+     * List of game events
+     */
     private ArrayList<String> gameEventList;
+
+    /**
+     * Array adapter for the event ListView.
+     */
     private ArrayAdapter<String> gameEventAdapter;
 
+    /**
+     * Updates the adapter with a new event in the game.
+     */
     @Override
     public void showGameEvent() {
         gameEventAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Call this when the activity is created.
+     * @param savedInstanceState The bundle saved from previous instances of this activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,11 +119,19 @@ public class GameActivity extends BaseActivity implements GameContract.View {
 
     }
 
+    /**
+     * Sets this activity's presenter
+     *
+     * @param presenter The presenter for this activity
+     */
     @Override
     public void setPresenter(GameContract.Presenter presenter) {
         this.presenter = presenter;
     }
 
+    /**
+     *
+     */
     private void createCameraSource() {
         // If there's no existing cameraSource, create one.
         if (cameraSource == null) {
@@ -128,6 +174,9 @@ public class GameActivity extends BaseActivity implements GameContract.View {
         }
     }
 
+    /**
+     * Resumes the camera
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -142,6 +191,10 @@ public class GameActivity extends BaseActivity implements GameContract.View {
         preview.stop();
     }
 
+    /**
+     * Called when this activity receives a Local Broadcast from the ClientService
+     * @param bundle The bundle holding relevant extras
+     */
     @Override
     protected void handleGameEvent(Bundle bundle) {
         String key = bundle.getString("key");
@@ -152,6 +205,9 @@ public class GameActivity extends BaseActivity implements GameContract.View {
         }
     }
 
+    /**
+     * Releases the camera source
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -160,6 +216,10 @@ public class GameActivity extends BaseActivity implements GameContract.View {
         }
     }
 
+    /**
+     * Asks the user for permissions
+     * @return a permission
+     */
     private String[] getRequiredPermissions() {
         try {
             PackageInfo info =
@@ -176,6 +236,10 @@ public class GameActivity extends BaseActivity implements GameContract.View {
         }
     }
 
+    /**
+     * Finds if all permissions needed are granted
+     * @return True if all permissions granted, false if at least one is missing
+     */
     private boolean allPermissionsGranted() {
         for (String permission : getRequiredPermissions()) {
             if (!isPermissionGranted(this, permission)) {
@@ -185,6 +249,9 @@ public class GameActivity extends BaseActivity implements GameContract.View {
         return true;
     }
 
+    /**
+     * Asks the user for each permission specifically
+     */
     private void getRuntimePermissions() {
         List<String> allNeededPermissions = new ArrayList<>();
         for (String permission : getRequiredPermissions()) {
@@ -199,6 +266,12 @@ public class GameActivity extends BaseActivity implements GameContract.View {
         }
     }
 
+    /**
+     * Gets the response to the permission request from the user
+     * @param requestCode The request code passed in
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     */
     @Override
     public void onRequestPermissionsResult(
             int requestCode, String[] permissions, int[] grantResults) {
@@ -209,6 +282,12 @@ public class GameActivity extends BaseActivity implements GameContract.View {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    /**
+     * Checks if permission is granted
+     * @param context Context why permission is asked
+     * @param permission One of the permissions
+     * @return True if permission granted, False if not
+     */
     private static boolean isPermissionGranted(Context context, String permission) {
         if (ContextCompat.checkSelfPermission(context, permission)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -219,6 +298,10 @@ public class GameActivity extends BaseActivity implements GameContract.View {
         return false;
     }
 
+    /**
+     * Sends the value of the barcode scan
+     * @param barcodeValue value of the scan
+     */
     @Override
     public void sendScanRequest(String barcodeValue) {
         gameService.sendScan(barcodeValue);

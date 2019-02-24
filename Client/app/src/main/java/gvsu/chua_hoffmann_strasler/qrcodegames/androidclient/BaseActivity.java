@@ -14,18 +14,27 @@ import android.widget.Toast;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.ClientService;
 
+/**
+ * Base activity that is implemented by all other activities
+ */
 public abstract class BaseActivity extends AppCompatActivity {
     protected ClientService gameService;
     protected boolean isServiceBound = false;
 
     private LocalBroadcastManager lbm;
 
+    /**
+     * Basic function for back button
+     */
     @Override
     public void onBackPressed() {
         Toast.makeText(this, "You can't use the back button here.",
                 Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Reconnects to the server on resume of the app.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -37,6 +46,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         bindService(intent, mConnection, BIND_NOT_FOREGROUND);
     }
 
+    /**
+     * Unbinds connection on pause of the app
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -45,6 +57,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         lbm.unregisterReceiver(mGameEventReceiver);
     }
 
+    /**
+     * Connect to the server and binds the connection
+     */
     protected ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -53,14 +68,24 @@ public abstract class BaseActivity extends AppCompatActivity {
             isServiceBound = true;
         }
 
+        /**
+         * @param name
+         */
         @Override
         public void onServiceDisconnected(ComponentName name) {
             isServiceBound = false;
         }
     };
 
+    /**
+     * Handles game event recieved from the client
+     * @param bundle Contains additional infomation from the event
+     */
     protected abstract void handleGameEvent(Bundle bundle);
 
+    /**
+     *  Recives broadcast from the server and if there is event to be handled, it sends it to the client
+     */
     private BroadcastReceiver mGameEventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
