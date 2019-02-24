@@ -3,15 +3,34 @@ package games;
 import models.CaptureTheFlag.Flag;
 import models.ScanResult;
 
+/**
+ * Class for the game of Capture the flag
+ */
 public class CaptureTheFlag extends Game {
 
+    /**
+     *Flag for team 1
+     */
     private Flag flag1;
+
+    /**
+     *Flag for team 2
+     */
     private Flag flag2;
 
+    /**
+     *Name of the base 1
+     */
     private static final String BASE1 = "base1";
+
+    /**
+     *Name of the base 2
+     */
     private static final String BASE2 = "base2";
 
-
+    /**
+     *Creates a game of capture the flag
+     */
     public CaptureTheFlag() {
         super();
         this.mGameName = "Capture the Flag";
@@ -19,6 +38,12 @@ public class CaptureTheFlag extends Game {
         flag2 = new Flag(2);
     }
 
+    /**
+     *Checks if a player scanned another player
+     * @param userName name of the player
+     * @param otherPlayer name of the player that has been tagged
+     * @return returns a message of the players
+     */
     private ScanResult scannedPlayer(String userName, String otherPlayer) {
         if (findTeam(userName) == 1 && findTeam(otherPlayer) == 2 && otherPlayer.equals(flag1.getFlagBearer())) {
             flag1.reset();
@@ -33,6 +58,12 @@ public class CaptureTheFlag extends Game {
         return null;
     }
 
+    /**
+     *Checks if player scanned a base
+     * @param userName name of the player that scanned a base
+     * @param base name of the base that has beed scanned
+     * @return returns a message for the players
+     */
     private ScanResult scannedBase(String userName, String base) {
         // Handle a player tagging enemy team base
         if (findTeam(userName) == 1 && base.equals(BASE2) && !flag2.getIsTaken()) {
@@ -59,6 +90,12 @@ public class CaptureTheFlag extends Game {
         return null;
     }
 
+    /**
+     * Called when a players has scanned something
+     * @param userName name of the player
+     * @param scanned string that he has scanned
+     * @return returns scanned player or scanned base, otherwise null
+     */
     @Override
     public ScanResult handleScan(String userName, String scanned) {
 
