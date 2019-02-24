@@ -7,44 +7,44 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Class defining a basic structure for a game
+ * Class defining a basic structure for a game.
  */
 public abstract class Game {
 
     /**
-     * Holds the ID of the game
+     * Holds the ID of the game.
      */
     private String mGameCode;
 
     /**
-     * Holds the type of the game
+     * Holds the type of the game.
      */
     protected String mGameName;
 
     /**
-     * Holds an array list with all players
+     * Holds an array list with all players.
      */
     protected ArrayList<String> mPlayers;
 
     /**
-     * Holds an array list with player state
+     * Holds an array list with player state.
      */
     protected ArrayList<Integer> mPlayerState;
 
 
     /**
-     * Holds an array list with player team
+     * Holds an array list with player team.
      */
     protected ArrayList<Integer> mPlayerTeam;
 
 
     /**
-     * Tells if the game has started
+     * Tells if the game has started.
      */
     protected boolean mIsStarted;
 
     /**
-     * Initializes game
+     * Initializes game.
      */
     public Game() {
         mPlayers = new ArrayList<String>();
@@ -65,7 +65,7 @@ public abstract class Game {
     }
 
     /**
-     * Returns the type of the game
+     * Returns the type of the game.
      * @return type of the
      */
     public String getGameName() {
@@ -73,7 +73,7 @@ public abstract class Game {
     }
 
     /**
-     * Returns game ID
+     * Returns game ID.
      * @return ID of the game
      */
     public String getGameCode() {
@@ -81,7 +81,7 @@ public abstract class Game {
     }
 
     /**
-     * Switches teams for players
+     * Switches teams for players.
      * @param userName name of the player switching teams
      */
     public void switchTeam(String userName) {
@@ -91,7 +91,7 @@ public abstract class Game {
     }
 
     /**
-     * Joins a player in the lobby and adds him to a team
+     * Joins a player in the lobby and adds him to a team.
      * @param userName name of the player joining the game
      */
     public void joinLobby(String userName) {
@@ -101,7 +101,7 @@ public abstract class Game {
     }
 
     /**
-     * Returns a array list of all players
+     * Returns a array list of all players.
      * @return list of players
      */
     public ArrayList<String> getPlayers() {
@@ -109,7 +109,7 @@ public abstract class Game {
     }
 
     /**
-     * Find a team of a player
+     * Find a team of a player.
      * @param userName name of the player
      * @return team number of the player
      */
@@ -122,8 +122,8 @@ public abstract class Game {
     }
 
     /**
-     * Starts the game
-     * This should be overridden by children, but also use super.start()
+     * Starts the game.
+     * This should be overridden by children, but also use super.start().
      */
     public void start() {
         mIsStarted = true;
@@ -137,7 +137,7 @@ public abstract class Game {
     }
 
     /**
-     * Check if the game has started
+     * Check if the game has started.
      * @return True = game has started, False = the game has not started
      */
     public boolean isPlaying() {
@@ -145,7 +145,7 @@ public abstract class Game {
     }
 
     /**
-     * Handles a scan from a player
+     * Handles a scan from a player.
      * This should be implemented by classes that inherit from Game
      * @param userName name of the player that scanned the object
      * @param scanned name of the scanned object

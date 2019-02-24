@@ -13,51 +13,55 @@ import com.google.android.gms.common.images.Size;
 
 import java.io.IOException;
 
-/** Preview the camera image in the screen. */
+
+/**
+ * Preview the camera image in the screen.
+ */
 public class CameraSourcePreview extends ViewGroup {
 
     /**
-     * The tag for this object used for debug logs
+     * The tag for this object used for debug logs.
      */
     private static final String TAG = "QRCodeGames:Preview";
 
     /**
-     * The application context
+     * The application context.
      */
     private Context context;
 
     /**
-     * Surface view
+     * Surface view.
      */
     private SurfaceView surfaceView;
 
     /**
-     * If a start has been requested
+     * If a start has been requested.
      */
     private boolean startRequested;
 
     /**
-     * If there is a surface to draw to that is available
+     * If there is a surface to draw to that is available.
      */
     private boolean surfaceAvailable;
 
     /**
-     * The imaging data from the camera
+     * The imaging data from the camera.
      */
     private CameraSource cameraSource;
 
     /**
-     * The overlay used to draw graphics on top of the overlay
+     * The overlay used to draw graphics on top of the overlay.
      */
     private GraphicOverlay overlay;
 
     /**
-     * Creates a preview for the camera with MLKit detection
+     * Creates a preview for the camera with MLKit detection.
      *
      * @param context The application context
      * @param attrs A collection of attributes for this custom view
      */
-    public CameraSourcePreview(Context context, AttributeSet attrs) {
+    public CameraSourcePreview(final Context context,
+                               final AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
         startRequested = false;
@@ -69,12 +73,12 @@ public class CameraSourcePreview extends ViewGroup {
     }
 
     /**
-     * Starts the camera stream of image data
+     * Starts the camera stream of image data.
      *
      * @param cameraSource The source of image data
-     * @throws IOException
+     * @throws IOException Thrown when starting CameraSource.
      */
-    public void start(CameraSource cameraSource) throws IOException {
+    public void start(final CameraSource cameraSource) throws IOException {
         if (cameraSource == null) {
             stop();
         }
@@ -88,19 +92,20 @@ public class CameraSourcePreview extends ViewGroup {
     }
 
     /**
-     * Starts the camera stream of image data
+     * Starts the camera stream of image data.
      *
      * @param cameraSource The source of image data
      * @param overlay The graphic overlay used for drawing
-     * @throws IOException
+     * @throws IOException Thrown when starting camera
      */
-    public void start(CameraSource cameraSource, GraphicOverlay overlay) throws IOException {
+    public void start(final CameraSource cameraSource,
+                      final GraphicOverlay overlay) throws IOException {
         this.overlay = overlay;
         start(cameraSource);
     }
 
     /**
-     * Stops the camera
+     * Stops the camera.
      */
     public void stop() {
         if (cameraSource != null) {
@@ -109,7 +114,7 @@ public class CameraSourcePreview extends ViewGroup {
     }
 
     /**
-     * Release the camera
+     * Release the camera.
      */
     public void release() {
         if (cameraSource != null) {
@@ -119,7 +124,7 @@ public class CameraSourcePreview extends ViewGroup {
     }
 
     /**
-     * Starts the camera if the camera is ready
+     * Starts the camera if the camera is ready.
      *
      * @throws IOException
      */
@@ -132,11 +137,14 @@ public class CameraSourcePreview extends ViewGroup {
                 int min = Math.min(size.getWidth(), size.getHeight());
                 int max = Math.max(size.getWidth(), size.getHeight());
                 if (isPortraitMode()) {
-                    // Swap width and height sizes when in portrait, since it will be rotated by
+                    // Swap width and height sizes when in portrait,
+                    // since it will be rotated by
                     // 90 degrees
-                    overlay.setCameraInfo(min, max, cameraSource.getCameraFacing());
+                    overlay.setCameraInfo(min, max,
+                            cameraSource.getCameraFacing());
                 } else {
-                    overlay.setCameraInfo(max, min, cameraSource.getCameraFacing());
+                    overlay.setCameraInfo(max, min,
+                            cameraSource.getCameraFacing());
                 }
                 overlay.clear();
             }
@@ -145,16 +153,16 @@ public class CameraSourcePreview extends ViewGroup {
     }
 
     /**
-     * The callback for the SurfaceHolder
+     * The callback for the SurfaceHolder.
      */
     private class SurfaceCallback implements SurfaceHolder.Callback {
         /**
-         * Called when the surface is created
+         * Called when the surface is created.
          *
          * @param surface The surface holder used
          */
         @Override
-        public void surfaceCreated(SurfaceHolder surface) {
+        public void surfaceCreated(final SurfaceHolder surface) {
             surfaceAvailable = true;
             try {
                 startIfReady();
@@ -164,17 +172,17 @@ public class CameraSourcePreview extends ViewGroup {
         }
 
         /**
-         * Called when the surface is destroyed
+         * Called when the surface is destroyed.
          *
          * @param surface The surface holder used
          */
         @Override
-        public void surfaceDestroyed(SurfaceHolder surface) {
+        public void surfaceDestroyed(final SurfaceHolder surface) {
             surfaceAvailable = false;
         }
 
         /**
-         * Called when the surface is changed
+         * Called when the surface is changed.
          *
          * @param holder The holder for the surface
          * @param format The format for the surface
@@ -182,8 +190,9 @@ public class CameraSourcePreview extends ViewGroup {
          * @param height The height of the surface
          */
         @Override
-        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
-    }
+        public void surfaceChanged(final SurfaceHolder holder,
+                                   final int format, final int width,
+                                   final int height) {}
 
     /**
      * Called when this view group is on the layout
@@ -195,7 +204,8 @@ public class CameraSourcePreview extends ViewGroup {
      * @param bottom The bottom position
      */
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    protected void onLayout(boolean changed, int left, int top, int right,
+                            int bottom) {
         int width = 320;
         int height = 240;
         if (cameraSource != null) {
@@ -206,7 +216,8 @@ public class CameraSourcePreview extends ViewGroup {
             }
         }
 
-        // Swap width and height sizes when in portrait, since it will be rotated 90 degrees
+        // Swap width and height sizes when in portrait, since it will be
+        // rotated 90 degrees
         if (isPortraitMode()) {
             int tmp = width;
             width = height;
@@ -218,12 +229,14 @@ public class CameraSourcePreview extends ViewGroup {
 
         // Computes height and width for potentially doing fit width.
         int childWidth = layoutWidth;
-        int childHeight = (int) (((float) layoutWidth / (float) width) * height);
+        int childHeight = (int) (((float) layoutWidth /
+                (float) width) * height);
 
         // If height is too tall using fit width, does fit height instead.
         if (childHeight > layoutHeight) {
             childHeight = layoutHeight;
-            childWidth = (int) (((float) layoutHeight / (float) height) * width);
+            childWidth = (int) (((float) layoutHeight /
+                    (float) height) * width);
         }
 
         for (int i = 0; i < getChildCount(); ++i) {
