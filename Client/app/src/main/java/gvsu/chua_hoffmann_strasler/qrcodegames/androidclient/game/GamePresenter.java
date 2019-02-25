@@ -28,6 +28,7 @@ public class GamePresenter implements GameContract.Presenter{
      * @param view The Game View to be bound to this presenter
      */
     public GamePresenter(GameContract.View view) {
+	this.view = view;
         this.isGamePlaying = true;
         this.gameEventList = new ArrayList<>();
         view.setPresenter(this);
