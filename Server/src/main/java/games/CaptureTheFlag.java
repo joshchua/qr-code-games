@@ -82,7 +82,7 @@ public class CaptureTheFlag extends Game {
             return new ScanResult(userName + " has returned Team 2's flag to their base. Game Over!");
         }
 
-        if (findTeam(userName) == 2 && base.equals(BASE2) && userName.equals(flag2.getFlagBearer())) {
+        if (findTeam(userName) == 2 && base.equals(BASE2) && userName.equals(flag1.getFlagBearer())) {
             gameOver();
             return new ScanResult(userName + " has returned Team 1's flag to their base. Game Over!");
         }
