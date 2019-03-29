@@ -1,4 +1,4 @@
-package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.connect;
+package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.create;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -20,13 +20,13 @@ import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.registerusername.Re
  * The starting activity where users can register and connect to a server to
  * join or create a new game.
  */
-public class ConnectActivity extends BaseActivity
-        implements ConnectContract.View {
+public class CreateActivity extends BaseActivity
+        implements CreateContract.View {
 
     /**
-     * The ConnectActivity's Presenter.
+     * The CreateActivity's Presenter.
      */
-    private ConnectContract.Presenter mPresenter;
+    private CreateContract.Presenter mPresenter;
 
     /**
      * The EditText view to hold IP address input.
@@ -71,49 +71,14 @@ public class ConnectActivity extends BaseActivity
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_connect);
+        setContentView(R.layout.activity_create);
 
         Intent intent = new Intent(this, ClientService.class);
         startService(intent);
 
-        mPresenter = new ConnectPresenter(this);
+        mPresenter = new CreatePresenter(this);
 
-        btnCreateGame = findViewById(R.id.btn_createGame);
-        btnJoinGame = findViewById(R.id.btn_joinGame);
-        btnRegisterUserName = findViewById(R.id.btn_registerUserName);
 
-        txtIp = findViewById(R.id.editText_ipAddress);
-        txtPort = findViewById(R.id.editText_port);
-        txtGameCode = findViewById(R.id.editText_gameCode);
-
-        tvUserName = findViewById(R.id.tv_userName);
-
-        btnRegisterUserName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                mPresenter.scanUserName();
-            }
-        });
-
-        btnCreateGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                String game = "0";
-                String ip = txtIp.getText().toString();
-                String port = txtPort.getText().toString();
-                mPresenter.createGame(ip, port, game);
-            }
-        });
-
-        btnJoinGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                String ip = txtIp.getText().toString();
-                String port = txtPort.getText().toString();
-                String gameCode = txtGameCode.getText().toString();
-                mPresenter.joinGame(ip, port, gameCode);
-            }
-        });
     }
 
     /**
@@ -198,7 +163,7 @@ public class ConnectActivity extends BaseActivity
      * @param presenter The presenter for this activity
      */
     @Override
-    public void setPresenter(final ConnectContract.Presenter presenter) {
+    public void setPresenter(final CreateContract.Presenter presenter) {
         mPresenter = presenter;
     }
 

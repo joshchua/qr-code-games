@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">QR Code Games Client</string>
+
+    <string-array name="gameTypes">
+        <item>Capture the Flag</item>
+        <item>Treasure Hunt</item>
+    </string-array>
 </resources>

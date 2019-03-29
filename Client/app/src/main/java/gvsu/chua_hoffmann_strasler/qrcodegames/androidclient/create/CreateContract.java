@@ -1,4 +1,4 @@
-package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.connect;
+package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.create;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BasePresenter;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseView;
@@ -6,7 +6,7 @@ import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseView;
 /**
  * The contract binding the Connect View and Presenter using the MVP pattern.
  */
-public interface ConnectContract {
+public interface CreateContract {
     /**
      * The Connect View interface.
      */

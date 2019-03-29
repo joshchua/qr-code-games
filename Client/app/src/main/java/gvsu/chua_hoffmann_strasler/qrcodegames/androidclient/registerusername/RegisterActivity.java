@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
@@ -15,7 +15,7 @@ import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.Bar
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.CameraSource;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.CameraSourcePreview;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.GraphicOverlay;
-import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.connect.ConnectActivity;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.create.CreateActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -233,7 +233,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
      */
     @Override
     public void sendUserName(String userName) {
-        Intent intent = new Intent(this, ConnectActivity.class);
+        Intent intent = new Intent(this, CreateActivity.class);
         intent.putExtra("key", "scanned_username");
         intent.putExtra("username", userName);
         startActivity(intent);

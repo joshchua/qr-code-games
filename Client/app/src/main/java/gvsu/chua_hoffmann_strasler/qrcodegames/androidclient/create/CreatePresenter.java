@@ -1,14 +1,14 @@
-package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.connect;
+package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.create;
 
 /**
  * The presenter for the Connect Activity holding all presentation logic.
  */
-public class ConnectPresenter implements ConnectContract.Presenter {
+public class CreatePresenter implements CreateContract.Presenter {
 
     /**
      * The Connect View.
      */
-    private ConnectContract.View mConnectView;
+    private CreateContract.View mConnectView;
 
     /**
      * The user's username.
@@ -20,7 +20,7 @@ public class ConnectPresenter implements ConnectContract.Presenter {
      *
      * @param connectView The Connect View to be bound to this presenter
      */
-    public ConnectPresenter(final ConnectContract.View connectView) {
+    public CreatePresenter(final CreateContract.View connectView) {
         mConnectView = connectView;
         mConnectView.setPresenter(this);
     }
