@@ -11,17 +11,7 @@ public interface JoinContract {
      * The Connect View interface.
      */
     interface View extends BaseView<Presenter> {
-        /**
-         * Attempts to connect to the game server, and if successful, will
-         * create a new game.
-         *
-         * @param ip The IP address of the server
-         * @param port The server's port reserved for this game
-         * @param userName The user's username
-         * @param game The game the user wishes to play
-         */
-        void sendCreateGameRequest(String ip, int port, String userName,
-                                   int game);
+
 
         /**
          * Attempts to connect to the game server, and if successful, will join
@@ -43,31 +33,15 @@ public interface JoinContract {
         void showError(String error);
 
         /**
-         * Starts the RegisterActivity, so a user can scan their username.
-         */
-        void showScanner();
-
-        /**
          * Get's the the text from the IP address text box.
          *
          * @return IP address string
          */
         String getIpAddress();
 
-        /**
-         * Displays the given username by changing the TextView.
-         *
-         * @param userName The user's username
-         */
-        void showUserName(String userName);
 
-        /**
-         * Enables/Disables the connect/join buttons.
-         *
-         * @param isEnabled If true, the buttons will be enabled. If false, the
-         *                 buttons will be disabled.
-         */
-        void setConnectBtnEnabled(boolean isEnabled);
+
+        void getBack();
     }
 
     /**
@@ -109,20 +83,8 @@ public interface JoinContract {
          */
         void joinGame(String ip, String port, String gameCode);
 
-        /**
-         * Checks if the given inputs are valid, and if so, attempts to connect
-         * to the server and create a new game.
-         *
-         * @param ip IP address
-         * @param port Port
-         * @param game The type of game to be created
-         */
-        void createGame(String ip, String port, String game);
 
-        /**
-         * Launches the scanner for a user to register their username.
-         */
-        void scanUserName();
+
 
         /**
          * Sets the given username.
@@ -144,5 +106,10 @@ public interface JoinContract {
          * @return If there is a username set
          */
         boolean hasUserNameSet();
+
+
+        void getBack();
     }
+
+
 }

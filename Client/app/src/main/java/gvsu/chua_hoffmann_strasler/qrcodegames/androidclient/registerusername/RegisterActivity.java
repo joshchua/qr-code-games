@@ -16,6 +16,7 @@ import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.Cam
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.CameraSourcePreview;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.GraphicOverlay;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.create.CreateActivity;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.welcome.WelcomeActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,11 +49,11 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
 
         presenter = new RegisterPresenter(this);
 
-        preview = (CameraSourcePreview) findViewById(R.id.firePreview);
+        preview = findViewById(R.id.firePreview);
         if (preview == null) {
             Log.d(TAG, "Preview is null");
         }
-        graphicOverlay = (GraphicOverlay) findViewById(R.id.fireFaceOverlay);
+        graphicOverlay = findViewById(R.id.fireFaceOverlay);
         if (graphicOverlay == null) {
             Log.d(TAG, "graphicOverlay is null");
         }
@@ -233,9 +234,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
      */
     @Override
     public void sendUserName(String userName) {
-        Intent intent = new Intent(this, CreateActivity.class);
+        Intent intent = new Intent(this, WelcomeActivity.class);
         intent.putExtra("key", "scanned_username");
-        intent.putExtra("username", userName);
+        intent.putExtra("userName", userName);
         startActivity(intent);
+        finish();
     }
 }

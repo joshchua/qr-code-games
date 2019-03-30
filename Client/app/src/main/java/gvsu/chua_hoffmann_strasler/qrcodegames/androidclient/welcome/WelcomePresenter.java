@@ -3,12 +3,12 @@ package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.welcome;
 /**
  * The presenter for the Connect Activity holding all presentation logic.
  */
-public class CreatePresenter implements CreateContract.Presenter {
+public class WelcomePresenter implements WelcomeContract.Presenter {
 
     /**
      * The Connect View.
      */
-    private CreateContract.View mWelcomeView;
+    private WelcomeContract.View mWelcomeView;
 
     /**
      * The user's username.
@@ -20,7 +20,7 @@ public class CreatePresenter implements CreateContract.Presenter {
      *
      * @param welcomeView The Connect View to be bound to this presenter
      */
-    public CreatePresenter(final CreateContract.View welcomeView) {
+    public WelcomePresenter(final WelcomeContract.View welcomeView) {
         mWelcomeView = welcomeView;
         mWelcomeView.setPresenter(this);
     }
@@ -56,15 +56,18 @@ public class CreatePresenter implements CreateContract.Presenter {
 
 
     @Override
-    public void scanUserName() {
-
+    public void createGame() {
+        mWelcomeView.createGame();
     }
-
-    /**
-     * Used to initialize the presenter in testing.
-     */
     @Override
-    public void start() {
-
+    public void joinGame() {
+      mWelcomeView.joinGame();
     }
+
+
+    @Override
+    public void start(){ }
+
+
 }
+

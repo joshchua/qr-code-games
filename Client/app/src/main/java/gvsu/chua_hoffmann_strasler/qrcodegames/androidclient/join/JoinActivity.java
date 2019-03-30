@@ -1,20 +1,13 @@
 package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.join;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
-import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.ClientService;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.lobby.LobbyActivity;
-import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.registerusername.RegisterActivity;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.welcome.WelcomeActivity;
 
 /**
  * The starting activity where users can register and connect to a server to
@@ -27,41 +20,6 @@ public class JoinActivity extends BaseActivity
      * The CreateActivity's Presenter.
      */
     private JoinContract.Presenter mPresenter;
-
-    /**
-     * The EditText view to hold IP address input.
-     */
-    private EditText txtIp;
-
-    /**
-     * The EditText view to hold port number input.
-     */
-    private EditText txtPort;
-    /**
-     * The EditText view to hold gameCode input.
-     */
-    private EditText txtGameCode;
-
-    /**
-     * The Button view used to create a new game.
-     */
-    private Button btnCreateGame;
-
-    /**
-     * The Button view used to join an existing game.
-     */
-    private Button btnJoinGame;
-
-    /**
-     * The Button view to launch the username scanner.
-     */
-    private Button btnRegisterUserName;
-
-    /**
-     * The TextView that displays the user's username.
-     */
-    private TextView tvUserName;
-
     /**
      * Called when this activity is created.
      *
@@ -73,12 +31,17 @@ public class JoinActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
 
-        Intent intent = new Intent(this, ClientService.class);
+        final Intent intent = getIntent();
         startService(intent);
 
         mPresenter = new JoinPresenter(this);
+        mPresenter.setUserName(intent.getStringExtra("userName"));
 
+    }
 
+    @Override
+    public void onBackPressed() {
+        mPresenter.getBack();
     }
 
     /**
@@ -108,30 +71,12 @@ public class JoinActivity extends BaseActivity
      */
     @Override
     public String getIpAddress() {
-        return txtIp.getText().toString();
+
+        return "hi";//txtIp.getText().toString();
     }
 
-    /**
-     * Displays the given username by changing the TextView.
-     *
-     * @param userName The user's username
-     */
-    @Override
-    public void showUserName(final String userName) {
-        tvUserName.setText("You set your username to \"" + userName + "\".");
-    }
 
-    /**
-     * Enables/Disables the connect/join buttons.
-     *
-     * @param isEnabled If true, the buttons will be enabled. If false, the
-     *                 buttons will be disabled.
-     */
-    @Override
-    public void setConnectBtnEnabled(final boolean isEnabled) {
-        btnCreateGame.setEnabled(isEnabled);
-        btnJoinGame.setEnabled(isEnabled);
-    }
+
 
     /**
      * Called when this activity receives a Local Broadcast from the
@@ -167,29 +112,6 @@ public class JoinActivity extends BaseActivity
         mPresenter = presenter;
     }
 
-    /**
-     * Attempts to connect to the game server, and if successful, will create
-     * a new game.
-     *
-     * @param ip The IP address of the server
-     * @param port The server's port reserved for this game
-     * @param userName The user's username
-     * @param game The game the user wishes to play
-     */
-    @Override
-    public void sendCreateGameRequest(final String ip, final int port,
-                                      final String userName, final int game) {
-        // Disable buttons for 5 seconds to wait for connection attempt
-        setConnectBtnEnabled(false);
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setConnectBtnEnabled(true);
-            }
-        }, 5000);
-
-        gameService.connectAndCreateGame(ip, port, userName, game);
-    }
 
     /**
      * Attempts to connect to the game server, and if successful, will join an
@@ -204,14 +126,7 @@ public class JoinActivity extends BaseActivity
     public void sendJoinGameRequest(final String ip, final int port,
                                     final String userName,
                                     final String gameCode) {
-        // Disable buttons for 5 seconds to wait for connection attempt
-        setConnectBtnEnabled(false);
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setConnectBtnEnabled(true);
-            }
-        }, 5000);
+
 
         gameService.connectAndJoinGame(ip, port, userName, gameCode);
     }
@@ -227,13 +142,13 @@ public class JoinActivity extends BaseActivity
 
     }
 
-    /**
-     * Starts the RegisterActivity, so a user can scan their username.
-     */
+
+
     @Override
-    public void showScanner() {
-        Intent intent = new Intent(this, RegisterActivity.class);
-        intent.putExtra("key", "register_username");
+    public void getBack() {
+        Intent intent = new Intent(this, WelcomeActivity.class);
+        intent.putExtra("userName",mPresenter.getUserName());
         startActivity(intent);
+        finish();
     }
 }

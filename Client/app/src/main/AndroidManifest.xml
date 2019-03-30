@@ -19,7 +19,7 @@
 
 
         <activity
-            android:name=".join.JoinActivity"
+            android:name=".main.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +28,13 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".welcome.WelcomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".create.CreateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".join.JoinActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".lobby.LobbyActivity"

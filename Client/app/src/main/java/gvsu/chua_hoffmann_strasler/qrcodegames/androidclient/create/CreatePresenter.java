@@ -1,5 +1,7 @@
 package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.create;
 
+
+
 /**
  * The presenter for the Connect Activity holding all presentation logic.
  */
@@ -8,7 +10,7 @@ public class CreatePresenter implements CreateContract.Presenter {
     /**
      * The Connect View.
      */
-    private CreateContract.View mConnectView;
+    private CreateContract.View mCreateView;
 
     /**
      * The user's username.
@@ -18,12 +20,14 @@ public class CreatePresenter implements CreateContract.Presenter {
     /**
      * Initializes the connection between the Connect View and this presenter.
      *
-     * @param connectView The Connect View to be bound to this presenter
+     * @param createView The Connect View to be bound to this presenter
      */
-    public CreatePresenter(final CreateContract.View connectView) {
-        mConnectView = connectView;
-        mConnectView.setPresenter(this);
+    public CreatePresenter(final CreateContract.View createView) {
+        mCreateView = createView;
+        mCreateView.setPresenter(this);
     }
+
+
 
     /**
      * Checks if the given string is a valid IP address.
@@ -69,20 +73,6 @@ public class CreatePresenter implements CreateContract.Presenter {
         }
     }
 
-    /**
-     * Checks if the given inputs are valid, and if so, attempts to connect to
-     * the server and join an existing session.
-     *
-     * @param ip IP address
-     * @param port Port
-     * @param gameCode Game code of the existing session
-     */
-    @Override
-    public void joinGame(final String ip, final String port,
-                         final String gameCode) {
-        mConnectView.sendJoinGameRequest(ip, Integer.parseInt(port),
-                mUserName, gameCode);
-    }
 
     /**
      * Checks if the given inputs are valid, and if so, attempts to connect to
@@ -96,38 +86,31 @@ public class CreatePresenter implements CreateContract.Presenter {
     public void createGame(final String ip, final String port,
                            final String game) {
         if (!hasUserNameSet()) {
-            mConnectView.showError("Please register your username first");
+            mCreateView.showError("Please register your username first");
             return;
         }
 
         if (!isValidIPAddress(ip)) {
-            mConnectView.showError("The provided IP address is not valid");
+            mCreateView.showError("The provided IP address is not valid");
             return;
         }
 
 
         if (!isValidGame(game)) {
-            mConnectView.showError("The game option provided is not valid.");
+            mCreateView.showError("The game option provided is not valid.");
             return;
         }
 
 
         if (!isValidPort(port)) {
-            mConnectView.showError("The port provided is not valid");
+            mCreateView.showError("The port provided is not valid");
             return;
         }
 
-        mConnectView.sendCreateGameRequest(ip, Integer.parseInt(port),
+        mCreateView.sendCreateGameRequest(ip, Integer.parseInt(port),
                 mUserName, Integer.parseInt(game));
     }
 
-    /**
-     * Launches the scanner for a user to register their username.
-     */
-    @Override
-    public void scanUserName() {
-        mConnectView.showScanner();
-    }
 
     /**
      * Sets the given username.
@@ -137,7 +120,6 @@ public class CreatePresenter implements CreateContract.Presenter {
     @Override
     public void setUserName(final String userName) {
         mUserName = userName;
-        mConnectView.showUserName(userName);
     }
 
     /**
@@ -167,5 +149,10 @@ public class CreatePresenter implements CreateContract.Presenter {
     @Override
     public void start() {
 
+    }
+
+    @Override
+    public void getBack() {
+        mCreateView.getBack();
     }
 }

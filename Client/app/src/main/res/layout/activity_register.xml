@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fireTopLayout"
     android:orientation="vertical"
@@ -28,4 +28,4 @@
            />
     </gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.CameraSourcePreview>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

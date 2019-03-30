@@ -13,7 +13,7 @@ public class JoinPresenter implements JoinContract.Presenter {
     /**
      * The user's username.
      */
-    private String mUserName;
+    private String userName;
 
     /**
      * Initializes the Connection between the Join View and this presenter.
@@ -61,9 +61,7 @@ public class JoinPresenter implements JoinContract.Presenter {
     @Override
     public boolean isValidGame(final String game) {
         try {
-            boolean isValid = Integer.parseInt(game) == 0;
-
-            return isValid;
+            return Integer.parseInt(game) == 0;
         } catch (NumberFormatException ex) {
             return false;
         }
@@ -81,53 +79,12 @@ public class JoinPresenter implements JoinContract.Presenter {
     public void joinGame(final String ip, final String port,
                          final String gameCode) {
         mJoinView.sendJoinGameRequest(ip, Integer.parseInt(port),
-                mUserName, gameCode);
+                userName, gameCode);
     }
 
-    /**
-     * Checks if the given inputs are valid, and if so, attempts to Join to
-     * the server and Join a new game.
-     *
-     * @param ip IP address
-     * @param port Port
-     * @param game The type of game to be Joind
-     */
-    @Override
-    public void createGame(final String ip, final String port,
-                           final String game) {
-        if (!hasUserNameSet()) {
-            mJoinView.showError("Please register your username first");
-            return;
-        }
-
-        if (!isValidIPAddress(ip)) {
-            mJoinView.showError("The provided IP address is not valid");
-            return;
-        }
 
 
-        if (!isValidGame(game)) {
-            mJoinView.showError("The game option provided is not valid.");
-            return;
-        }
 
-
-        if (!isValidPort(port)) {
-            mJoinView.showError("The port provided is not valid");
-            return;
-        }
-
-        mJoinView.sendCreateGameRequest(ip, Integer.parseInt(port),
-                mUserName, Integer.parseInt(game));
-    }
-
-    /**
-     * Launches the scanner for a user to register their username.
-     */
-    @Override
-    public void scanUserName() {
-        mJoinView.showScanner();
-    }
 
     /**
      * Sets the given username.
@@ -136,8 +93,7 @@ public class JoinPresenter implements JoinContract.Presenter {
      */
     @Override
     public void setUserName(final String userName) {
-        mUserName = userName;
-        mJoinView.showUserName(userName);
+        this.userName = userName;
     }
 
     /**
@@ -147,7 +103,7 @@ public class JoinPresenter implements JoinContract.Presenter {
      */
     @Override
     public String getUserName() {
-        return mUserName;
+        return userName;
     }
 
     /**
@@ -157,7 +113,7 @@ public class JoinPresenter implements JoinContract.Presenter {
      */
     @Override
     public boolean hasUserNameSet() {
-        return mUserName != null;
+        return userName != null;
     }
 
 
@@ -167,5 +123,10 @@ public class JoinPresenter implements JoinContract.Presenter {
     @Override
     public void start() {
 
+    }
+
+    @Override
+    public void getBack() {
+        mJoinView.getBack();
     }
 }

@@ -2,62 +2,31 @@ package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.welcome;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
-import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.ClientService;
-import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.registerusername.RegisterActivity;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.create.CreateActivity;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.join.JoinActivity;
+
 
 /**
  * The starting activity where users can register and connect to a server to
  * join or create a new game.
  */
 public class WelcomeActivity extends BaseActivity
-        implements CreateContract.View {
+        implements WelcomeContract.View {
 
     /**
      * The CreateActivity's Presenter.
      */
-    private CreateContract.Presenter mPresenter;
+    private WelcomeContract.Presenter mPresenter;
 
-    /**
-     * The EditText view to hold IP address input.
-     */
-    private EditText txtIp;
 
-    /**
-     * The EditText view to hold port number input.
-     */
-    private EditText txtPort;
-    /**
-     * The EditText view to hold gameCode input.
-     */
-    private EditText txtGameCode;
-
-    /**
-     * The Button view used to create a new game.
-     */
-    private Button btnCreateGame;
-
-    /**
-     * The Button view used to join an existing game.
-     */
-    private Button btnJoinGame;
-
-    /**
-     * The Button view to launch the username scanner.
-     */
-    private Button btnRegisterUserName;
-
-    /**
-     * The TextView that displays the user's username.
-     */
-    private TextView tvUserName;
-
+    private TextView welcomeName;
     /**
      * Called when this activity is created.
      *
@@ -68,31 +37,29 @@ public class WelcomeActivity extends BaseActivity
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-
-        Intent intent = new Intent(this, ClientService.class);
-        startService(intent);
-
-        mPresenter = new CreatePresenter(this);
-    }
-
-    /**
-     * Called when this activity is resumed.
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
         final Intent intent = getIntent();
-        if (intent != null) {
-            String key = intent.getStringExtra("key");
-            if (key == null) {
-                return;
-            }
 
-            if (key.equals("scanned_username")) {
-                String userName = intent.getStringExtra("username");
-                mPresenter.setUserName(userName);
+        mPresenter =  new WelcomePresenter(this);
+
+        welcomeName = findViewById(R.id.welcomeName);
+
+        mPresenter.setUserName(intent.getStringExtra("userName"));
+
+        Button createGameBtn = findViewById(R.id.createGameBtn);
+        createGameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.createGame();
             }
-        }
+        });
+        Button joinGameBtn = findViewById(R.id.joinGameBtn);
+        joinGameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.joinGame();
+            }
+        });
+
     }
 
 
@@ -103,19 +70,22 @@ public class WelcomeActivity extends BaseActivity
      */
     @Override
     public void showUserName(final String userName) {
-        tvUserName.setText("You set your username to \"" + userName + "\".");
+        welcomeName.setText("Welcome, " + userName);
     }
 
-    /**
-     * Enables/Disables the connect/join buttons.
-     *
-     * @param isEnabled If true, the buttons will be enabled. If false, the
-     *                 buttons will be disabled.
-     */
     @Override
-    public void setConnectBtnEnabled(final boolean isEnabled) {
-        btnCreateGame.setEnabled(isEnabled);
-        btnJoinGame.setEnabled(isEnabled);
+    public void createGame() {
+        Intent intent = new Intent(this, CreateActivity.class);
+        intent.putExtra("userName",mPresenter.getUserName());
+        startActivity(intent);
+        finish();
+    }
+    @Override
+    public void joinGame() {
+        Intent intent = new Intent(this, JoinActivity.class);
+        intent.putExtra("userName",mPresenter.getUserName());
+        startActivity(intent);
+        finish();
     }
 
     /**
@@ -135,30 +105,7 @@ public class WelcomeActivity extends BaseActivity
      * @param presenter The presenter for this activity
      */
     @Override
-    public void setPresenter(final CreateContract.Presenter presenter) {
+    public void setPresenter(final WelcomeContract.Presenter presenter) {
         mPresenter = presenter;
-    }
-
-
-
-    /**
-     * Displays a Toast with given error message.
-     *
-     * @param error The error message
-     */
-    @Override
-    public void showError(final String error) {
-        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
-
-    }
-
-    /**
-     * Starts the RegisterActivity, so a user can scan their username.
-     */
-    @Override
-    public void showScanner() {
-        Intent intent = new Intent(this, RegisterActivity.class);
-        intent.putExtra("key", "register_username");
-        startActivity(intent);
     }
 }
