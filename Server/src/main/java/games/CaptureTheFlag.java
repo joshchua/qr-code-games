@@ -44,64 +44,78 @@ public class CaptureTheFlag extends Game {
      * @param otherPlayer name of the player that has been tagged
      * @return returns a message of the players
      */
-    private ScanResult scannedPlayer(String userName, String otherPlayer) {
-        if (findTeam(userName) == 1 && findTeam(otherPlayer) == 2 && otherPlayer.equals(flag1.getFlagBearer())) {
+    private ScanResult scannedPlayer(final String userName,
+                                     final String otherPlayer) {
+        if (findTeam(userName) == 1 && findTeam(otherPlayer) == 2
+                && otherPlayer.equals(flag1.getFlagBearer())) {
             flag1.reset();
-            return new ScanResult(userName + " has tagged " + otherPlayer + " and has reset Team 1's flag.");
+            return new ScanResult(userName + " has tagged " + otherPlayer
+                    + " and has reset Team 1's flag.");
         }
 
-        if (findTeam(userName) == 2 && findTeam(otherPlayer) == 1 && otherPlayer.equals(flag2.getFlagBearer())) {
+        if (findTeam(userName) == 2 && findTeam(otherPlayer) == 1
+                && otherPlayer.equals(flag2.getFlagBearer())) {
             flag2.reset();
-            return new ScanResult(userName + " has tagged " + otherPlayer + " and has reset Team 2's flag.");
+            return new ScanResult(userName + " has tagged " + otherPlayer
+                    + " and has reset Team 2's flag.");
         }
 
         return null;
     }
 
     /**
-     *Checks if player scanned a base
+     * Checks if player scanned a base.
+     *
      * @param userName name of the player that scanned a base
      * @param base name of the base that has beed scanned
      * @return returns a message for the players
      */
-    private ScanResult scannedBase(String userName, String base) {
+    private ScanResult scannedBase(final String userName, final String base) {
         // Handle a player tagging enemy team base
-        if (findTeam(userName) == 1 && base.equals(BASE2) && !flag2.getIsTaken()) {
+        if (findTeam(userName) == 1 && base.equals(BASE2)
+                && !flag2.getIsTaken()) {
             flag2.setFlagBearer(userName);
             return new ScanResult(userName + " has captured Team 2's flag!");
         }
 
-        if (findTeam(userName) == 2 && base.equals(BASE1) && !flag1.getIsTaken()) {
+        if (findTeam(userName) == 2 && base.equals(BASE1)
+                && !flag1.getIsTaken()) {
             flag1.setFlagBearer(userName);
             return new ScanResult(userName + " has captured Team 1's flag!");
         }
 
         // Handle a player tagging their own base
-        if (findTeam(userName) == 1 && base.equals(BASE1) && userName.equals(flag2.getFlagBearer())) {
+        if (findTeam(userName) == 1 && base.equals(BASE1)
+                && userName.equals(flag2.getFlagBearer())) {
             gameOver();
-            return new ScanResult(userName + " has returned Team 2's flag to their base. Game Over!");
+            return new ScanResult(userName + " has returned Team 2's flag to "
+                    + "their base. Game Over!");
         }
 
-        if (findTeam(userName) == 2 && base.equals(BASE2) && userName.equals(flag1.getFlagBearer())) {
+        if (findTeam(userName) == 2 && base.equals(BASE2)
+                && userName.equals(flag1.getFlagBearer())) {
             gameOver();
-            return new ScanResult(userName + " has returned Team 1's flag to their base. Game Over!");
+            return new ScanResult(userName + " has returned Team 1's flag to "
+                    + "their base. Game Over!");
         }
 
         return null;
     }
 
     /**
-     * Called when a players has scanned something
+     * Called when a players has scanned something.
+     *
      * @param userName name of the player
      * @param scanned string that he has scanned
      * @return returns scanned player or scanned base, otherwise null
      */
     @Override
-    public ScanResult handleScan(String userName, String scanned) {
+    public ScanResult handleScan(final String userName, final String scanned) {
 
         if (scanned.equals(BASE1) || scanned.equals(BASE2)) {
             return scannedBase(userName, scanned);
-        } else if (scanned.equals(flag1.getFlagBearer()) || scanned.equals(flag2.getFlagBearer())) {
+        } else if (scanned.equals(flag1.getFlagBearer())
+                || scanned.equals(flag2.getFlagBearer())) {
             return scannedPlayer(userName, scanned);
         }
 
