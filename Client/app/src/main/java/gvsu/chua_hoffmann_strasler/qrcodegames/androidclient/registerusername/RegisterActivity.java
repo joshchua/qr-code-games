@@ -8,6 +8,8 @@ import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
@@ -15,7 +17,6 @@ import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.Bar
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.CameraSource;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.CameraSourcePreview;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.GraphicOverlay;
-import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.create.CreateActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.welcome.WelcomeActivity;
 
 import java.io.IOException;
@@ -63,6 +64,8 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         } else {
             getRuntimePermissions();
         }
+
+
     }
 
     /**

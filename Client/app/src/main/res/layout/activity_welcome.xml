@@ -27,11 +27,12 @@
             android:layout_width="157dp"
             android:layout_height="201dp"
             android:layout_gravity="center"
+            android:contentDescription="@string/imgDescription"
             app:srcCompat="@drawable/qr_code" />
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/head"
         style="@style/TextFieldShadow"
         android:layout_width="0dp"
         android:layout_height="64dp"
@@ -39,14 +40,9 @@
         android:layout_marginTop="48dp"
         android:layout_marginEnd="8dp"
         android:layout_weight="1"
-        android:fontFamily="@font/roboto"
-        android:shadowColor="#94000000"
-        android:shadowDy="2"
-        android:shadowRadius="4"
         android:text="@string/qrCodeGames"
         android:textAlignment="center"
-        android:textAppearance="@android:style/TextAppearance.Material.Headline"
-        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textColor="#ffffff"
         android:textSize="46sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,46 +52,45 @@
         android:id="@+id/welcomeName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:fontFamily="@font/roboto"
+        android:layout_marginTop="36dp"
         android:text="@string/welcome"
         android:textAlignment="center"
         android:textColor="@color/common_google_signin_btn_text_dark_default"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toTopOf="@+id/createGameBtn"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        android:textSize="26sp"
+        app:layout_constraintBottom_toTopOf="@+id/createMenuBtn"
+        app:layout_constraintTop_toBottomOf="@+id/head"
         tools:layout_editor_absoluteX="16dp" />
 
     <Button
-        android:id="@+id/createGameBtn"
+        android:id="@+id/createMenuBtn"
         android:layout_width="200dp"
         android:layout_height="63dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="1dp"
-        android:text="CREATE GAME"
+        android:text="@string/createGameButton"
         android:textAlignment="center"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/joinGameBtn"
+        app:layout_constraintBottom_toTopOf="@+id/joinMenuBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcomeName" />
 
     <Button
-        android:id="@+id/joinGameBtn"
+        android:id="@+id/joinMenuBtn"
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="70dp"
-        android:text="JOIN GAME"
+        android:text="@string/joinGameButton"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createGameBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/createMenuBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

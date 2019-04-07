@@ -1,5 +1,6 @@
 package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.join;
 
+
 /**
  * The presenter for the Join Activity holding all presentation logic.
  */
@@ -34,7 +35,7 @@ public class JoinPresenter implements JoinContract.Presenter {
     @Override
     public boolean isValidIPAddress(final String ip) {
         String strPattern = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
-        + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+                + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
                 + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
                 + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
         return ip.matches(strPattern);
@@ -51,49 +52,35 @@ public class JoinPresenter implements JoinContract.Presenter {
         return port.matches("\\d+");
     }
 
-    /**
-     * Checks if the given game string is a valid game that can be played via
-     * this app.
-     *
-     * @param game The string to be checked
-     * @return If the given game is a valid game
-     */
-    @Override
-    public boolean isValidGame(final String game) {
-        try {
-            return Integer.parseInt(game) == 0;
-        } catch (NumberFormatException ex) {
-            return false;
-        }
-    }
 
     /**
      * Checks if the given inputs are valid, and if so, attempts to Join to
      * the server and join an existing session.
      *
-     * @param ip IP address
-     * @param port Port
+     * @param ip       IP address
+     * @param port     Port
      * @param gameCode Game code of the existing session
      */
     @Override
     public void joinGame(final String ip, final String port,
                          final String gameCode) {
-        mJoinView.sendJoinGameRequest(ip, Integer.parseInt(port),
-                userName, gameCode);
-    }
+        if (!isValidIPAddress(ip)) {
+            mJoinView.showError("The provided IP address is not valid");
+            return;
+        }
 
 
+        if (!isValidPort(port)) {
+            mJoinView.showError("The port provided is not valid");
+            return;
+        }
+        try {
+            mJoinView.sendJoinGameRequest(ip, Integer.parseInt(port),
+                    userName, gameCode);
+        } catch (InterruptedException e) {
+            System.out.println(e);
+        }
 
-
-
-    /**
-     * Sets the given username.
-     *
-     * @param userName The user's username
-     */
-    @Override
-    public void setUserName(final String userName) {
-        this.userName = userName;
     }
 
     /**
@@ -107,15 +94,14 @@ public class JoinPresenter implements JoinContract.Presenter {
     }
 
     /**
-     * Checks if there is a username set.
+     * Sets the given username.
      *
-     * @return If there is a username set
+     * @param userName The user's username
      */
     @Override
-    public boolean hasUserNameSet() {
-        return userName != null;
+    public void setUserName(final String userName) {
+        this.userName = userName;
     }
-
 
     /**
      * Used to initialize the presenter in testing.
@@ -125,8 +111,13 @@ public class JoinPresenter implements JoinContract.Presenter {
 
     }
 
+    /**
+     * Returns to previous activity on back button press
+     */
     @Override
     public void getBack() {
         mJoinView.getBack();
     }
+
+
 }

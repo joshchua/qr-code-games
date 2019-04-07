@@ -30,6 +30,5 @@ public interface MainContract {
         void scanUserName();
 
 
-
     }
 }

@@ -2,9 +2,13 @@ package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.create;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.material.textfield.TextInputEditText;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
@@ -23,16 +27,31 @@ public class CreateActivity extends BaseActivity
      */
     private CreateContract.Presenter mPresenter;
 
-    private TextInputEditText ipAddressBox;
+    /**
+     * TextView holding IP Address
+     */
+    private TextView ipAddressView;
 
-    private TextInputEditText portNumberBox;
+    /**
+     * TextView holding IP Address
+     */
+    private TextView portNumberView;
 
+    /**
+     * Spinner holding different game modes
+     */
     private Spinner gameModeBox;
+
+    /**
+     * Sends request to join a game on the server
+     */
+    private Button createGameBtn;
+
     /**
      * Called when this activity is created.
      *
      * @param savedInstanceState The bundle saved from previous instances of
-     *                          this activity
+     *                           this activity
      */
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -45,47 +64,29 @@ public class CreateActivity extends BaseActivity
         mPresenter = new CreatePresenter(this);
         mPresenter.setUserName(intent.getStringExtra("userName"));
 
-        ipAddressBox = findViewById(R.id.ipAddressBox);
-        portNumberBox = findViewById(R.id.portNumberBox);
-        gameModeBox = findViewById(R.id.gameModeBox);
+        ipAddressView = findViewById(R.id.ipAddressView);
+        portNumberView = findViewById(R.id.portNumberView);
+        gameModeBox = findViewById(R.id.gameModeView);
+
+        createGameBtn = findViewById(R.id.createGameBtn);
+        createGameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.createGame(ipAddressView.getText().toString(),
+                        portNumberView.getText().toString(),
+                        gameModeBox.getSelectedItem().toString());
+            }
+        });
     }
 
+
+    /**
+     * Returns to previous activity on back button press
+     */
     @Override
     public void onBackPressed() {
         mPresenter.getBack();
     }
-
-
-    /**
-     * Called when this activity is resumed.
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-        final Intent intent = getIntent();
-        if (intent != null) {
-            String key = intent.getStringExtra("key");
-            if (key == null) {
-                return;
-            }
-
-            if (key.equals("scanned_username")) {
-                String userName = intent.getStringExtra("username");
-                mPresenter.setUserName(userName);
-            }
-        }
-    }
-
-    /**
-     * Get's the the text from the IP address text box.
-     *
-     * @return IP address string
-     */
-    @Override
-    public String getIpAddress() {
-        return ipAddressBox.getText().toString();
-    }
-
 
 
     /**
@@ -97,15 +98,15 @@ public class CreateActivity extends BaseActivity
     @Override
     protected void handleGameEvent(final Bundle bundle) {
         String key = bundle.getString("key");
-        if (key.equals("lobby_received")) {
+        if (key != null && key.equals("lobby_received")) {
             Intent intent = new Intent(this, LobbyActivity.class);
             intent.removeExtra("key");
             intent.putExtras(bundle);
             intent.putExtra("userName", mPresenter.getUserName());
-            intent.putExtra("ip", getIpAddress());
+            intent.putExtra("ip", ipAddressView.getText().toString());
             startActivity(intent);
             finish();
-        } else if (key.equals("join_game_error")) {
+        } else if (key != null && key.equals("join_game_error")) {
             Toast.makeText(this, bundle.getString("message"),
                     Toast.LENGTH_SHORT).show();
         }
@@ -126,18 +127,28 @@ public class CreateActivity extends BaseActivity
      * Attempts to connect to the game server, and if successful, will create
      * a new game.
      *
-     * @param ip The IP address of the server
-     * @param port The server's port reserved for this game
+     * @param ip       The IP address of the server
+     * @param port     The server's port reserved for this game
      * @param userName The user's username
-     * @param game The game the user wishes to play
+     * @param game     The game the user wishes to play
      */
     @Override
     public void sendCreateGameRequest(final String ip, final int port,
                                       final String userName, final int game) {
-
+        createGameBtn.setEnabled(false);
         gameService.connectAndCreateGame(ip, port, userName, game);
-    }
+        createGameBtn.setEnabled(false);
+        createGameBtn.setText(R.string.joining);
 
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                createGameBtn.setText(R.string.joinGame);
+                createGameBtn.setEnabled(true);
+            }
+        }, 5000);
+
+    }
 
 
     /**
@@ -151,12 +162,13 @@ public class CreateActivity extends BaseActivity
 
     }
 
-
-
+    /**
+     * Returns to previous activity on back button press
+     */
     @Override
     public void getBack() {
         Intent intent = new Intent(this, WelcomeActivity.class);
-        intent.putExtra("userName",mPresenter.getUserName());
+        intent.putExtra("userName", mPresenter.getUserName());
         startActivity(intent);
         finish();
     }

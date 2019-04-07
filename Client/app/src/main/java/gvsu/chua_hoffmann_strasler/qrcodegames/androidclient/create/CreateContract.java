@@ -16,14 +16,13 @@ public interface CreateContract {
          * Attempts to connect to the game server, and if successful, will
          * create a new game.
          *
-         * @param ip The IP address of the server
-         * @param port The server's port reserved for this game
+         * @param ip       The IP address of the server
+         * @param port     The server's port reserved for this game
          * @param userName The user's username
-         * @param game The game the user wishes to play
+         * @param game     The game the user wishes to play
          */
         void sendCreateGameRequest(String ip, int port, String userName,
                                    int game);
-
 
         /**
          * Displays a Toast with given error message.
@@ -32,17 +31,9 @@ public interface CreateContract {
          */
         void showError(String error);
 
-
         /**
-         * Get's the the text from the IP address text box.
-         *
-         * @return IP address string
+         * Returns to previous activity on back button press
          */
-        String getIpAddress();
-
-
-
-
         void getBack();
     }
 
@@ -68,33 +59,16 @@ public interface CreateContract {
          */
         boolean isValidPort(String port);
 
-        /**
-         * Checks if the given game string is a valid game that can be played
-         * via this app.
-         *
-         * @param game The string to be checked
-         * @return If the given game is a valid game
-         */
-        boolean isValidGame(String game);
-
-
 
         /**
          * Checks if the given inputs are valid, and if so, attempts to connect
          * to the server and create a new game.
          *
-         * @param ip IP address
+         * @param ip   IP address
          * @param port Port
          * @param game The type of game to be created
          */
         void createGame(String ip, String port, String game);
-
-        /**
-         * Sets the given username.
-         *
-         * @param userName The user's username
-         */
-        void setUserName(String userName);
 
         /**
          * Gets the user's username.
@@ -104,13 +78,15 @@ public interface CreateContract {
         String getUserName();
 
         /**
-         * Checks if there is a username set.
+         * Sets the given username.
          *
-         * @return If there is a username set
+         * @param userName The user's username
          */
-        boolean hasUserNameSet();
+        void setUserName(String userName);
 
-
+        /**
+         * Returns to previous activity on back button press
+         */
         void getBack();
     }
 }

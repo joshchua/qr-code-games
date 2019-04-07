@@ -33,6 +33,13 @@ public interface WelcomeContract {
 
 
         /**
+         * Gets the user's username.
+         *
+         * @return The user's username
+         */
+        String getUserName();
+
+        /**
          * Sets the given username.
          *
          * @param userName The user's username
@@ -40,14 +47,13 @@ public interface WelcomeContract {
         void setUserName(String userName);
 
         /**
-         * Gets the user's username.
-         *
-         * @return The user's username
+         * Opens Create game activity
          */
-        String getUserName();
-
         void createGame();
 
+        /**
+         * Opens Join game activity
+         */
         void joinGame();
     }
 }

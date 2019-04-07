@@ -8,8 +8,8 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        style="@style/TextFieldShadow"
         android:id="@+id/cardView"
+        style="@style/TextFieldShadow"
         android:layout_width="180dp"
         android:layout_height="180dp"
         android:layout_marginStart="8dp"
@@ -26,6 +26,7 @@
             android:layout_width="157dp"
             android:layout_height="201dp"
             android:layout_gravity="center"
+            android:contentDescription="@string/imgDescription"
             app:srcCompat="@drawable/qr_code" />
     </androidx.cardview.widget.CardView>
 
@@ -68,7 +69,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/ipAddressBox"
+        android:id="@+id/ipAddressView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -81,13 +82,14 @@
         android:paddingTop="15dp"
         android:paddingEnd="10dp"
         android:paddingBottom="15dp"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/portNumberBox"
+        android:id="@+id/portNumberView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -100,10 +102,11 @@
         android:paddingTop="15dp"
         android:paddingEnd="10dp"
         android:paddingBottom="15dp"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ipAddressBox" />
+        app:layout_constraintTop_toBottomOf="@+id/ipAddressView" />
 
     <TextView
         android:id="@+id/textView3"
@@ -119,19 +122,17 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/portNumberBox" />
+        app:layout_constraintTop_toBottomOf="@+id/portNumberView" />
 
     <Spinner
-        android:spinnerMode="dropdown"
-        android:dropDownWidth="match_parent"
-        android:popupBackground="@drawable/text_field"
-        android:id="@+id/gameModeBox"
+        android:id="@+id/gameModeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/spinner"
+        android:dropDownWidth="match_parent"
         android:entries="@array/gameTypes"
         android:fontFamily="@font/roboto"
         android:hint="@string/gameCode"
@@ -139,11 +140,12 @@
         android:paddingTop="15dp"
         android:paddingEnd="10dp"
         android:paddingBottom="15dp"
+        android:popupBackground="@drawable/text_field"
+        android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <Button
         android:id="@+id/createGameBtn"
@@ -162,8 +164,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gameModeBox" />
-
+        app:layout_constraintTop_toBottomOf="@+id/gameModeView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

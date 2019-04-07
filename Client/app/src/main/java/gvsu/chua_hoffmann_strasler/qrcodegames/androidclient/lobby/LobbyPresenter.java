@@ -29,6 +29,7 @@ public class LobbyPresenter implements LobbyContract.Presenter {
 
     /**
      * Switches team for a player
+     *
      * @param userName name of the player that is switching teams
      * @param gameCode ID of the game where the player is switching teams
      */
@@ -39,8 +40,9 @@ public class LobbyPresenter implements LobbyContract.Presenter {
 
     /**
      * Checks if team has players and updates the array
-     * @param team1 array of team 1
-     * @param team2 array of team 2
+     *
+     * @param team1      array of team 1
+     * @param team2      array of team 2
      * @param teamArray1 array list of team 1
      * @param teamArray2 array list of team 2
      */
@@ -48,8 +50,12 @@ public class LobbyPresenter implements LobbyContract.Presenter {
     public void updateTeams(String[] team1, String[] team2, ArrayList<String> teamArray1, ArrayList<String> teamArray2) {
         teamArray1.clear();
         teamArray2.clear();
-        if(team1 != null) {for (String user: team1) teamArray1.add(user);}
-        if(team2 != null) {for (String user: team2) teamArray2.add(user);}
+        if (team1 != null) {
+            for (String user : team1) teamArray1.add(user);
+        }
+        if (team2 != null) {
+            for (String user : team2) teamArray2.add(user);
+        }
         mLobbyView.updateTeams();
     }
 
@@ -62,16 +68,8 @@ public class LobbyPresenter implements LobbyContract.Presenter {
     }
 
     /**
-     * Sets the local gameCode
-     * @param gameCode ID of the game
-     */
-    @Override
-    public void setGameCode(String gameCode) {
-        this.gameCode = gameCode;
-    }
-
-    /**
      * Returns gameCode
+     *
      * @return ID of the game
      */
     @Override
@@ -80,9 +78,20 @@ public class LobbyPresenter implements LobbyContract.Presenter {
     }
 
     /**
+     * Sets the local gameCode
+     *
+     * @param gameCode ID of the game
+     */
+    @Override
+    public void setGameCode(String gameCode) {
+        this.gameCode = gameCode;
+    }
+
+    /**
      * Start from the base presenter
      */
     @Override
-    public void start() {}
+    public void start() {
+    }
 
 }

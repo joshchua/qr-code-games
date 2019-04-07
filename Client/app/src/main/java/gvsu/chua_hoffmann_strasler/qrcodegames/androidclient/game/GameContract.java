@@ -14,15 +14,20 @@ public interface GameContract {
      */
     interface View extends BaseView<Presenter> {
         void sendScanRequest(String barcodeValue);
+
         void showGameEvent();
     }
+
     /**
      * The Game Presenter interface
      */
     interface Presenter extends BasePresenter {
         void handleScan(String barcodeValue);
+
         void handleGameEvent(String gameEvent, boolean isPlaying);
+
         void gameOver();
+
         ArrayList<String> getGameEventList();
     }
 }

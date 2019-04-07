@@ -1,5 +1,6 @@
 package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.join;
 
+
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BasePresenter;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseView;
 
@@ -17,13 +18,13 @@ public interface JoinContract {
          * Attempts to connect to the game server, and if successful, will join
          * an existing game.
          *
-         * @param ip The IP address of the server
-         * @param port The server's port reserved for this game
+         * @param ip       The IP address of the server
+         * @param port     The server's port reserved for this game
          * @param userName The user's username
          * @param gameCode The game code of the existing session on the server
          */
         void sendJoinGameRequest(String ip, int port, String userName,
-                                 String gameCode);
+                                 String gameCode) throws InterruptedException;
 
         /**
          * Displays a Toast with given error message.
@@ -33,14 +34,8 @@ public interface JoinContract {
         void showError(String error);
 
         /**
-         * Get's the the text from the IP address text box.
-         *
-         * @return IP address string
+         * Returns to previous activity on back button press
          */
-        String getIpAddress();
-
-
-
         void getBack();
     }
 
@@ -65,33 +60,14 @@ public interface JoinContract {
         boolean isValidPort(String port);
 
         /**
-         * Checks if the given game string is a valid game that can be played
-         * via this app.
-         *
-         * @param game The string to be checked
-         * @return If the given game is a valid game
-         */
-        boolean isValidGame(String game);
-
-        /**
          * Checks if the given inputs are valid, and if so, attempts to connect
          * to the server and join an existing session.
          *
-         * @param ip IP address
-         * @param port Port
+         * @param ip       IP address
+         * @param port     Port
          * @param gameCode Game code of the existing session
          */
         void joinGame(String ip, String port, String gameCode);
-
-
-
-
-        /**
-         * Sets the given username.
-         *
-         * @param userName The user's username
-         */
-        void setUserName(String userName);
 
         /**
          * Gets the user's username.
@@ -101,13 +77,15 @@ public interface JoinContract {
         String getUserName();
 
         /**
-         * Checks if there is a username set.
+         * Sets the given username.
          *
-         * @return If there is a username set
+         * @param userName The user's username
          */
-        boolean hasUserNameSet();
+        void setUserName(String userName);
 
-
+        /**
+         * Returns to previous activity on back button press
+         */
         void getBack();
     }
 

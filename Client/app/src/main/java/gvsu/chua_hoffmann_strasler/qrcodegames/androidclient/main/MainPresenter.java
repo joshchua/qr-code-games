@@ -20,7 +20,9 @@ public class MainPresenter implements MainContract.Presenter {
         mMainView.setPresenter(this);
     }
 
-
+    /**
+     * Opens QR scanner in register activity
+     */
     @Override
     public void scanUserName() {
         mMainView.showScanner();

@@ -8,8 +8,8 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        style="@style/TextFieldShadow"
         android:id="@+id/cardView"
+        style="@style/TextFieldShadow"
         android:layout_width="180dp"
         android:layout_height="180dp"
         android:layout_marginStart="8dp"
@@ -26,6 +26,7 @@
             android:layout_width="157dp"
             android:layout_height="201dp"
             android:layout_gravity="center"
+            android:contentDescription="@string/imgDescription"
             app:srcCompat="@drawable/qr_code" />
     </androidx.cardview.widget.CardView>
 
@@ -47,42 +48,42 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/ipAddressBox"
+        android:id="@+id/ipAddressView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/text_field"
-        android:fontFamily="@font/roboto"
         android:hint="@string/ipAddress"
         android:paddingStart="10dp"
         android:paddingTop="15dp"
         android:paddingEnd="10dp"
         android:paddingBottom="15dp"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/portNumberBox"
+        android:id="@+id/portNumberView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/text_field"
-        android:fontFamily="@font/roboto"
         android:hint="@string/portNumber"
         android:paddingStart="10dp"
         android:paddingTop="15dp"
         android:paddingEnd="10dp"
         android:paddingBottom="15dp"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ipAddressBox" />
+        app:layout_constraintTop_toBottomOf="@+id/ipAddressView" />
 
     <TextView
         android:id="@+id/textView3"
@@ -98,37 +99,35 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/portNumberBox" />
+        app:layout_constraintTop_toBottomOf="@+id/portNumberView" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/gameModeBox"
+        android:id="@+id/gameCodeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/text_field"
-        android:fontFamily="@font/roboto"
         android:hint="@string/gameCode"
         android:paddingStart="10dp"
         android:paddingTop="15dp"
         android:paddingEnd="10dp"
         android:paddingBottom="15dp"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <Button
-        android:id="@+id/createGameBtn"
-        style="@style/TextFieldShadow"
+        android:id="@+id/joinGameBtn"
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="32dp"
-        android:fontFamily="@font/roboto"
         android:text="@string/joinGameButton"
         android:textAlignment="center"
         android:textSize="18sp"
@@ -136,7 +135,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gameModeBox" />
+        app:layout_constraintTop_toBottomOf="@+id/gameCodeView" />
 
     <TextView
         android:id="@+id/textView"
@@ -147,14 +146,9 @@
         android:layout_marginTop="48dp"
         android:layout_marginEnd="8dp"
         android:layout_weight="1"
-        android:fontFamily="@font/roboto"
-        android:shadowColor="#94000000"
-        android:shadowDy="2"
-        android:shadowRadius="4"
         android:text="@string/joinGame"
         android:textAlignment="center"
-        android:textAppearance="@android:style/TextAppearance.Material.Headline"
-        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textColor="#ffffff"
         android:textSize="46sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

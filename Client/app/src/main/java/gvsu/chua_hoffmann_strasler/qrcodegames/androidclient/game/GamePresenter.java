@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Presenter for Game activity
  */
-public class GamePresenter implements GameContract.Presenter{
+public class GamePresenter implements GameContract.Presenter {
 
     /**
      * Game View
@@ -28,7 +28,7 @@ public class GamePresenter implements GameContract.Presenter{
      * @param view The Game View to be bound to this presenter
      */
     public GamePresenter(GameContract.View view) {
-	this.view = view;
+        this.view = view;
         this.isGamePlaying = true;
         this.gameEventList = new ArrayList<>();
         view.setPresenter(this);
@@ -36,6 +36,7 @@ public class GamePresenter implements GameContract.Presenter{
 
     /**
      * Sends scan request for barcode
+     *
      * @param barcodeValue value of the scanned code
      */
     @Override
@@ -46,8 +47,9 @@ public class GamePresenter implements GameContract.Presenter{
     }
 
     /**
-     *  Called when this activity receives a Local Broadcast from the ClientService
-     * @param gameEvent name of event the game received
+     * Called when this activity receives a Local Broadcast from the ClientService
+     *
+     * @param gameEvent     name of event the game received
      * @param isGamePlaying determines whether a game is in progress or not
      */
     @Override
@@ -60,7 +62,7 @@ public class GamePresenter implements GameContract.Presenter{
     }
 
     /**
-     *Set the game to be over
+     * Set the game to be over
      */
     @Override
     public void gameOver() {
@@ -69,6 +71,7 @@ public class GamePresenter implements GameContract.Presenter{
 
     /**
      * Gets the array list of game events
+     *
      * @return array list of game events
      */
     @Override

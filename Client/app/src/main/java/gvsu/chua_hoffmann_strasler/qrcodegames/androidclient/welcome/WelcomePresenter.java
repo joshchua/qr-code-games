@@ -25,6 +25,14 @@ public class WelcomePresenter implements WelcomeContract.Presenter {
         mWelcomeView.setPresenter(this);
     }
 
+    /**
+     * Gets the user's username.
+     *
+     * @return The user's username
+     */
+    public String getUserName() {
+        return mUserName;
+    }
 
     /**
      * Sets the given username.
@@ -37,36 +45,26 @@ public class WelcomePresenter implements WelcomeContract.Presenter {
     }
 
     /**
-     * Gets the user's username.
-     *
-     * @return The user's username
+     * Opens Create new game activity
      */
-    public String getUserName() {
-        return mUserName;
-    }
-
-    /**
-     * Checks if there is a username set.
-     *
-     * @return If there is a username set
-     */
-    public boolean hasUserNameSet() {
-        return mUserName != null;
-    }
-
-
     @Override
     public void createGame() {
         mWelcomeView.createGame();
     }
+
+    /**
+     * Opens Join game activity
+     */
     @Override
     public void joinGame() {
-      mWelcomeView.joinGame();
+        mWelcomeView.joinGame();
     }
 
-
+    /**
+     * Basic presenter method
+     */
     @Override
-    public void start(){ }
+    public void start() {}
 
 
 }

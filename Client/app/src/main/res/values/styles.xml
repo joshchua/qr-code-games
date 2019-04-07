@@ -6,7 +6,9 @@
         <item name="colorPrimary">#1a51e7</item>
         <item name="colorPrimaryDark">#1a51e7</item>
         <item name="colorAccent">#6200EE</item>
+        <item name="android:fontFamily">@font/roboto</item>
     </style>
+
 
     <style name="FullscreenTheme" parent="AppTheme">
         <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
@@ -21,6 +23,16 @@
     </style>
 
     <style name="TextFieldShadow">
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">2.0</item>
+        <item name="android:shadowDy">2.0</item>
+        <item name="android:shadowRadius">5.0</item>
+    </style>
+
+    <style name="list" parent="CardView.Light">
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="cardCornerRadius">4dp</item>
+        <item name="android:background">#ffffff</item>
         <item name="android:shadowColor">#000000</item>
         <item name="android:shadowDx">2.0</item>
         <item name="android:shadowDy">2.0</item>

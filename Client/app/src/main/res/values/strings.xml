@@ -3,10 +3,11 @@
 
     #Main activity
     <string name="startText">Scan your wearable QR Code to get started&#8230;</string>
+    <string name="cameraImg">cameraImg</string>
 
     #Welcome activity
     <string name="qrCodeGames">QR Code Games</string>
-    <string name="welcome">Welcome, @userName</string>
+    <string name="welcome">Welcome, %1$s</string>
     <string name="createGameButton">CREATE GAME</string>
     <string name="joinGameButton">JOIN GAME</string>
 
@@ -20,10 +21,24 @@
     <string name="enterGameCode">ENTER GAME CODE</string>
     <string name="gameCode">Game Code</string>
     <string name="chooseGameMode">CHOOSE GAME MODE</string>
+    <string name="imgDescription">QRCodeGames</string>
+    <string name="joining">JOINING&#8230;</string>
+    <string name="connecting">CONNECTING&#8230;</string>
+
 
     <string-array name="gameTypes">
         <item>Capture the Flag</item>
         <item>Treasure Hunt</item>
     </string-array>
+
+
+    #Lobby
+    <string name="captureTheFlag">Capture The Flag</string>
+    <string name="gameCodeTextView">Game Code: %1$s</string>
+    <string name="team1">TEAM 1</string>
+    <string name="team2">TEAM 2</string>
+    <string name="switchTeams">SWITCH TEAMS</string>
+    <string name="startGame">START GAME</string>
+
 
 </resources>

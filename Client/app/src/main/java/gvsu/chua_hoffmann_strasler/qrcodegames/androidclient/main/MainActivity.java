@@ -26,7 +26,7 @@ public class MainActivity extends BaseActivity
      * Called when this activity is created.
      *
      * @param savedInstanceState The bundle saved from previous instances of
-     *                          this activity
+     *                           this activity
      */
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class MainActivity extends BaseActivity
         openQRScanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               mPresenter.scanUserName();
+                mPresenter.scanUserName();
             }
         });
 
@@ -80,6 +80,6 @@ public class MainActivity extends BaseActivity
         Intent intent = new Intent(this, RegisterActivity.class);
         intent.putExtra("key", "register_username");
         startActivity(intent);
-        finish();
+        //     finish();
     }
 }
