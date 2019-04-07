@@ -138,12 +138,12 @@ public class CreateActivity extends BaseActivity
         createGameBtn.setEnabled(false);
         gameService.connectAndCreateGame(ip, port, userName, game);
         createGameBtn.setEnabled(false);
-        createGameBtn.setText(R.string.joining);
+        createGameBtn.setText(R.string.connecting);
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                createGameBtn.setText(R.string.joinGame);
+                createGameBtn.setText(R.string.createGame);
                 createGameBtn.setEnabled(true);
             }
         }, 5000);
