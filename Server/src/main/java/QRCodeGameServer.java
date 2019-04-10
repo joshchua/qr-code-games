@@ -1,6 +1,9 @@
-import com.esotericsoftware.kryonet.*;
+import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 
-import data.*;
+import data.GameConnection;
+import data.Network;
 import data.Network.CreateGame;
 import data.Network.JoinGame;
 import data.Network.Lobby;
@@ -21,22 +24,22 @@ import java.util.ArrayList;
  */
 public class QRCodeGameServer {
     /**
-     * Array list of all the active games
+     * Array list of all the active games.
      */
     private ArrayList<Game> games;
 
     /**
-     * Number of the port that is user for the connection
+     * Number of the port that is user for the connection.
      */
     private int port;
 
     /**
      * The Server.
      */
-    Server server;
+    private Server server;
 
     /**
-     * Starts the server on a port 54555 if no port given
+     * Starts the server on a port 54555 if no port given.
      */
     public QRCodeGameServer() {
         port = Network.PORT;
@@ -44,17 +47,17 @@ public class QRCodeGameServer {
     }
 
     /**
-     * Starts the server on a port variable
+     * Starts the server on a port variable.
      *
      * @param port number of the server port
      */
-    public QRCodeGameServer(int port) {
+    public QRCodeGameServer(final int port) {
         this.port = port;
         startServer();
     }
 
     /**
-     * Server and opens the port on the network
+     * Server and opens the port on the network.
      */
     private void startServer() {
         games = new ArrayList<Game>();
@@ -68,27 +71,29 @@ public class QRCodeGameServer {
         System.out.println("QR Code Games Server was created on port " + port);
 
         server.addListener(new Listener() {
-            public void received(Connection con, Object obj) {
-                GameConnection gc = (GameConnection)con;
+            public void received(final Connection con, final Object obj) {
+                GameConnection gc = (GameConnection) con;
 
                 if (obj instanceof CreateGame) {
-                    CreateGame cg = (CreateGame)obj;
+                    CreateGame cg = (CreateGame) obj;
                     gc.userName = cg.userName;
                     createGame(cg.game, cg.userName);
                     gc.gameCode = games.get(games.size() - 1).getGameCode();
                 }
 
                 if (obj instanceof JoinGame) {
-                    JoinGame jg = (JoinGame)obj;
+                    JoinGame jg = (JoinGame) obj;
                     Game game = findGame(jg.gameCode);
                     if (game == null) {
-                        String msg = "There is no game with the provided game code.";
+                        String msg = "There is no game with the provided "
+                                + "game code.";
                         sendJoinGameError(gc.getID(), msg);
                         return;
                     }
 
                     if (game.getPlayers().contains(jg.userName)) {
-                        String msg = "Someone with that user name is already in this game.";
+                        String msg = "Someone with that user name is already "
+                                + "in this game.";
                         sendJoinGameError(gc.getID(), msg);
                         return;
                     }
@@ -99,23 +104,24 @@ public class QRCodeGameServer {
                 }
 
                 if (obj instanceof SwitchTeam) {
-                    SwitchTeam ct = (SwitchTeam)obj;
-                    System.out.printf("%s is switching teams in game %s.%n", ct.userName, ct.gameCode);
+                    SwitchTeam ct = (SwitchTeam) obj;
+                    System.out.printf("%s is switching teams in game %s.%n",
+                            ct.userName, ct.gameCode);
                     switchTeam(ct.gameCode, ct.userName);
                 }
 
                 if (obj instanceof StartGame) {
-                    StartGame sg = (StartGame)obj;
+                    StartGame sg = (StartGame) obj;
                     startGame(sg.gameCode);
                 }
 
                 if (obj instanceof Scan) {
-                    Scan scan = (Scan)obj;
+                    Scan scan = (Scan) obj;
                     handleScan(gc.gameCode, gc.userName, scan.scanned);
                 }
             }
 
-            public void disconnected(Connection con) {
+            public void disconnected(final Connection con) {
 
             }
         });
@@ -129,14 +135,14 @@ public class QRCodeGameServer {
     }
 
     /**
-     *  Sends the object to all players connected the specific game
+     *  Sends the object to all players connected the specific game.
      * @param game name of the game receiving the object
      * @param obj contains information about the event
      */
-    private void sendToPlayers(Game game, Object obj) {
+    private void sendToPlayers(final Game game, final Object obj) {
         ArrayList<String> temp = new ArrayList<String>(game.getPlayers());
         for (Connection connection : server.getConnections()) {
-            GameConnection gc = (GameConnection)connection;
+            GameConnection gc = (GameConnection) connection;
             for (String userName : temp) {
                 if (userName.equals(gc.userName)) {
                     server.sendToTCP(gc.getID(), obj);
@@ -148,76 +154,89 @@ public class QRCodeGameServer {
     }
 
     /**
-     *  Tries to find a game with matching gameCode ID
+     * Tries to find a game with matching gameCode ID.
+     *
      * @param gameCode ID of the game
-     * @return Returns null if no game found, returns Game object of the game if it matches
+     * @return Returns null if no game found, returns Game object of the game if
+     * it matches
      */
-    private Game findGame(String gameCode) {
+    private Game findGame(final String gameCode) {
         for (Game game : games) {
-            if (game.getGameCode().equals(gameCode))
+            if (game.getGameCode().equals(gameCode)) {
                 return game;
+            }
         }
         return null;
     }
 
     /**
-     * Send message to client if an error occurs when joining the game
+     * Send message to client if an error occurs when joining the game.
+     *
      * @param connectionID client connection
      * @param msg Error message
      */
-    private void sendJoinGameError(int connectionID, String msg) {
+    private void sendJoinGameError(final int connectionID, final String msg) {
         JoinGameErrorResult error = new JoinGameErrorResult();
         error.message = msg;
         server.sendToTCP(connectionID, error);
     }
 
     /**
-     *  Creates a new game of a specific game type
+     *  Creates a new game of a specific game type.
+     *
      * @param gameNum type of the game
      * @param userName name of the player that created the game
      */
 
-    private void createGame(int gameNum, String userName) {
+    private void createGame(final int gameNum, final String userName) {
         Game game;
         if (gameNum == 0) {
             game = new CaptureTheFlag();
-        } else
+        } else {
             return; // better handling probably
+        }
+
         game.joinLobby(userName);
 
-        System.out.println(userName + " has created a new game of " + game.getGameName() + ". (" + game.getGameCode() + ")");
+        System.out.println(userName + " has created a new game of "
+                + game.getGameName() + ". (" + game.getGameCode() + ")");
         games.add(game);
         sendAllUpdatedLobby(game);
     }
 
     /**
-     * Find if there is matching game and joins it
+     * Find if there is matching game and joins it.
+     *
      * @param gameCode game code of the game to be joined
      * @param userName name of player joining the game
      */
-    private void joinGame(String gameCode, String userName) {
+    private void joinGame(final String gameCode, final String userName) {
         Game game = findGame(gameCode);
         game.joinLobby(userName);
-        System.out.println(userName + " joined " + game.getGameName() + ". (" + game.getGameCode() + ")");
+        System.out.println(userName + " joined " + game.getGameName() + ". ("
+                + game.getGameCode() + ")");
         sendAllUpdatedLobby(game);
     }
 
     /**
-     * Switched teams of a player
+     * Switched teams of a player.
+     *
      * @param gameCode ID of the game where the player is switching their team
      * @param userName name of the player switching the teams
      */
-    private void switchTeam(String gameCode, String userName) {
+    private void switchTeam(final String gameCode, final String userName) {
         Game game = findGame(gameCode);
         game.switchTeam(userName);
         sendAllUpdatedLobby(game);
     }
 
     /**
-     *  Every time someone joins the game or switches team it sends arrays of the teams to all players
+     *  Every time someone joins the game or switches team it sends arrays of
+     *  the teams to all players.
+     *
      * @param game name of the game that was updated
      */
-    private void sendAllUpdatedLobby(Game game) {
+    private void sendAllUpdatedLobby(final Game game) {
         Lobby lobby = new Lobby();
         lobby.gameCode = game.getGameCode();
         lobby.gameName = game.getGameName();
@@ -246,10 +265,11 @@ public class QRCodeGameServer {
     }
 
     /**
-     * Starts the game
+     * Starts the game.
+     *
      * @param gameCode ID of the game to be started
      */
-    private void startGame(String gameCode) {
+    private void startGame(final String gameCode) {
         Game game = findGame(gameCode);
 
         if (game != null) {
@@ -268,12 +288,15 @@ public class QRCodeGameServer {
     }
 
     /**
-     * Called when a player had been scanned by another player
+     * Called when a player had been scanned by another player.
+     *
      * @param gameCode ID of the game
      * @param userName name of the player who scanned it
      * @param scanned name of the object that was scanned
      */
-    private void handleScan(String gameCode, String userName, String scanned) {
+    private void handleScan(final String gameCode,
+                            final String userName,
+                            final String scanned) {
         Game game = findGame(gameCode);
         if (game != null) {
             ScanResult scanResult = game.handleScan(userName, scanned);
@@ -289,11 +312,11 @@ public class QRCodeGameServer {
     }
 
     /**
-     *Main method that starts the server when ran
+     *Main method that starts the server when ran.
      *
      * @param args the input arguments
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         int port = -1;
         if (args.length > 0) {
             for (int i = 0; i < args.length; i++) {
@@ -302,14 +325,16 @@ public class QRCodeGameServer {
                         port = Integer.parseInt(args[i + 1]);
                     }
                 } catch (Exception ex) {
-                    System.out.println("There is an error with the given arguments.");
+                    System.out.println("There is an error with the given "
+                            + "arguments.");
                 }
             }
         }
 
-        if (port == -1)
+        if (port == -1) {
             new QRCodeGameServer();
-        else
+        } else {
             new QRCodeGameServer(port);
+        }
     }
 }

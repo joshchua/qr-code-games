@@ -126,7 +126,7 @@ public class CameraSourcePreview extends ViewGroup {
     /**
      * Starts the camera if the camera is ready.
      *
-     * @throws IOException
+     * @throws IOException when camera cannot be started
      */
     @SuppressLint("MissingPermission")
     protected void startIfReady() throws IOException {
@@ -205,8 +205,11 @@ public class CameraSourcePreview extends ViewGroup {
       * @param bottom  The bottom position
       */
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right,
-                                int bottom) {
+    protected void onLayout(final boolean changed,
+                            final int left,
+                            final int top,
+                            final int right,
+                            final int bottom) {
         int width = 320;
         int height = 240;
         if (cameraSource != null) {
@@ -230,12 +233,14 @@ public class CameraSourcePreview extends ViewGroup {
 
         // Computes height and width for potentially doing fit width.
         int childWidth = layoutWidth;
-        int childHeight = (int) (((float) layoutWidth / (float) width) * height);
+        int childHeight = (int) (((float) layoutWidth / (float) width)
+                * height);
 
         // If height is too tall using fit width, does fit height instead.
         if (childHeight > layoutHeight) {
             childHeight = layoutHeight;
-            childWidth = (int) (((float) layoutHeight / (float) height) * width);
+            childWidth = (int) (((float) layoutHeight / (float) height)
+                    * width);
 
         }
 
