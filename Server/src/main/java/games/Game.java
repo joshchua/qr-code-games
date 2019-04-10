@@ -19,7 +19,7 @@ public abstract class Game {
     /**
      * Holds the type of the game.
      */
-    private String mGameName;
+    protected String mGameName;
 
     /**
      * Holds an array list with all players.

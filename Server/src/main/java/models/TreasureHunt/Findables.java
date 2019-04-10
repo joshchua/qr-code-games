@@ -1,4 +1,4 @@
-package models.ScavengerHunt;
+package models.TreasureHunt;
 
 import java.util.ArrayList;
 

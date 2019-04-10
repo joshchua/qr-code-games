@@ -1,13 +1,13 @@
 package games;
 
-import models.ScavengerHunt.Findables;
+import models.TreasureHunt.Findables;
 import models.ScanResult;
 
 
 /**
- * Class for the game of Scavenger Hunt.
+ * Class for the game of Treasure Hunt.
  */
-public class ScavengerHunt extends Game {
+public class TreasureHunt extends Game {
 
     /**
      * String for game start code for use in "handleScan' when treasure has all been
@@ -29,7 +29,7 @@ public class ScavengerHunt extends Game {
      */
     private Findables team2Treasure;
 
-    public ScavengerHunt() {
+    public TreasureHunt(int treasures) {
         super();
         this.mGameName = "Scavenger Hunt";
         Findables treasure = new Findables();
