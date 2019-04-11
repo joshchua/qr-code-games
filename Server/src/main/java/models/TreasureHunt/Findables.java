@@ -9,11 +9,15 @@ public class Findables {
 
 
     public Findables(){
-    ArrayList<String> findablesArrayList = new ArrayList<String>();
-}
+        ArrayList<String> findablesArrayList = new ArrayList<String>();
+    }
 
     public void addToFindables(String input){
-    findablesArrayList.add(input);
+        findablesArrayList.add(input);
+    }
+
+    public int getFindablesSize(){
+        return findablesArrayList.size();
     }
 
     public ArrayList<String> getFindablesList(){
