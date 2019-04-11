@@ -22,26 +22,19 @@ public class TreasureHunt extends Game {
      */
     private Findables team2Treasure;
 
-    public TreasureHunt() {
+    public TreasureHunt(int countTreasure) {
         super();
         this.mGameName = "Scavenger Hunt";
+
         Findables treasure = new Findables();
+
+        for(int i = 1; i <= countTreasure; i++){
+            treasure.addToFindables("treasure" + i);
+
+        }
+        
         Findables team1Treasure = new Findables();
         Findables team2Treasure = new Findables();
-    }
-
-    /**
-     * Adds the item to the treasure arraylist before game starts
-     * @param username is player string
-     * @param item is scanned string representing treasure
-     * @return code for display to clients**
-     */
-    private ScanResult loadTreasureScan(String username, String item){
-        if(treasure.findablesContains(item) == false) {
-            treasure.addToFindables(item);
-            return new ScanResult(username + " has added " + item + "to the search!");
-        }
-        return null;
     }
 
     /**
@@ -58,7 +51,7 @@ public class TreasureHunt extends Game {
             }
             if (team1Treasure.findablesContains(item) == false){
                 team1Treasure.addToFindables(item);
-                if(treasure.getFindablesSize() = team1Treasure.getFindablesSize()){
+                if(treasure.getFindablesSize() == team1Treasure.getFindablesSize()){
                     gameOver();
                     return new ScanResult(username + " found the last piece of treasure for Team 1!");
                 }
@@ -72,7 +65,7 @@ public class TreasureHunt extends Game {
             }
             if (team2Treasure.findablesContains(item) == false){
                 team2Treasure.addToFindables(item);
-                if(treasure.getFindablesSize() = team2Treasure.getFindablesSize()){
+                if(treasure.getFindablesSize() == team2Treasure.getFindablesSize()){
                     gameOver();
                     return new ScanResult(username + " found the last piece of treasure for Team 2!");
                 }
@@ -92,16 +85,7 @@ public class TreasureHunt extends Game {
      */
     @Override
     public ScanResult handleScan(String userName, String scanned) {
-        if(!mIsStarted && scanned == GAMESTARTCODE)
-            if(!mIsStarted){
-                return loadTreasureScan(userName, scanned);
-            }
-
-        if(mIsStarted){
-            return  scannedTreasure(userName, scanned);
-        }
-
-        return null;
+        return  scannedTreasure(userName, scanned);
     }
 
 

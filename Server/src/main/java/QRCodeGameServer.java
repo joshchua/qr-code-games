@@ -14,6 +14,7 @@ import data.Network.GameEvent;
 import data.Network.Scan;
 import games.CaptureTheFlag;
 import games.Game;
+import games.TreasureHunt;
 import models.ScanResult;
 
 import java.io.IOException;
@@ -188,12 +189,16 @@ public class QRCodeGameServer {
      * @param userName name of the player that created the game
      */
 
-    private void createGame(final int gameNum, final String userName) {
+    private void createGame(final int gameNum, final String userName, int options) {
         Game game;
         if (gameNum == 0) {
             game = new CaptureTheFlag();
-        } else {
-            return; // better handling probably
+        } else if(gameNum == 1) {
+            game = new TreasureHunt(options);
+
+        }else{
+                return; // better handling probably
+            }
         }
 
         game.joinLobby(userName);
