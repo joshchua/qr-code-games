@@ -159,6 +159,8 @@ public class CreateActivity extends BaseActivity
             Intent intent = new Intent(this, LobbyActivity.class);
             intent.removeExtra("key");
             intent.putExtras(bundle);
+            intent.putExtra("gameMode",
+                    treasureCountTextView.getText().toString());
             intent.putExtra("userName", mPresenter.getUserName());
             intent.putExtra("ip", ipAddressTextView.getText().toString());
             startActivity(intent);

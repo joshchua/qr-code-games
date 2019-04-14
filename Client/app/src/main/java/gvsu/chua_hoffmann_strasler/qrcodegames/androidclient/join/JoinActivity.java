@@ -27,22 +27,22 @@ public class JoinActivity extends BaseActivity
     private JoinContract.Presenter mPresenter;
 
     /**
-     * TextView holding IP Address
+     * TextView holding IP Address.
      */
     private TextView ipAddressView;
 
     /**
-     * TextView holding IP Address
+     * TextView holding IP Address.
      */
     private TextView portNumberView;
 
     /**
-     * TextView holding Game Code
+     * TextView holding Game Code.
      */
     private TextView gameCodeView;
 
     /**
-     * Sends request to join a game on the server
+     * Sends request to join a game on the server.
      */
     private Button joinGameBtn;
 
@@ -72,15 +72,16 @@ public class JoinActivity extends BaseActivity
         joinGameBtn = findViewById(R.id.joinGameBtn);
         joinGameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 mPresenter.joinGame(ipAddressView.getText().toString(),
-                        portNumberView.getText().toString(), gameCodeView.getText().toString());
+                        portNumberView.getText().toString(),
+                        gameCodeView.getText().toString());
             }
         });
     }
 
     /**
-     * Returns to previous activity on back button press
+     * Returns to previous activity on back button press.
      */
     @Override
     public void onBackPressed() {
@@ -162,7 +163,7 @@ public class JoinActivity extends BaseActivity
 
 
     /**
-     * Returns to previous activity on back button press
+     * Returns to previous activity on back button press.
      */
     @Override
     public void getBack() {

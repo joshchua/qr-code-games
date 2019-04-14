@@ -45,7 +45,7 @@ public class WelcomePresenter implements WelcomeContract.Presenter {
     }
 
     /**
-     * Opens Create new game activity
+     * Opens Create new game activity.
      */
     @Override
     public void createGame() {
@@ -53,7 +53,7 @@ public class WelcomePresenter implements WelcomeContract.Presenter {
     }
 
     /**
-     * Opens Join game activity
+     * Opens Join game activity.
      */
     @Override
     public void joinGame() {
@@ -61,10 +61,11 @@ public class WelcomePresenter implements WelcomeContract.Presenter {
     }
 
     /**
-     * Basic presenter method
+     * Basic presenter method.
      */
     @Override
-    public void start() {}
+    public void start() {
+    }
 
 
 }

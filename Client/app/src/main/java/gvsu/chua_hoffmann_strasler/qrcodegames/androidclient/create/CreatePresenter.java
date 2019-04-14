@@ -68,8 +68,9 @@ public class CreatePresenter implements CreateContract.Presenter {
 
         String gameNum = "0";
 
-        if (game.equals("Treasure Hunt"))
+        if (game.equals("Treasure Hunt")) {
             gameNum = "1";
+        }
 
         if (!isValidIPAddress(ip)) {
             mCreateView.showError("The provided IP address is not valid");
@@ -114,7 +115,7 @@ public class CreatePresenter implements CreateContract.Presenter {
     }
 
     /**
-     * Returns to previous activity on back button press
+     * Returns to previous activity on back button press.
      */
     @Override
     public void getBack() {

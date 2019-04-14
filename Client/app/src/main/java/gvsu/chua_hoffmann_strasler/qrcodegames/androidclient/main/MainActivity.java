@@ -42,7 +42,7 @@ public class MainActivity extends BaseActivity
         Button openQRScanBtn = findViewById(R.id.openQRScanBtn);
         openQRScanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 mPresenter.scanUserName();
             }
         });

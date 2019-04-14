@@ -19,10 +19,10 @@ public class JoinPresenter implements JoinContract.Presenter {
     /**
      * Initializes the Connection between the Join View and this presenter.
      *
-     * @param JoinView The Join View to be bound to this presenter
+     * @param joinView The Join View to be bound to this presenter
      */
-    public JoinPresenter(final JoinContract.View JoinView) {
-        mJoinView = JoinView;
+    public JoinPresenter(final JoinContract.View joinView) {
+        mJoinView = joinView;
         mJoinView.setPresenter(this);
     }
 
@@ -69,18 +69,12 @@ public class JoinPresenter implements JoinContract.Presenter {
             return;
         }
 
-
         if (!isValidPort(port)) {
             mJoinView.showError("The port provided is not valid");
             return;
         }
-        try {
-            mJoinView.sendJoinGameRequest(ip, Integer.parseInt(port),
+        mJoinView.sendJoinGameRequest(ip, Integer.parseInt(port),
                     userName, gameCode);
-        } catch (InterruptedException e) {
-            System.out.println(e);
-        }
-
     }
 
     /**
@@ -112,7 +106,7 @@ public class JoinPresenter implements JoinContract.Presenter {
     }
 
     /**
-     * Returns to previous activity on back button press
+     * Returns to previous activity on back button press.
      */
     @Override
     public void getBack() {

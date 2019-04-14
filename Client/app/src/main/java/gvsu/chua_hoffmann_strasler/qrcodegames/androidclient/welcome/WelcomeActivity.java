@@ -25,7 +25,10 @@ public class WelcomeActivity extends BaseActivity
      */
     private WelcomeContract.Presenter mPresenter;
 
-    private TextView welcomeName;
+    /**
+     * Shows users name on the screen.
+     */
+    private TextView welcomeWithName;
 
     /**
      * Called when this activity is created.
@@ -41,21 +44,21 @@ public class WelcomeActivity extends BaseActivity
 
         mPresenter = new WelcomePresenter(this);
 
-        welcomeName = findViewById(R.id.welcomeName);
+        welcomeWithName = findViewById(R.id.welcomeName);
 
         mPresenter.setUserName(intent.getStringExtra("userName"));
 
         Button createMenuBtn = findViewById(R.id.createMenuBtn);
         createMenuBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 mPresenter.createGame();
             }
         });
         Button joinMenuBtn = findViewById(R.id.joinMenuBtn);
         joinMenuBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 mPresenter.joinGame();
             }
         });
@@ -63,7 +66,7 @@ public class WelcomeActivity extends BaseActivity
     }
 
     /**
-     * Returns to previous activity on back button press
+     * Returns to previous activity on back button press.
      */
     @Override
     public void onBackPressed() {
@@ -79,11 +82,12 @@ public class WelcomeActivity extends BaseActivity
      */
     @Override
     public void showUserName(final String userName) {
-        welcomeName.setText(getString(R.string.welcome, mPresenter.getUserName()));
+        welcomeWithName.setText(getString(R.string.welcome,
+                mPresenter.getUserName()));
     }
 
     /**
-     * Opens Create game activity
+     * Opens Create game activity.
      */
     @Override
     public void createGame() {
@@ -94,7 +98,7 @@ public class WelcomeActivity extends BaseActivity
     }
 
     /**
-     * Opens Join game activity
+     * Opens Join game activity.
      */
     @Override
     public void joinGame() {

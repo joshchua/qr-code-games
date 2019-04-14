@@ -20,8 +20,14 @@ public interface WelcomeContract {
          */
         void showUserName(String userName);
 
+        /**
+         * Opens activity to create a game.
+         */
         void createGame();
 
+        /**
+         * Opens activity to join a game.
+         */
         void joinGame();
 
     }
@@ -47,12 +53,12 @@ public interface WelcomeContract {
         void setUserName(String userName);
 
         /**
-         * Opens Create game activity
+         * Opens Create game activity.
          */
         void createGame();
 
         /**
-         * Opens Join game activity
+         * Opens Join game activity.
          */
         void joinGame();
     }

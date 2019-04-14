@@ -24,7 +24,7 @@ public interface JoinContract {
          * @param gameCode The game code of the existing session on the server
          */
         void sendJoinGameRequest(String ip, int port, String userName,
-                                 String gameCode) throws InterruptedException;
+                                 String gameCode);
 
         /**
          * Displays a Toast with given error message.
@@ -34,7 +34,7 @@ public interface JoinContract {
         void showError(String error);
 
         /**
-         * Returns to previous activity on back button press
+         * Returns to previous activity on back button press.
          */
         void getBack();
     }
@@ -84,7 +84,7 @@ public interface JoinContract {
         void setUserName(String userName);
 
         /**
-         * Returns to previous activity on back button press
+         * Returns to previous activity on back button press.
          */
         void getBack();
     }

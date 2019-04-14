@@ -34,6 +34,7 @@
 
     #Lobby
     <string name="captureTheFlag">Capture The Flag</string>
+    <string name="treasureHunt">Treasure Hunt</string>
     <string name="gameCodeTextView">Game Code: %1$s</string>
     <string name="team1">TEAM 1</string>
     <string name="team2">TEAM 2</string>

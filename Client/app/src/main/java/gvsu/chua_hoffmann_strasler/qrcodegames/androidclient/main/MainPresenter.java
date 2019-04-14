@@ -21,7 +21,7 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     /**
-     * Opens QR scanner in register activity
+     * Opens QR scanner in register activity.
      */
     @Override
     public void scanUserName() {
