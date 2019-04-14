@@ -24,12 +24,15 @@
     <string name="imgDescription">QRCodeGames</string>
     <string name="joining">JOINING&#8230;</string>
     <string name="connecting">CONNECTING&#8230;</string>
-
-
     <string-array name="gameTypes">
         <item>Capture the Flag</item>
         <item>Treasure Hunt</item>
     </string-array>
+    #create activity popup
+    <string name="selectNumberTreasures">Select the number of
+        treasures:</string>
+    <string name="create">CREATE</string>
+    <string name="popupHint">5</string>
 
 
     #Lobby
