@@ -1,14 +1,19 @@
 package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.create;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
@@ -28,24 +33,34 @@ public class CreateActivity extends BaseActivity
     private CreateContract.Presenter mPresenter;
 
     /**
-     * TextView holding IP Address
+     * TextView holding IP Address.
      */
-    private TextView ipAddressView;
+    private TextView ipAddressTextView;
 
     /**
-     * TextView holding IP Address
+     * TextView holding IP Address.
      */
-    private TextView portNumberView;
+    private TextView portNumberTextView;
 
     /**
-     * Spinner holding different game modes
+     * Spinner holding different game modes.
      */
-    private Spinner gameModeBox;
+    private Spinner gameModeSpinner;
 
     /**
-     * Sends request to join a game on the server
+     * Sends request to join a game on the server.
      */
     private Button createGameBtn;
+
+    /**
+     * Shows when treasure hun is selected and asks for number of treasures.
+     */
+    private Dialog popup;
+
+    /**
+     * Input field for the number of treasures.
+     */
+    private TextInputEditText treasureCountTextView;
 
     /**
      * Called when this activity is created.
@@ -64,24 +79,66 @@ public class CreateActivity extends BaseActivity
         mPresenter = new CreatePresenter(this);
         mPresenter.setUserName(intent.getStringExtra("userName"));
 
-        ipAddressView = findViewById(R.id.ipAddressView);
-        portNumberView = findViewById(R.id.portNumberView);
-        gameModeBox = findViewById(R.id.gameModeView);
+        ipAddressTextView = findViewById(R.id.ipAddressView);
+        portNumberTextView = findViewById(R.id.portNumberView);
+        gameModeSpinner = findViewById(R.id.gameModeView);
 
+        //create game button
         createGameBtn = findViewById(R.id.createGameBtn);
         createGameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                mPresenter.createGame(ipAddressView.getText().toString(),
-                        portNumberView.getText().toString(),
-                        gameModeBox.getSelectedItem().toString());
+            public void onClick(final View v) {
+                if (gameModeSpinner.getSelectedItem().toString()
+                        .equals("Treasure Hunt")) {
+                    popup.show();
+                } else {
+                    mPresenter.createGame(
+                            ipAddressTextView.getText().toString(),
+                            portNumberTextView.getText().toString(),
+                            gameModeSpinner.getSelectedItem().toString(),
+                            "");
+                }
             }
         });
+
+        //popup if treasure hunt is selected
+        popup = new Dialog(this);
+        popup.setContentView(R.layout.popup);
+        popup.getWindow().setBackgroundDrawable(new ColorDrawable(
+                android.graphics.Color.TRANSPARENT));
+        treasureCountTextView = popup.findViewById(R.id.treasureCount);
+
+        //transparency of popup background
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.dimAmount = 0.85f;  // dimAmount between 0.0f and 1.0f, 1.0f is
+        // completely dark
+        popup.getWindow().setAttributes(lp);
+        popup.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+        //button inside popup
+        final Button createTreasure = popup.findViewById(R.id.createTreasure);
+        createTreasure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                if (!treasureCountTextView.getText().toString().equals("")) {
+
+                    createTreasure.setText(
+                            treasureCountTextView.getText().toString());
+                    popup.dismiss();
+                    mPresenter.createGame(
+                            ipAddressTextView.getText().toString(),
+                            portNumberTextView.getText().toString(),
+                            gameModeSpinner.getSelectedItem().toString(),
+                            treasureCountTextView.getText().toString());
+                }
+            }
+        });
+
     }
 
 
     /**
-     * Returns to previous activity on back button press
+     * Returns to previous activity on back button press.
      */
     @Override
     public void onBackPressed() {
@@ -103,7 +160,7 @@ public class CreateActivity extends BaseActivity
             intent.removeExtra("key");
             intent.putExtras(bundle);
             intent.putExtra("userName", mPresenter.getUserName());
-            intent.putExtra("ip", ipAddressView.getText().toString());
+            intent.putExtra("ip", ipAddressTextView.getText().toString());
             startActivity(intent);
             finish();
         } else if (key != null && key.equals("join_game_error")) {
@@ -163,7 +220,7 @@ public class CreateActivity extends BaseActivity
     }
 
     /**
-     * Returns to previous activity on back button press
+     * Returns to previous activity on back button press.
      */
     @Override
     public void getBack() {

@@ -60,16 +60,16 @@ public class CreatePresenter implements CreateContract.Presenter {
      *
      * @param ip   IP address
      * @param port Port
-     * @param game The type of game to be created
+     * @param game The type of game to be created + number of items
      */
     @Override
     public void createGame(final String ip, final String port,
-                           final String game) {
+                           final String game, final String count) {
 
-        int gameNum = 0;
+        String gameNum = "0";
 
         if (game.equals("Treasure Hunt"))
-            gameNum = 1;
+            gameNum = "1";
 
         if (!isValidIPAddress(ip)) {
             mCreateView.showError("The provided IP address is not valid");
@@ -80,9 +80,9 @@ public class CreatePresenter implements CreateContract.Presenter {
             mCreateView.showError("The port provided is not valid");
             return;
         }
-
+        gameNum += count;
         mCreateView.sendCreateGameRequest(ip, Integer.parseInt(port),
-                mUserName, gameNum);
+                mUserName, Integer.parseInt(gameNum));
     }
 
     /**

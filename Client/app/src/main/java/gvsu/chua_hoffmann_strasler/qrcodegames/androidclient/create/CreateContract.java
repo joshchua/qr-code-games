@@ -32,7 +32,7 @@ public interface CreateContract {
         void showError(String error);
 
         /**
-         * Returns to previous activity on back button press
+         * Returns to previous activity on back button press.
          */
         void getBack();
     }
@@ -67,8 +67,9 @@ public interface CreateContract {
          * @param ip   IP address
          * @param port Port
          * @param game The type of game to be created
+         * @param count number of treasures
          */
-        void createGame(String ip, String port, String game);
+        void createGame(String ip, String port, String game, String count);
 
         /**
          * Gets the user's username.
@@ -85,7 +86,7 @@ public interface CreateContract {
         void setUserName(String userName);
 
         /**
-         * Returns to previous activity on back button press
+         * Returns to previous activity on back button press.
          */
         void getBack();
     }
