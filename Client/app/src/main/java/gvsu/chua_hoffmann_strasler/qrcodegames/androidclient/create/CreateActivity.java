@@ -116,14 +116,11 @@ public class CreateActivity extends BaseActivity
         popup.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
         //button inside popup
-        final Button createTreasure = popup.findViewById(R.id.createTreasure);
-        createTreasure.setOnClickListener(new View.OnClickListener() {
+        final Button createTreasureBtn = popup.findViewById(R.id.createTreasureBtn);
+        createTreasureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 if (!treasureCountTextView.getText().toString().equals("")) {
-
-                    createTreasure.setText(
-                            treasureCountTextView.getText().toString());
                     popup.dismiss();
                     mPresenter.createGame(
                             ipAddressTextView.getText().toString(),
