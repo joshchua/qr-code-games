@@ -1,179 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:background="@drawable/gradient"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/topPanel"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:background="#ffff8800"
-        android:orientation="vertical">
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/captureTheFlag"
+        android:textColor="#ffffff"
+        android:textSize="42sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <RelativeLayout
-            android:id="@+id/fifty_fifty_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp">
+    <TextView
+        android:id="@+id/gameID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/gameCodeTextView"
+        android:textColor="#ffffff"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
-            <ImageView
-                android:id="@+id/logo"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                android:gravity="center_horizontal"
-                app:srcCompat="@mipmap/ic_launcher_round" />
+    <TextView
+        android:id="@+id/Team1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/roboto_medium"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="@string/team1"
+        android:textAlignment="textStart"
+        android:textColor="#013F7B"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/card1"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gameID" />
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="10dp"
-                android:layout_toStartOf="@+id/logo"
-                android:text="Capture The Flag"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textSize="28sp" />
+    <TextView
+        android:id="@+id/Team2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/roboto_medium"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="@string/team2"
+        android:textAlignment="textStart"
+        android:textColor="#013F7B"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/card2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/gameID" />
 
-            <TextView
-                android:id="@+id/gameIDtext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/title"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
-                android:text="Game id:"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/gameID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/title"
-                android:layout_alignStart="@+id/gameIDtext"
-                android:layout_marginStart="78dp"
-                android:layout_marginTop="4dp"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-
-        </RelativeLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btn_StartGame"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_alignTop="@+id/topPanel"
-        android:layout_alignBottom="@+id/Buttons"
-        android:layout_marginTop="120dp"
-        android:layout_marginBottom="60dp"
-        android:orientation="horizontal"
-        android:weightSum="2">
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="36dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/startGame"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/card2" />
 
+    <Button
+        android:id="@+id/btn_SwitchTeams"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="36dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/switchTeams"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/card1" />
 
-        <LinearLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card1"
+        style="@style/list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="128dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Team1">
+
+        <ListView
+            android:id="@+id/list_Team1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="match_parent" />
+    </androidx.cardview.widget.CardView>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/Team1"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="sans-serif-condensed"
-                    android:text="Team 1"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    android:textSize="30sp" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card2"
+        style="@style/list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="128dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/Team2">
 
-                <ListView
-                    android:id="@+id/list_Team1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignTop="@+id/Team1"
-                    android:layout_marginTop="45dp" />
-
-            </RelativeLayout>
-        </LinearLayout>
-
-        <LinearLayout
+        <ListView
+            android:id="@+id/list_Team2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="match_parent" />
+    </androidx.cardview.widget.CardView>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/Team2"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="sans-serif-condensed"
-                    android:text="Team 2"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    android:textSize="30sp" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
-                <ListView
-                    android:id="@+id/list_Team2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignTop="@+id/Team2"
-                    android:layout_marginTop="45dp" />
-
-            </RelativeLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/Buttons"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
-
-        <RelativeLayout
-            android:layout_width="205dp"
-            android:layout_height="match_parent">
-
-            <Button
-                android:id="@+id/btn_SwitchTeams"
-                style="@style/Widget.AppCompat.Button"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="0dp"
-                android:text="Switch Teams" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/btn_StartGame"
-                style="@style/Widget.AppCompat.Button"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:text="Start Game" />
-        </RelativeLayout>
-    </LinearLayout>
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

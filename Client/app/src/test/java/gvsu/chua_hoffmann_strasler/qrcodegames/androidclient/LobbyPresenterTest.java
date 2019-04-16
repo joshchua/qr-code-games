@@ -81,7 +81,7 @@ public class LobbyPresenterTest {
         presenter.start();
 
         String expected = "TEST";
-        presenter.setGameCode(expected);
+        presenter.setTitleAndCode(expected);
         assertEquals(expected, presenter.getGameCode());
     }
 

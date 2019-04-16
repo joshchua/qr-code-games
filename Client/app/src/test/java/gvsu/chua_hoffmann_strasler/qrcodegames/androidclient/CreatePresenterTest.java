@@ -3,12 +3,12 @@ package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.connect.ConnectContract;
-import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.connect.ConnectPresenter;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.create.CreateContract;
+import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.create.CreatePresenter;
 
 
-public class ConnectPresenterTest {
-    public static class MockConnectActivity implements ConnectContract.View {
+public class CreatePresenterTest {
+    public static class MockConnectActivity implements CreateContract.View {
 
         private boolean mWasCalled = false;
 
@@ -53,7 +53,7 @@ public class ConnectPresenterTest {
         }
 
         @Override
-        public void setPresenter(ConnectContract.Presenter presenter) {
+        public void setPresenter(CreateContract.Presenter presenter) {
             mWasCalled = true;
         }
 
@@ -62,14 +62,14 @@ public class ConnectPresenterTest {
         }
     }
 
-    public ConnectPresenter presenter;
+    public CreatePresenter presenter;
 
     public MockConnectActivity mock;
 
     @Test
     public void shouldPassCorrectIp() {
         mock = new MockConnectActivity();
-        presenter = new ConnectPresenter(mock);
+        presenter = new CreatePresenter(mock);
         presenter.start();
 
         String testIp = "123.123.123.123";
@@ -79,7 +79,7 @@ public class ConnectPresenterTest {
     @Test
     public void isValidIPAddressShouldFailWrongIp() {
         mock = new MockConnectActivity();
-        presenter = new ConnectPresenter(mock);
+        presenter = new CreatePresenter(mock);
         presenter.start();
 
         String testIp = "NOT AN IP ADDRESS";
@@ -89,7 +89,7 @@ public class ConnectPresenterTest {
     @Test
     public void isValidPortShouldPassCorrectPort() {
         mock = new MockConnectActivity();
-        presenter = new ConnectPresenter(mock);
+        presenter = new CreatePresenter(mock);
         presenter.start();
 
         String testPort = "12345";
@@ -100,7 +100,7 @@ public class ConnectPresenterTest {
     @Test
     public void isValidPortShouldFailWrongPort() {
         mock = new MockConnectActivity();
-        presenter = new ConnectPresenter(mock);
+        presenter = new CreatePresenter(mock);
         presenter.start();
 
         String testPort = "NOT A VALID PORT";
@@ -110,7 +110,7 @@ public class ConnectPresenterTest {
     @Test
     public void isValidGameShouldPassCorrectGame() {
         mock = new MockConnectActivity();
-        presenter = new ConnectPresenter(mock);
+        presenter = new CreatePresenter(mock);
         presenter.start();
 
         String testGame = "0";
@@ -120,7 +120,7 @@ public class ConnectPresenterTest {
     @Test
     public void isValidGameShouldFailWrongGame() {
         mock = new MockConnectActivity();
-        presenter = new ConnectPresenter(mock);
+        presenter = new CreatePresenter(mock);
         presenter.start();
 
         String testGame = "APPLE";
@@ -130,7 +130,7 @@ public class ConnectPresenterTest {
     @Test
     public void createGameShouldCallView() {
         mock = new MockConnectActivity();
-        presenter = new ConnectPresenter(mock);
+        presenter = new CreatePresenter(mock);
         presenter.start();
 
         presenter.createGame("123.123.123.123", "12345", "0");
@@ -140,7 +140,7 @@ public class ConnectPresenterTest {
     @Test
     public void joinGameShouldCallView() {
         mock = new MockConnectActivity();
-        presenter = new ConnectPresenter(mock);
+        presenter = new CreatePresenter(mock);
         presenter.start();
 
         presenter.joinGame("123.123.123.123", "12345","ABC");
@@ -150,7 +150,7 @@ public class ConnectPresenterTest {
     @Test
     public void scanUserNameShouldCallView() {
         mock = new MockConnectActivity();
-        presenter = new ConnectPresenter(mock);
+        presenter = new CreatePresenter(mock);
         presenter.start();
 
         presenter.scanUserName();
@@ -160,7 +160,7 @@ public class ConnectPresenterTest {
     @Test
     public void getUserNameShouldGetCorrectUserName() {
         mock = new MockConnectActivity();
-        presenter = new ConnectPresenter(mock);
+        presenter = new CreatePresenter(mock);
         presenter.start();
 
         String testUserName = "apple";
@@ -171,7 +171,7 @@ public class ConnectPresenterTest {
     @Test
     public void hasUserNameSetShouldTellIfUserNameSet() {
         mock = new MockConnectActivity();
-        presenter = new ConnectPresenter(mock);
+        presenter = new CreatePresenter(mock);
         presenter.start();
 
         String testUserName = "banana";
@@ -182,7 +182,7 @@ public class ConnectPresenterTest {
     @Test
     public void hasUserNameSetShouldBeFalseWhenNoUserName() {
         mock = new MockConnectActivity();
-        presenter = new ConnectPresenter(mock);
+        presenter = new CreatePresenter(mock);
         presenter.start();
 
         assertFalse(presenter.hasUserNameSet());

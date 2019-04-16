@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        style="@style/TextFieldShadow"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginEnd="8dp"
+        app:cardBackgroundColor="@android:color/background_light"
+        app:cardCornerRadius="35dp"
+        app:cardElevation="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="157dp"
+            android:layout_height="201dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/imgDescription"
+            app:srcCompat="@drawable/qr_code" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/head"
+        style="@style/TextFieldShadow"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:text="@string/qrCodeGames"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textSize="46sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <TextView
+        android:id="@+id/welcomeName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="@string/welcome"
+        android:textAlignment="center"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textSize="26sp"
+        app:layout_constraintBottom_toTopOf="@+id/createMenuBtn"
+        app:layout_constraintTop_toBottomOf="@+id/head"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <Button
+        android:id="@+id/createMenuBtn"
+        android:layout_width="200dp"
+        android:layout_height="63dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="1dp"
+        android:text="@string/createGameButton"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/joinMenuBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcomeName" />
+
+    <Button
+        android:id="@+id/joinMenuBtn"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="70dp"
+        android:text="@string/joinGameButton"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createMenuBtn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

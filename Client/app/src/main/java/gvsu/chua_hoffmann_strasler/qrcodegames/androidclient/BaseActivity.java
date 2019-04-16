@@ -8,10 +8,10 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data.ClientService;
 
 /**
@@ -32,6 +32,39 @@ public abstract class BaseActivity extends AppCompatActivity {
      * The LocalBroadcastManager used for connection.
      */
     private LocalBroadcastManager lbm;
+    /**
+     * Connect to the server and binds the connection.
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(final ComponentName className,
+                                       final IBinder service) {
+            ClientService.ClientServiceBinder binder =
+                    (ClientService.ClientServiceBinder) service;
+            gameService = binder.getService();
+            isServiceBound = true;
+        }
+
+        /**
+         * @param name
+         */
+        @Override
+        public void onServiceDisconnected(final ComponentName name) {
+            isServiceBound = false;
+        }
+    };
+    /**
+     * Recives broadcast from the server and if there is event to be handled,
+     * it sends it to the client.
+     */
+    private BroadcastReceiver mGameEventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            if (intent != null) {
+                handleGameEvent(intent.getExtras());
+            }
+        }
+    };
 
     /**
      * Basic function for back button.
@@ -69,44 +102,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * Connect to the server and binds the connection.
-     */
-    private ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(final ComponentName className,
-                                       final IBinder service) {
-            ClientService.ClientServiceBinder binder =
-                    (ClientService.ClientServiceBinder) service;
-            gameService = binder.getService();
-            isServiceBound = true;
-        }
-
-        /**
-         * @param name
-         */
-        @Override
-        public void onServiceDisconnected(final ComponentName name) {
-            isServiceBound = false;
-        }
-    };
-
-    /**
      * Handles game event recieved from the client.
      *
      * @param bundle Contains additional infomation from the event
      */
     protected abstract void handleGameEvent(Bundle bundle);
-
-    /**
-     *  Recives broadcast from the server and if there is event to be handled,
-     *  it sends it to the client.
-     */
-    private BroadcastReceiver mGameEventReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-            if (intent != null) {
-                handleGameEvent(intent.getExtras());
-            }
-        }
-    };
 }
