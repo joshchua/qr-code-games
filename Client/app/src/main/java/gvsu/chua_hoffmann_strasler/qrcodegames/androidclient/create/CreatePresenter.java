@@ -65,6 +65,11 @@ public class CreatePresenter implements CreateContract.Presenter {
     @Override
     public void createGame(final String ip, final String port,
                            final String game, final String count) {
+        String realCount = count;
+
+        if (realCount.equals("")) {
+            realCount = "0";
+        }
 
         String gameNum = "0";
 
@@ -83,7 +88,8 @@ public class CreatePresenter implements CreateContract.Presenter {
         }
 
         mCreateView.sendCreateGameRequest(ip, Integer.parseInt(port),
-                mUserName, Integer.parseInt(gameNum), Integer.parseInt(count));
+                mUserName, Integer.parseInt(gameNum),
+                Integer.parseInt(realCount));
     }
 
     /**

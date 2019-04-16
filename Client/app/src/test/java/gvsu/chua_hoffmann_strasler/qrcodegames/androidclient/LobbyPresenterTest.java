@@ -1,5 +1,5 @@
 package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient;
-
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -43,22 +43,22 @@ public class LobbyPresenterTest {
 
     public LobbyPresenter presenter;
 
-    @Test
-    public void switchTeamsShouldCallView() {
+    @Before
+    public void init() {
         mock = new MockLobbyActivity();
         presenter = new LobbyPresenter(mock);
         presenter.start();
 
+    }
+
+    @Test
+    public void switchTeamsShouldCallView() {
         presenter.switchTeams("userName", "12345");
         assertTrue(mock.wasCalled());
     }
 
     @Test
     public void updateTeamsShouldCallView() {
-        mock = new MockLobbyActivity();
-        presenter = new LobbyPresenter(mock);
-        presenter.start();
-
         presenter.updateTeams(new String[1], new String[1],
                 new ArrayList<String>(), new ArrayList<String>());
         assertTrue(mock.wasCalled());
@@ -66,22 +66,21 @@ public class LobbyPresenterTest {
 
     @Test
     public void startGameShouldCallView() {
-        mock = new MockLobbyActivity();
-        presenter = new LobbyPresenter(mock);
-        presenter.start();
-
         presenter.startGame();
         assertTrue(mock.wasCalled());
     }
 
     @Test
-    public void getGameCodeShouldGetCorrectGameCode() {
-        mock = new MockLobbyActivity();
-        presenter = new LobbyPresenter(mock);
-        presenter.start();
+    public void setTitleAndCodeShouldSetTitle() {
+        String expected = "This is a title";
+        presenter.setTitleAndCode(expected, "a game code");
+        assertEquals(expected, presenter.getGameTitle());
+    }
 
-        String expected = "TEST";
-        presenter.setTitleAndCode(expected);
+    @Test
+    public void setTitleAndCodeShouldSetGameCode() {
+        String expected = "GameC0de";
+        presenter.setTitleAndCode("title", expected);
         assertEquals(expected, presenter.getGameCode());
     }
 

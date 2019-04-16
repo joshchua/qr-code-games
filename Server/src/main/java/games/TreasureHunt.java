@@ -83,7 +83,7 @@ public class TreasureHunt extends Game {
         int win = checkWin();
 
         if (win > -1) {
-            message += "\n Game Over! ";
+            message += " Game Over! ";
             if (win == 1) {
                 message += "Team 1";
             } else {

@@ -111,6 +111,9 @@ public class CaptureTheFlag extends Game {
      */
     @Override
     public ScanResult handleScan(final String userName, final String scanned) {
+        if (!isPlaying()) {
+            return null;
+        }
 
         if (scanned.equals(BASE1) || scanned.equals(BASE2)) {
             return scannedBase(userName, scanned);

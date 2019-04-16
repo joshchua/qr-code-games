@@ -15,7 +15,7 @@ public class MainPresenter implements MainContract.Presenter {
      *
      * @param mainView The Connect View to be bound to this presenter
      */
-    protected MainPresenter(final MainContract.View mainView) {
+    public MainPresenter(final MainContract.View mainView) {
         mMainView = mainView;
         mMainView.setPresenter(this);
     }
