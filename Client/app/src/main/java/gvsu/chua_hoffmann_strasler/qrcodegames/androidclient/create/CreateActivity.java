@@ -157,7 +157,7 @@ public class CreateActivity extends BaseActivity
             intent.removeExtra("key");
             intent.putExtras(bundle);
             intent.putExtra("gameMode",
-                    treasureCountTextView.getText().toString());
+                    gameModeSpinner.getSelectedItem().toString());
             intent.putExtra("userName", mPresenter.getUserName());
             intent.putExtra("ip", ipAddressTextView.getText().toString());
             startActivity(intent);
