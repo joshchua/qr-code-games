@@ -78,7 +78,7 @@ public class QRCodeGameServer {
                 if (obj instanceof CreateGame) {
                     CreateGame cg = (CreateGame) obj;
                     gc.userName = cg.userName;
-                    createGame(cg.game, cg.userName, 0);
+                    createGame(cg.game, cg.userName, cg.options);
                     gc.gameCode = games.get(games.size() - 1).getGameCode();
                 }
 
@@ -195,9 +195,8 @@ public class QRCodeGameServer {
             game = new CaptureTheFlag();
         } else if(gameNum == 1) {
             game = new TreasureHunt(options);
-
         } else {
-                return;
+            return;
         }
 
         game.joinLobby(userName);

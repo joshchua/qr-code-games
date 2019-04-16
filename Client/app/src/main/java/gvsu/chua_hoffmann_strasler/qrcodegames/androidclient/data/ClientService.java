@@ -248,7 +248,8 @@ public class ClientService extends Service {
      * @param game Type of game to be created
      */
     public void connectAndCreateGame(final String ip, final int port,
-                                     final String userName, final int game) {
+                                     final String userName, final int game,
+                                     final int options) {
         connectToServer(ip, port);
         // Wait a second to ensure that client is connected to server
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -258,6 +259,7 @@ public class ClientService extends Service {
                     CreateGame createGame = new CreateGame();
                     createGame.game = game;
                     createGame.userName = userName;
+                    createGame.options = options;
                     Message msg = mOutNetHandler.obtainMessage(1);
                     msg.obj = createGame;
                     mOutNetHandler.sendMessage(msg);

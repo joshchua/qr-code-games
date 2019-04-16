@@ -22,7 +22,7 @@ public interface CreateContract {
          * @param game     The game the user wishes to play
          */
         void sendCreateGameRequest(String ip, int port, String userName,
-                                   int game);
+                                   int game, int options);
 
         /**
          * Displays a Toast with given error message.

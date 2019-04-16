@@ -45,6 +45,11 @@ public final class Network {
          * The user's username.
          */
         public String userName;
+
+        /**
+         * Game options.
+         */
+        public int options;
     }
 
     /**

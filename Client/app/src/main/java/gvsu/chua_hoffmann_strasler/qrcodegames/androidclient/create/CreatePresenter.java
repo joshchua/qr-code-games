@@ -81,9 +81,9 @@ public class CreatePresenter implements CreateContract.Presenter {
             mCreateView.showError("The port provided is not valid");
             return;
         }
-        gameNum += count;
+
         mCreateView.sendCreateGameRequest(ip, Integer.parseInt(port),
-                mUserName, Integer.parseInt(gameNum));
+                mUserName, Integer.parseInt(gameNum), Integer.parseInt(count));
     }
 
     /**

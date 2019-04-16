@@ -190,9 +190,10 @@ public class CreateActivity extends BaseActivity
      */
     @Override
     public void sendCreateGameRequest(final String ip, final int port,
-                                      final String userName, final int game) {
+                                      final String userName, final int game,
+                                      final int options) {
         createGameBtn.setEnabled(false);
-        gameService.connectAndCreateGame(ip, port, userName, game);
+        gameService.connectAndCreateGame(ip, port, userName, game, options);
         createGameBtn.setEnabled(false);
         createGameBtn.setText(R.string.connecting);
 
