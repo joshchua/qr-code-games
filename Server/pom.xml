@@ -8,10 +8,6 @@
     <artifactId>QRCodeGameServer</artifactId>
     <version>0.1-SNAPSHOT</version>
 
-    <properties>
-        <junit.jupiter.version>5.4.2</junit.jupiter.version>
-    </properties>
-
     <repositories>
         <repository>
             <id>clojars</id>
@@ -32,8 +28,8 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>${junit.jupiter.version}</version>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

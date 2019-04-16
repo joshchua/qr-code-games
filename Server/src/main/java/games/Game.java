@@ -24,24 +24,24 @@ public abstract class Game {
     /**
      * Holds an array list with all players.
      */
-    private ArrayList<String> mPlayers;
+    protected ArrayList<String> mPlayers;
 
     /**
      * Holds an array list with player state.
      */
-    private ArrayList<Integer> mPlayerState;
+    protected ArrayList<Integer> mPlayerState;
 
 
     /**
      * Holds an array list with player team.
      */
-    private ArrayList<Integer> mPlayerTeam;
+    protected ArrayList<Integer> mPlayerTeam;
 
 
     /**
      * Tells if the game has started.
      */
-    private boolean mIsStarted;
+    protected boolean mIsStarted;
 
     /**
      * Initializes game.
