@@ -194,6 +194,9 @@ public class QRCodeGameServer {
         if (gameNum == 0) {
             game = new CaptureTheFlag();
         } else if(gameNum == 1) {
+
+
+
             game = new TreasureHunt(options);
         } else {
             return;

@@ -22,7 +22,7 @@ public class TreasureHunt extends Game {
     public TreasureHunt(int numOfTreasures) {
         super();
         this.mGameName = "Treasure Hunt";
-        this.numOfTreasures =  numOfTreasures;
+        this.numOfTreasures = numOfTreasures;
         map = new HashMap<String, Integer>();
 
         for (int i = 1; i <= numOfTreasures; i++) {
