@@ -1,7 +1,9 @@
 package games;
 
-import models.TreasureHunt.Findables;
 import models.ScanResult;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -9,83 +11,93 @@ import models.ScanResult;
  */
 public class TreasureHunt extends Game {
 
-    /**
-     * Findables object holds arraylist for treasures(As Strings) to be loaded into
-     */
-    private Findables treasure;
-    /**
-     * This object represents the treasures that team 1 has found so far
-     */
-    private Findables team1Treasure;
-    /**
-     * This object represents the treasures that team 2 has found so far
-     */
-    private Findables team2Treasure;
+    private Map<String, Integer> map;
+    private int numOfTreasures;
 
-    public TreasureHunt(int countTreasure) {
+    /**
+     * Creates a new Treasure Hunt game.
+     *
+     * @param numOfTreasures Number of treasures
+     */
+    public TreasureHunt(int numOfTreasures) {
         super();
-        this.mGameName = "Scavenger Hunt";
+        this.mGameName = "Treasure Hunt";
+        this.numOfTreasures =  numOfTreasures;
+        map = new HashMap<String, Integer>();
 
-        Findables treasure = new Findables();
-
-        for(int i = 1; i <= countTreasure; i++){
-            treasure.addToFindables("treasure" + i);
-
+        for (int i = 1; i <= numOfTreasures; i++) {
+            map.put("treasure" + i, 0);
         }
-        
-        Findables team1Treasure = new Findables();
-        Findables team2Treasure = new Findables();
     }
 
     /**
-     * Game logic for when game has started, checks team, conditions and updates Findables arraylists for teams
-     * declares winner if applicable
-     * @param username is player string
-     * @param item is scanned string representing treasure
-     * @return code for display to clients**
+     * Checks if a team has won.
+     *
+     * @return Returns -1 if no winner. Returns 1 if team 1 wins and returns 2
+     * if team 2 wins.
      */
-    private ScanResult scannedTreasure(String username, String item) {
-        if (treasure.findablesContains(item) && findTeam(username) == 1) {
-            if (team1Treasure.findablesContains(item)) {
-                return null;
-            }
-            if (team1Treasure.findablesContains(item) == false){
-                team1Treasure.addToFindables(item);
-                if(treasure.getFindablesSize() == team1Treasure.getFindablesSize()){
-                    gameOver();
-                    return new ScanResult(username + " found the last piece of treasure for Team 1!");
-                }
-                return new ScanResult(username + " found " + item + " for Team 1!");
+    public int checkWin() {
+        int team1 = 0, team2 = 0;
+
+        for (String key : map.keySet()) {
+            if (map.get(key) == 3) {
+                team1++;
+                team2++;
+            } else if (map.get(key) == 2) {
+                team2++;
+            } else if (map.get(key) == 1) {
+                team1++;
             }
         }
 
-        if (treasure.findablesContains(item) && findTeam(username) == 2) {
-            if (team1Treasure.findablesContains(item)) {
-                return null;
-            }
-            if (team2Treasure.findablesContains(item) == false){
-                team2Treasure.addToFindables(item);
-                if(treasure.getFindablesSize() == team2Treasure.getFindablesSize()){
-                    gameOver();
-                    return new ScanResult(username + " found the last piece of treasure for Team 2!");
-                }
-                return new ScanResult(username + " found " + item + " for Team 2!");
-            }
-        }
-        return null;
+        if (team1 == numOfTreasures) return 1;
+        if (team2 == numOfTreasures) return 2;
+
+        return -1;
     }
 
     /**
-     * checks if game code for starting game is present
-     * if game is not started executes load treasure logic
-     * if game is started executes game logic
+     * Checks the scanned QR code. Checks if it is a valid treasure. If it is,
+     * then apply game logic.
+     *
      * @param userName name of the player that scanned the object
      * @param scanned name of the scanned object
-     * @return
+     * @return The game result
      */
     @Override
     public ScanResult handleScan(String userName, String scanned) {
-        return  scannedTreasure(userName, scanned);
+        if (!map.containsKey(scanned) || !isPlaying())
+            return null;
+
+        String message = "";
+
+        if (map.get(scanned) == 0) {
+            map.put(scanned, findTeam(userName));
+            message = userName + " found " + scanned + ".";
+        } else if ((map.get(scanned) == 1 && findTeam(userName) == 2)
+                || (map.get(scanned) == 2 && findTeam(userName) == 1)) {
+            map.put(scanned, 3);
+            message = userName + " found " + scanned + ".";
+        }
+
+        int win = checkWin();
+
+        if (win > -1) {
+            message += "\n Game Over! ";
+            if (win == 1) {
+                message += "Team 1";
+            } else {
+                message += "Team 2";
+            }
+            message += " found all of the treasure!";
+            gameOver();
+        }
+
+        if (message.equals("")) {
+            return null;
+        } else {
+            return new ScanResult(message);
+        }
     }
 
 
