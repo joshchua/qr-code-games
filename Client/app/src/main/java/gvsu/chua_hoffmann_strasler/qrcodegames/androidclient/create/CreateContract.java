@@ -20,6 +20,7 @@ public interface CreateContract {
          * @param port     The server's port reserved for this game
          * @param userName The user's username
          * @param game     The game the user wishes to play
+         * @param options  Extra options like number of treasures
          */
         void sendCreateGameRequest(String ip, int port, String userName,
                                    int game, int options);

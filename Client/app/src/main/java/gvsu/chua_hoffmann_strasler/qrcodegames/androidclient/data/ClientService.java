@@ -95,7 +95,7 @@ public class ClientService extends Service {
                 case 0: // Connect to Server
                     ConnectionInfo info = (ConnectionInfo) msg.obj;
                     try {
-                        client.connect(5000, info.ip, Network.PORT);
+                        client.connect(5000, info.getIp(), Network.PORT);
                         if (client.isConnected()) {
                             mIsClientConnected = true;
                         }
@@ -246,6 +246,7 @@ public class ClientService extends Service {
      * @param port Port
      * @param userName Username
      * @param game Type of game to be created
+     * @param options Extra options like number of treasures
      */
     public void connectAndCreateGame(final String ip, final int port,
                                      final String userName, final int game,

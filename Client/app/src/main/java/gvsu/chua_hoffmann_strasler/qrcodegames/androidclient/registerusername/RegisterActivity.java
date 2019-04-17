@@ -9,7 +9,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.util.DisplayMetrics;
 import android.util.Log;
 
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
@@ -24,25 +23,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Register activity that is created when users start scanning their name from the connect activity
+ * Register activity that is created when users start scanning their name
+ * from the connect activity.
  */
-public class RegisterActivity extends AppCompatActivity implements RegisterContract.View {
+public class RegisterActivity extends AppCompatActivity
+        implements RegisterContract.View {
 
+    /**
+     * Tag containing name of the activity.
+     */
     private static final String TAG = "RegisterActivity";
+
+    /**
+     * Number of permissions requested.
+     */
     private static final int PERMISSION_REQUESTS = 1;
 
+    /**
+     * Presenter for the register activity.
+     */
     private RegisterContract.Presenter presenter;
 
+    /**
+     * Camera source.
+     */
     private CameraSource cameraSource = null;
+
+    /**
+     * Camera preview.
+     */
     private CameraSourcePreview preview;
+
+    /**
+     * Graphic overlay.
+     */
     private GraphicOverlay graphicOverlay;
 
     /**
-     * Call this when the activity is created
-     * @param savedInstanceState The bundle saved from previous instances of this activity.
+     * Call this when the activity is created.
+     * @param savedInstanceState The bundle saved from previous instances of
+     *                          this activity.
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
 
@@ -69,26 +92,29 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
     }
 
     /**
-     * Sets this activity's presenter
+     * Sets this activity's presenter.
      *
      * @param presenter The presenter for this activity
      */
     @Override
-    public void setPresenter(RegisterContract.Presenter presenter) {
+    public void setPresenter(final RegisterContract.Presenter presenter) {
         this.presenter = presenter;
     }
 
+    /**
+     * Creates camera source if the is not one.
+     */
     private void createCameraSource() {
-        // If there's no existing cameraSource, create one.
         if (cameraSource == null) {
             cameraSource = new CameraSource(this, graphicOverlay);
         }
 
         try {
             Log.i(TAG, "Using Barcode Detector Processor");
-            cameraSource.setMachineLearningFrameProcessor(new BarcodeScanningProcessor() {
+            cameraSource.setMachineLearningFrameProcessor(
+                    new BarcodeScanningProcessor() {
                 @Override
-                public void scanCallback(String rawValue) {
+                public void scanCallback(final String rawValue) {
                     presenter.handleScan(rawValue);
                 }
             });
@@ -98,9 +124,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
     }
 
     /**
-     * Starts or restarts the camera source, if it exists. If the camera source doesn't exist yet
-     * (e.g., because onResume was called before the camera source was created), this will be called
-     * again when the camera source is created.
+     * Starts or restarts the camera source, if it exists. If the camera
+     * source doesn't exist yet (e.g., because onResume was called before the
+     * camera source was created), this will be called again when the camera
+     * source is created.
      */
     private void startCameraSource() {
         if (cameraSource != null) {
@@ -121,7 +148,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
     }
 
     /**
-     * Resumes the camera
+     * Resumes the camera.
      */
     @Override
     protected void onResume() {
@@ -138,7 +165,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
     }
 
     /**
-     * Releases the camera source
+     * Releases the camera source.
      */
     @Override
     protected void onDestroy() {
@@ -149,14 +176,15 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
     }
 
     /**
-     * Asks the user for permissions
+     * Asks the user for permissions.
      * @return a permission
      */
     private String[] getRequiredPermissions() {
         try {
             PackageInfo info =
                     this.getPackageManager()
-                            .getPackageInfo(this.getPackageName(), PackageManager.GET_PERMISSIONS);
+                            .getPackageInfo(this.getPackageName(),
+                                    PackageManager.GET_PERMISSIONS);
             String[] ps = info.requestedPermissions;
             if (ps != null && ps.length > 0) {
                 return ps;
@@ -170,7 +198,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
 
 
     /**
-     * Finds if all permissions needed are granted
+     * Finds if all permissions needed are granted.
      * @return True if all permissions granted, false if at least one is missing
      */
     private boolean allPermissionsGranted() {
@@ -183,7 +211,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
     }
 
     /**
-     * Asks the user for each permission specifically
+     * Asks the user for each permission specifically.
      */
     private void getRuntimePermissions() {
         List<String> allNeededPermissions = new ArrayList<>();
@@ -195,33 +223,37 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
 
         if (!allNeededPermissions.isEmpty()) {
             ActivityCompat.requestPermissions(
-                    this, allNeededPermissions.toArray(new String[0]), PERMISSION_REQUESTS);
+                    this, allNeededPermissions.toArray(new String[0]),
+                    PERMISSION_REQUESTS);
         }
     }
 
     /**
-     * Gets the response to the permission request from the user
+     * Gets the response to the permission request from the user.
      * @param requestCode The request code passed in
      * @param permissions The requested permissions. Never null.
      * @param grantResults The grant results for the corresponding permissions
      */
     @Override
     public void onRequestPermissionsResult(
-            int requestCode, String[] permissions, int[] grantResults) {
+            final int requestCode, final String[] permissions,
+            final int[] grantResults) {
         Log.i(TAG, "Permission granted!");
         if (allPermissionsGranted()) {
             createCameraSource();
         }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions,
+                grantResults);
     }
 
     /**
-     * Checks if permission is granted
+     * Checks if permission is granted.
      * @param context Context why permission is asked
      * @param permission One of the permissions
      * @return True if permission granted, False if not
      */
-    private static boolean isPermissionGranted(Context context, String permission) {
+    private static boolean isPermissionGranted(
+           final Context context, final String permission) {
         if (ContextCompat.checkSelfPermission(context, permission)
                 == PackageManager.PERMISSION_GRANTED) {
             Log.i(TAG, "Permission granted: " + permission);
@@ -232,11 +264,12 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
     }
 
     /**
-     * Adds the user name to an intents and returns back to the connect activity
+     * Adds the user name to an intents and returns back to the connect
+     * activity.
      * @param userName name of the user
      */
     @Override
-    public void sendUserName(String userName) {
+    public void sendUserName(final String userName) {
         Intent intent = new Intent(this, WelcomeActivity.class);
         intent.putExtra("key", "scanned_username");
         intent.putExtra("userName", userName);

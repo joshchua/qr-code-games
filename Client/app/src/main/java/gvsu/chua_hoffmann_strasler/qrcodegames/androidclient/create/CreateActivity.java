@@ -116,7 +116,8 @@ public class CreateActivity extends BaseActivity
         popup.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
         //button inside popup
-        final Button createTreasureBtn = popup.findViewById(R.id.createTreasureBtn);
+        final Button createTreasureBtn = popup.findViewById(
+                R.id.createTreasureBtn);
         createTreasureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
