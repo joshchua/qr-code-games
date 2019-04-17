@@ -39,13 +39,13 @@ public class TreasureHunt extends Game {
     public int checkWin() {
         int team1 = 0, team2 = 0;
 
-        for (String key : map.keySet()) {
-            if (map.get(key) == 3) {
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            if (entry.getValue() == 3) {
                 team1++;
                 team2++;
-            } else if (map.get(key) == 2) {
+            } else if (entry.getValue() == 2) {
                 team2++;
-            } else if (map.get(key) == 1) {
+            } else if (entry.getValue() == 1) {
                 team1++;
             }
         }
