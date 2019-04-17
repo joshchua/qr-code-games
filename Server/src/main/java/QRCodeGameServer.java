@@ -187,16 +187,15 @@ public class QRCodeGameServer {
      *
      * @param gameNum type of the game
      * @param userName name of the player that created the game
+     * @param options extra options like number of treasures
      */
 
-    private void createGame(final int gameNum, final String userName, int options) {
+    private void createGame(final int gameNum, final String userName,
+                            final int options) {
         Game game;
         if (gameNum == 0) {
             game = new CaptureTheFlag();
-        } else if(gameNum == 1) {
-
-
-
+        } else if (gameNum == 1) {
             game = new TreasureHunt(options);
         } else {
             return;

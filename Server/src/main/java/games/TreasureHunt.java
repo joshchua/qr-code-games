@@ -11,7 +11,14 @@ import java.util.Map;
  */
 public class TreasureHunt extends Game {
 
+    /**
+     * Map containing all treasures.
+     */
     private Map<String, Integer> map;
+
+    /**
+     * Number of treasures.
+     */
     private int numOfTreasures;
 
     /**
@@ -19,7 +26,7 @@ public class TreasureHunt extends Game {
      *
      * @param numOfTreasures Number of treasures
      */
-    public TreasureHunt(int numOfTreasures) {
+    public TreasureHunt(final int numOfTreasures) {
         super();
         this.mGameName = "Treasure Hunt";
         this.numOfTreasures = numOfTreasures;
@@ -50,8 +57,12 @@ public class TreasureHunt extends Game {
             }
         }
 
-        if (team1 == numOfTreasures) return 1;
-        if (team2 == numOfTreasures) return 2;
+        if (team1 == numOfTreasures) {
+            return 1;
+        }
+        if (team2 == numOfTreasures) {
+            return 2;
+        }
 
         return -1;
     }
@@ -65,9 +76,10 @@ public class TreasureHunt extends Game {
      * @return The game result
      */
     @Override
-    public ScanResult handleScan(String userName, String scanned) {
-        if (!map.containsKey(scanned) || !isPlaying())
+    public ScanResult handleScan(final String userName, final String scanned) {
+        if (!map.containsKey(scanned) || !isPlaying()) {
             return null;
+        }
 
         String message = "";
 
