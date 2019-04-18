@@ -46,5 +46,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-ml-vision-image-label-model:17.0.2'
     implementation 'com.google.firebase:firebase-ml-model-interpreter:17.0.3'
     implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
 }
 apply plugin: 'com.google.gms.google-services'
