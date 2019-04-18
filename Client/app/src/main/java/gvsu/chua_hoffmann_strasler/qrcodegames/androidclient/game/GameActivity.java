@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.BaseActivity;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.R;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.BarcodeScanningProcessor;
@@ -18,21 +22,17 @@ import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.Cam
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.CameraSourcePreview;
 import gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.barcodescanning.GraphicOverlay;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * The type Game activity.
  */
 public class GameActivity extends BaseActivity implements GameContract.View {
 
     /**
-     *Used for logging the camera in the acitivity
+     * Used for logging the camera in the activity.
      */
     private static final String TAG = "GameActivity";
     /**
-     * Defines number of the permissions requested
+     * Defines number of the permissions requested.
      */
     private static final int PERMISSION_REQUESTS = 1;
 
@@ -42,24 +42,24 @@ public class GameActivity extends BaseActivity implements GameContract.View {
     private GameContract.Presenter presenter;
 
     /**
-     * Source of the camera
+     * Source of the camera.
      */
     private CameraSource cameraSource = null;
     /**
-     * Preview of th camera source
+     * Preview of th camera source.
      */
     private CameraSourcePreview preview;
     /**
-     *Graphic overlay for the camera
+     * Graphic overlay for the camera.
      */
     private GraphicOverlay graphicOverlay;
 
     /**
-     * ListView for game events
+     * ListView for game events.
      */
     private ListView gameEventView;
     /**
-     * List of game events
+     * List of game events.
      */
     private ArrayList<String> gameEventList;
 
@@ -67,6 +67,24 @@ public class GameActivity extends BaseActivity implements GameContract.View {
      * Array adapter for the event ListView.
      */
     private ArrayAdapter<String> gameEventAdapter;
+
+    /**
+     * Checks if permission is granted.
+     *
+     * @param context    Context why permission is asked
+     * @param permission One of the permissions
+     * @return True if permission granted, False if not
+     */
+    private static boolean isPermissionGranted(final Context context,
+                                               final String permission) {
+        if (ContextCompat.checkSelfPermission(context, permission)
+                == PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "Permission granted: " + permission);
+            return true;
+        }
+        Log.i(TAG, "Permission NOT granted: " + permission);
+        return false;
+    }
 
     /**
      * Updates the adapter with a new event in the game.
@@ -78,10 +96,12 @@ public class GameActivity extends BaseActivity implements GameContract.View {
 
     /**
      * Call this when the activity is created.
-     * @param savedInstanceState The bundle saved from previous instances of this activity.
+     *
+     * @param savedInstanceState The bundle saved from previous instances
+     *                           of this activity.
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
 
@@ -91,14 +111,17 @@ public class GameActivity extends BaseActivity implements GameContract.View {
 
         gameEventView = findViewById(R.id.list_gameEvents);
         gameEventList = presenter.getGameEventList();
-        gameEventAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, gameEventList);
+        gameEventAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, gameEventList);
         gameEventView.setAdapter(gameEventAdapter);
 
         final Intent startingIntent = getIntent();
 
         if (startingIntent != null) {
-            String startingMessage = startingIntent.getStringExtra("message");
-            boolean isPlaying = startingIntent.getBooleanExtra("is_playing", false);
+            String startingMessage =
+                    startingIntent.getStringExtra("message");
+            boolean isPlaying = startingIntent.getBooleanExtra(
+                    "is_playing", false);
             presenter.handleGameEvent(startingMessage, isPlaying);
         }
 
@@ -120,12 +143,12 @@ public class GameActivity extends BaseActivity implements GameContract.View {
     }
 
     /**
-     * Sets this activity's presenter
+     * Sets this activity's presenter.
      *
      * @param presenter The presenter for this activity
      */
     @Override
-    public void setPresenter(GameContract.Presenter presenter) {
+    public void setPresenter(final GameContract.Presenter presenter) {
         this.presenter = presenter;
     }
 
@@ -140,9 +163,10 @@ public class GameActivity extends BaseActivity implements GameContract.View {
 
         try {
             Log.i(TAG, "Using Barcode Detector Processor");
-            cameraSource.setMachineLearningFrameProcessor(new BarcodeScanningProcessor() {
+            cameraSource.setMachineLearningFrameProcessor(
+                    new BarcodeScanningProcessor() {
                 @Override
-                public void scanCallback(String rawValue) {
+                public void scanCallback(final String rawValue) {
                     presenter.handleScan(rawValue);
                 }
             });
@@ -152,8 +176,9 @@ public class GameActivity extends BaseActivity implements GameContract.View {
     }
 
     /**
-     * Starts or restarts the camera source, if it exists. If the camera source doesn't exist yet
-     * (e.g., because onResume was called before the camera source was created), this will be called
+     * Starts or restarts the camera source, if it exists. If the camera source
+     * doesn't exist yet (e.g., because onResume was called before the camera
+     * source was created), this will be called
      * again when the camera source is created.
      */
     private void startCameraSource() {
@@ -175,7 +200,7 @@ public class GameActivity extends BaseActivity implements GameContract.View {
     }
 
     /**
-     * Resumes the camera
+     * Resumes the camera.
      */
     @Override
     protected void onResume() {
@@ -184,7 +209,9 @@ public class GameActivity extends BaseActivity implements GameContract.View {
         startCameraSource();
     }
 
-    /** Stops the camera. */
+    /**
+     * Stops the camera.
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -192,11 +219,13 @@ public class GameActivity extends BaseActivity implements GameContract.View {
     }
 
     /**
-     * Called when this activity receives a Local Broadcast from the ClientService
+     * Called when this activity receives a Local Broadcast from the
+     * ClientService.
+     *
      * @param bundle The bundle holding relevant extras
      */
     @Override
-    protected void handleGameEvent(Bundle bundle) {
+    protected void handleGameEvent(final Bundle bundle) {
         String key = bundle.getString("key");
         if (key.equals("game_event")) {
             String gameEvent = bundle.getString("message");
@@ -206,7 +235,7 @@ public class GameActivity extends BaseActivity implements GameContract.View {
     }
 
     /**
-     * Releases the camera source
+     * Releases the camera source.
      */
     @Override
     protected void onDestroy() {
@@ -217,14 +246,16 @@ public class GameActivity extends BaseActivity implements GameContract.View {
     }
 
     /**
-     * Asks the user for permissions
+     * Asks the user for permissions.
+     *
      * @return a permission
      */
     private String[] getRequiredPermissions() {
         try {
             PackageInfo info =
                     this.getPackageManager()
-                            .getPackageInfo(this.getPackageName(), PackageManager.GET_PERMISSIONS);
+                            .getPackageInfo(this.getPackageName(),
+                                    PackageManager.GET_PERMISSIONS);
             String[] ps = info.requestedPermissions;
             if (ps != null && ps.length > 0) {
                 return ps;
@@ -237,8 +268,10 @@ public class GameActivity extends BaseActivity implements GameContract.View {
     }
 
     /**
-     * Finds if all permissions needed are granted
-     * @return True if all permissions granted, false if at least one is missing
+     * Finds if all permissions needed are granted.
+     *
+     * @return True if all permissions granted,
+     *         false if at least one is missing
      */
     private boolean allPermissionsGranted() {
         for (String permission : getRequiredPermissions()) {
@@ -250,7 +283,7 @@ public class GameActivity extends BaseActivity implements GameContract.View {
     }
 
     /**
-     * Asks the user for each permission specifically
+     * Asks the user for each permission specifically.
      */
     private void getRuntimePermissions() {
         List<String> allNeededPermissions = new ArrayList<>();
@@ -262,48 +295,37 @@ public class GameActivity extends BaseActivity implements GameContract.View {
 
         if (!allNeededPermissions.isEmpty()) {
             ActivityCompat.requestPermissions(
-                    this, allNeededPermissions.toArray(new String[0]), PERMISSION_REQUESTS);
+                    this, allNeededPermissions.toArray(
+                            new String[0]), PERMISSION_REQUESTS);
         }
     }
 
     /**
-     * Gets the response to the permission request from the user
-     * @param requestCode The request code passed in
-     * @param permissions The requested permissions. Never null.
+     * Gets the response to the permission request from the user.
+     *
+     * @param requestCode  The request code passed in
+     * @param permissions  The requested permissions. Never null.
      * @param grantResults The grant results for the corresponding permissions
      */
     @Override
     public void onRequestPermissionsResult(
-            int requestCode, String[] permissions, int[] grantResults) {
+            final int requestCode, final String[] permissions,
+            final int[] grantResults) {
         Log.i(TAG, "Permission granted!");
         if (allPermissionsGranted()) {
             createCameraSource();
         }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode,
+                permissions, grantResults);
     }
 
     /**
-     * Checks if permission is granted
-     * @param context Context why permission is asked
-     * @param permission One of the permissions
-     * @return True if permission granted, False if not
-     */
-    private static boolean isPermissionGranted(Context context, String permission) {
-        if (ContextCompat.checkSelfPermission(context, permission)
-                == PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG, "Permission granted: " + permission);
-            return true;
-        }
-        Log.i(TAG, "Permission NOT granted: " + permission);
-        return false;
-    }
-
-    /**
-     * Sends the value of the barcode scan
+     * Sends the value of the barcode scan.
+     *
      * @param barcodeValue value of the scan
      */
     @Override
-    public void sendScanRequest(String barcodeValue) {
+    public void sendScanRequest(final String barcodeValue) {
         gameService.sendScan(barcodeValue);
     }
 }

@@ -1,18 +1,23 @@
 package games;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CaptureTheFlagTest {
-    CaptureTheFlag c = new CaptureTheFlag();
+
+    CaptureTheFlag c;
+
+    @BeforeEach
+    void init() {
+        c = new CaptureTheFlag();
+    }
 
     @Test
     void getGameName() {
         assertEquals(c.getGameName(), "Capture the Flag");
     }
-
-
 
 
     @Test
@@ -23,6 +28,7 @@ class CaptureTheFlagTest {
         c.joinLobby("joe");
         c.switchTeam("zac");
         c.switchTeam("joe");
+        c.start();
 
         //player scanned himself
         assertNull(c.handleScan("tom","tom"));
@@ -47,10 +53,11 @@ class CaptureTheFlagTest {
         c.joinLobby("zac");
         assertNull(c.handleScan("zac", "base1"));
     }
-        @Test
-        void scannedBase2WithFlag1() {
+    @Test
+    void scannedBase2WithFlag1() {
         c.joinLobby("zac");
         c.switchTeam("zac");
+        c.start();
         c.handleScan("zac","base1");
         assertEquals(c.handleScan("zac","base2").getMessage(),
                 "zac has returned Team 1's flag to their base. Game Over!");
@@ -58,11 +65,9 @@ class CaptureTheFlagTest {
     @Test
     void scannedBase1WithFlag2() {
         c.joinLobby("zac");
+        c.start();
         c.handleScan("zac","base2");
         assertEquals(c.handleScan("zac","base1").getMessage(),
                 "zac has returned Team 2's flag to their base. Game Over!");
     }
-
-
-
 }

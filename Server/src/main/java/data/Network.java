@@ -4,19 +4,21 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
 /**
- * This class handles the server connection from the kryo plugin
+ * A class holding Kryo serializable objects for Kryonet socket communication.
  */
-public class Network {
+public final class Network {
+
     /**
-     * Number of the port for the server
+     * Default port number.
      */
     public static final int PORT = 54555;
 
     /**
-     * Registers all classes on the server
-     * @param endPoint name of the endpoint
+     * Registers relevant objects to be Kryo serialized for transport.
+     *
+     * @param endPoint The endPoint receive the registrations.
      */
-    public static void register(EndPoint endPoint) {
+    public static void register(final EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
         kryo.register(CreateGame.class);
         kryo.register(JoinGame.class);
@@ -30,65 +32,126 @@ public class Network {
     }
 
     /**
-     * Class defining variables needed to create a game
+     * Object to be sent over the network telling the server to create a new
+     * game.
      */
     public static class CreateGame {
+        /**
+         * The type of game to be created.
+         */
         public int game;
+
+        /**
+         * The user's username.
+         */
         public String userName;
+
+        /**
+         * Game options.
+         */
+        public int options;
     }
 
     /**
-     * Class defining variables needed to join a game
+     * Object to be sent over the network telling the server to add the user to
+     * an existing game.
      */
     public static class JoinGame {
+        /**
+         * The gameCode.
+         */
         public String gameCode;
+
+        /**
+         * The user name.
+         */
         public String userName;
     }
 
     /**
-     * Class defining variables needed to create a lobby
+     * Object to be sent over the network holding the state of the lobby.
      */
     public static class Lobby {
+        /**
+         * The name of the game.
+         */
         public String gameName;
+
+        /**
+         * The code for the game.
+         */
         public String gameCode;
+
+        /**
+         * The user names of the players on team 1.
+         */
         public String[] team1;
+
+        /**
+         * The user names of the players on team 2.
+         */
         public String[] team2;
     }
 
     /**
-     * Class defining variables needed to switch a team
+     * Object to be sent over the network telling the server to switch the
+     * user's teams.
      */
     public static class SwitchTeam {
+
+        /**
+         * The game code of the session.
+         */
         public String gameCode;
+
+        /**
+         * The user name of the user.
+         */
         public String userName;
     }
 
     /**
-     * Class defining the result of the Join Game error
+     * Sent to the client if there is an error with joining a game.
      */
     public static class JoinGameErrorResult {
+
+        /**
+         * The error message.
+         */
         public String message;
     }
 
     /**
-     * Class defining variables needed to start game
+     * Object sent to the server, telling the server to start the game.
      */
     public static class StartGame {
+        /**
+         * The game code.
+         */
         public String gameCode;
     }
 
-    /*
-     *Class defining variables needed for a game event
+    /**
+     * Object sent to clients, telling the clients the game events.
      */
     public static class GameEvent {
+        /**
+         * The message.
+         */
         public String message;
+        /**
+         * Is game playing.
+         */
         public boolean isPlaying;
     }
 
     /**
-     Class defining variables needed for a scan
+     * Object sent to the server, telling the server what has been scanned.
      */
     public static class Scan {
+        /**
+         * The scanned raw text.
+         */
         public String scanned;
     }
 }

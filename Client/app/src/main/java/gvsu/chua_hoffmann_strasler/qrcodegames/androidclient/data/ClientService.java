@@ -11,7 +11,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -95,7 +95,7 @@ public class ClientService extends Service {
                 case 0: // Connect to Server
                     ConnectionInfo info = (ConnectionInfo) msg.obj;
                     try {
-                        client.connect(5000, info.ip, Network.PORT);
+                        client.connect(5000, info.getIp(), Network.PORT);
                         if (client.isConnected()) {
                             mIsClientConnected = true;
                         }
@@ -246,9 +246,11 @@ public class ClientService extends Service {
      * @param port Port
      * @param userName Username
      * @param game Type of game to be created
+     * @param options Extra options like number of treasures
      */
     public void connectAndCreateGame(final String ip, final int port,
-                                     final String userName, final int game) {
+                                     final String userName, final int game,
+                                     final int options) {
         connectToServer(ip, port);
         // Wait a second to ensure that client is connected to server
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -258,6 +260,7 @@ public class ClientService extends Service {
                     CreateGame createGame = new CreateGame();
                     createGame.game = game;
                     createGame.userName = userName;
+                    createGame.options = options;
                     Message msg = mOutNetHandler.obtainMessage(1);
                     msg.obj = createGame;
                     mOutNetHandler.sendMessage(msg);
