@@ -1,11 +1,41 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#1a51e7</item>
+        <item name="colorPrimaryDark">#1a51e7</item>
+        <item name="colorAccent">#6200EE</item>
+        <item name="android:fontFamily">@font/roboto</item>
     </style>
 
+
+    <style name="FullscreenTheme" parent="AppTheme">
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
+        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+    </style>
+
+    <style name="FullscreenActionBarStyle" parent="android:Widget.Holo.ActionBar">
+        <item name="android:background">@color/black_overlay</item>
+    </style>
+
+    <style name="TextFieldShadow">
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">2.0</item>
+        <item name="android:shadowDy">2.0</item>
+        <item name="android:shadowRadius">5.0</item>
+    </style>
+
+    <style name="list" parent="CardView.Light">
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="cardCornerRadius">4dp</item>
+        <item name="android:background">#ffffff</item>
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">2.0</item>
+        <item name="android:shadowDy">2.0</item>
+        <item name="android:shadowRadius">5.0</item>
+    </style>
 </resources>

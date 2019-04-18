@@ -26,6 +26,12 @@
             <artifactId>kryo</artifactId>
             <version>5.0.0-RC2</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -40,7 +46,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.mypackage.MyClass</mainClass>
+                            <mainClass>gvsu.chua_hoffmann_strasler.qrcodegames.server.QRCodeGameServer</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

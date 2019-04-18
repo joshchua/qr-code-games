@@ -6,14 +6,25 @@ package gvsu.chua_hoffmann_strasler.qrcodegames.androidclient.data;
 public class ConnectionInfo {
 
     /**
-     * The server's IP address.
+     * Returns ip address.
+     * @return ip address
      */
-    public String ip;
+    public String getIp() {
+        return ip;
+    }
 
     /**
-     * The server's port
+     * The server's IP address.
+     */
+    private String ip;
+
+
+
+    /**
+     * The server's port.
      */
     public int port;
+
 
     /**
      * Creates a Connection Info object.

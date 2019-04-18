@@ -52,13 +52,13 @@ public abstract class Game {
         mPlayerTeam = new ArrayList<Integer>();
 
         final String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        final int N = alphabet.length();
+        final int n = alphabet.length();
 
         // Randomly generates a new game code
         Random r = new Random();
         mGameCode = "";
         for (int i = 0; i < 5; i++) {
-            mGameCode += alphabet.charAt(r.nextInt(N));
+            mGameCode += alphabet.charAt(r.nextInt(n));
         }
 
         mIsStarted = false;
@@ -84,17 +84,23 @@ public abstract class Game {
      * Switches teams for players.
      * @param userName name of the player switching teams
      */
-    public void switchTeam(String userName) {
+    public void switchTeam(final String userName) {
         int index = mPlayers.indexOf(userName);
         int team = mPlayerTeam.get(index);
-        mPlayerTeam.set(index,(team == 1 ) ? 2 : 1);
+        if (team == 1) {
+            team = 2;
+        } else {
+            team = 1;
+        }
+
+        mPlayerTeam.set(index, team);
     }
 
     /**
      * Joins a player in the lobby and adds him to a team.
      * @param userName name of the player joining the game
      */
-    public void joinLobby(String userName) {
+    public void joinLobby(final String userName) {
         mPlayers.add(userName);
         mPlayerTeam.add(1);
         mPlayerState.add(PlayerState.NORMAL);
@@ -113,7 +119,7 @@ public abstract class Game {
      * @param userName name of the player
      * @return team number of the player
      */
-    public int findTeam(String userName) {
+    public int findTeam(final String userName) {
         int index = mPlayers.indexOf(userName);
         if (index > -1) {
             return mPlayerTeam.get(index);
@@ -130,7 +136,7 @@ public abstract class Game {
     }
 
     /**
-     * Ends the game
+     * Ends the game.
      */
     public void gameOver() {
         mIsStarted = false;
@@ -146,7 +152,8 @@ public abstract class Game {
 
     /**
      * Handles a scan from a player.
-     * This should be implemented by classes that inherit from Game
+     * This should be implemented by classes that inherit from Game.
+     *
      * @param userName name of the player that scanned the object
      * @param scanned name of the scanned object
      * @return returns the message for players
