@@ -60,9 +60,18 @@ class TreasureHuntTest {
         game.joinLobby("tom");
         game.joinLobby("zac");
         game.switchTeam("zac");
-
-        assertEquals(game.handleScan("tom", "treasure1").getMessage(), "tom found treasure1.");
+        game.handleScan("tom", "treasure1");
 
         assertEquals(game.handleScan("zac", "treasure1").getMessage(), "zac found treasure1.");
+    }
+
+    @Test
+    void scannedSameTreasure2() {
+        game.joinLobby("tom");
+        game.joinLobby("zac");
+        game.switchTeam("zac");
+        game.handleScan("zac", "treasure1");
+
+        assertEquals(game.handleScan("tom", "treasure1").getMessage(), "tom found treasure1.");
     }
 }
