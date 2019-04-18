@@ -32,6 +32,10 @@ public class JoinPresenterTest {
         public void setPresenter(JoinContract.Presenter presenter) {
             mWasCalled = true;
         }
+
+        public boolean wasCalled() {
+            return mWasCalled;
+        }
     }
 
     public MockJoinActivity mock;
@@ -40,6 +44,54 @@ public class JoinPresenterTest {
 
     @Before
     public void initialize() {
+        mock = new MockJoinActivity();
+        presenter = new JoinPresenter(mock);
+        presenter.start();
+    }
 
+    @Test
+    public void isVaildIPAddressShouldPassValidIP() {
+        String ip = "1.160.10.240";
+        assertTrue(presenter.isValidIPAddress(ip));
+    }
+
+    @Test
+    public void isValidIPAddressShouldFailInvalidIP() {
+        String ip = "bad input";
+        assertFalse(presenter.isValidIPAddress(ip));
+    }
+
+    @Test
+    public void isValidPortShouldPassValidPort() {
+        String port = "12345";
+        assertTrue(presenter.isValidPort(port));
+    }
+
+    @Test
+    public void isValidPortShouldFailInvalidPort() {
+        String port = "bad input";
+        assertFalse(presenter.isValidPort(port));
+    }
+
+    @Test
+    public void joinGameShouldCallView() {
+        String ip = "1.160.10.240";
+        String port = "12345";
+        String gameCode = "ABC123";
+        presenter.joinGame(ip, port, gameCode);
+        assertTrue(mock.wasCalled());
+    }
+
+    @Test
+    public void setAndGetUserNameShould() {
+        String expected = "username1";
+        presenter.setUserName(expected);
+        assertEquals(expected, presenter.getUserName());
+    }
+
+    @Test
+    public void getBackShouldCallView() {
+        presenter.getBack();
+        assertTrue(mock.wasCalled());
     }
 }
