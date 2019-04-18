@@ -46,7 +46,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.mypackage.MyClass</mainClass>
+                            <mainClass>gvsu.chua_hoffmann_strasler.qrcodegames.server.QRCodeGameServer</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
